@@ -52,12 +52,9 @@
         measurementId: "G-MQ60CQZ0TH"
       };
       firebase.initializeApp(firebaseConfig);
-    </script>
-    <script>
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
           var uid = user.uid;
-          window.location.replace("https://webapp-jk6n79nr5-educationistpres.vercel.app")
         } else {
             window.location.replace("https://www.educationisttutoring.org")
         }
