@@ -27,6 +27,33 @@
             height: 70px;
         }
     </style>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM",
+        authDomain: "educationist-42b45.firebaseapp.com",
+        databaseURL: "https://educationist-42b45-default-rtdb.firebaseio.com",
+        projectId: "educationist-42b45",
+        storageBucket: "educationist-42b45.appspot.com",
+        messagingSenderId: "842761677930",
+        appId: "1:842761677930:web:a4c21f30788d79cc7cae13",
+        measurementId: "G-MQ60CQZ0TH"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
+    <script>
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          var uid = user.uid;
+          window.location.replace("https://webapp-jk6n79nr5-educationistpres.vercel.app")
+        } else {
+            window.location.replace("https://www.educationisttutoring.org")
+        }
+      });
+    </script>
 </head>
 <body style="margin: 0px;">
     <div class="header">
