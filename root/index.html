@@ -112,16 +112,12 @@
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
-                        window.location.replace("https://app.educationisttutoring.org")
                     })
                     .catch((error) => {
                         var errorCode = error.code;
                         var errorMessage = error.message;
                         alert("There has been an error. Please contact Educationist for more assitance or try again later.");
                     });
-                    var myDate = new Date()
-                    myDate.setMinutes(myDate.getMinutes())
-                    document.cookie = "token=" + token + ";expires=" + myDate + ";path=/;";
                 }
                 // window.location.replace("https://educationisttutoring.org/webapp/logout")
             }
