@@ -72,6 +72,7 @@
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
+                        window.location.replace("https://webapp-red.vercel.app/")
                     })
                     .catch((error) => {
                         var errorCode = error.code;
@@ -86,6 +87,7 @@
             console.log("HI")
             firebase.auth().signOut().then(() => {
                 console.log("Logged out successfully")
+                window.location.replace("https:/www.educationisttutoring.org")
             }).catch((error) => {
                 console.log(error)
             });
