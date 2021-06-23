@@ -38,10 +38,10 @@
         <nav class="navigation-bar">
             <img class="logo-image" src="https://cdn.educationisttutoring.org/images/light-logos/educationist.png">
             <ul style="margin: 0; float: right;">
-                <li class="navigation-items"><a href="default.asp">Home</a></li>
+                <li class="navigation-items"><a onclick="logout()" href="default.asp">Home</a></li>
                 <li class="navigation-items"><a href="news.asp">News</a></li>
                 <li class="navigation-items"><a href="contact.asp">Contact</a></li>
-                <li class="navigation-items"><a href="https://educationisttutoring.org/webapp/logout">Log Out</a></li>
+                <li class="navigation-items"><button onclick="logout()">Log Out</a></li>
             </div>
         </nav>
     </div>
@@ -50,7 +50,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     
     <script>
-      var firebaseConfig = {
+        var firebaseConfig = {
         apiKey: "AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM",
         authDomain: "educationist-42b45.firebaseapp.com",
         databaseURL: "https://educationist-42b45-default-rtdb.firebaseio.com",
@@ -59,15 +59,37 @@
         messagingSenderId: "842761677930",
         appId: "1:842761677930:web:a4c21f30788d79cc7cae13",
         measurementId: "G-MQ60CQZ0TH"
-      };
-      firebase.initializeApp(firebaseConfig);
-      firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-          var uid = user.uid;
-        } else {
-            // window.location.replace("https://educationisttutoring.org/webapp/logout")
+        };
+        firebase.initializeApp(firebaseConfig);
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                var uid = user.uid;
+            } else {
+                const queryString = window.location.search;
+                const urlParams = new URLSearchParams(queryString);
+                const token = urlParams.get('token')
+                if (token) {
+                    firebase.auth().signInWithCustomToken(token)
+                    .then((userCredential) => {
+                        var user = userCredential.user;
+                    })
+                    .catch((error) => {
+                        var errorCode = error.code;
+                        var errorMessage = error.message;
+                    });
+                } else {
+                    window.location.replace("https://www.educationisttutoring.org")
+                }
+            }
+        });
+        function logout() {
+            console.log("HI")
+            firebase.auth().signOut().then(() => {
+                console.log("Logged out successfully")
+            }).catch((error) => {
+                console.log(error)
+            });
         }
-      });
     </script>
 </body>
 </html>
