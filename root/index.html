@@ -108,8 +108,7 @@
                 var token = getCookie('token');
                 document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                 console.log(document.cookie);
-                if (token) {
-                    console.log(token)
+                if (token != "") {
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
@@ -117,7 +116,7 @@
                     .catch((error) => {
                         var errorCode = error.code;
                         var errorMessage = error.message;
-                        alert("There has been an error. Please contact Educationist for more assitance or try again later.");
+                        alert(errorMessage);
                     });
                 }
                 window.location.replace("https://educationisttutoring.org/webapp/logout")
