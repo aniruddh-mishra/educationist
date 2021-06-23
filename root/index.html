@@ -74,6 +74,21 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     
     <script>
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+                }
+            }
+        return "";
+        }
         var firebaseConfig = {
         apiKey: "AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM",
         authDomain: "educationist-42b45.firebaseapp.com",
@@ -90,10 +105,10 @@
                 var uid = user.uid;
                 alert("This website is still in development. To switch back to the main educationist website, please log out. Thank you for your time, and we can't wait to see what you do during your time with Educationist!");
             } else {
-                const queryString = window.location.search;
-                const urlParams = new URLSearchParams(queryString);
-                const token = urlParams.get('token')
-                if (token) {
+                console.log(document.cookie);
+                var token = getCookie('token');
+                document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                if (token != "") {
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
@@ -104,9 +119,11 @@
                         var errorMessage = error.message;
                         alert("There has been an error. Please contact Educationist for more assitance or try again later.");
                     });
-                } else {
-                    window.location.replace("https://educationisttutoring.org/webapp/logout")
+                    var myDate = new Date()
+                    myDate.setMinutes(myDate.getMinutes())
+                    document.cookie = "token=" + token + ";expires=" + myDate + ";path=/;";
                 }
+                window.location.replace("https://educationisttutoring.org/webapp/logout")
             }
         });
         function logout() {
