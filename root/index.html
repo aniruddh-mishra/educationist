@@ -106,7 +106,7 @@
                 alert("This website is still in development. To switch back to the main educationist website, please log out. Thank you for your time, and we can't wait to see what you do during your time with Educationist!");
             } else {
                 var token = getCookie('token');
-                document.cookie = "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC;";
+                document.cookie = "token=;domain=.educationisttutoring.org;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                 console.log(document.cookie);
                 if (token != "") {
                     firebase.auth().signInWithCustomToken(token)
