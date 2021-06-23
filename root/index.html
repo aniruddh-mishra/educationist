@@ -72,7 +72,7 @@
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
-                        window.location.replace("file:///Users/aniruddhmishra/Documents/Code/educationist/apps/webapp/root/index.html")
+                        window.location.replace("https://webapp-red.vercel.app/")
                     })
                     .catch((error) => {
                         var errorCode = error.code;
