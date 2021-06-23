@@ -72,22 +72,20 @@
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
-                        window.location.replace("https://webapp-red.vercel.app")
+                        window.location.replace("file:///Users/aniruddhmishra/Documents/Code/educationist/apps/webapp/root/index.html")
                     })
                     .catch((error) => {
                         var errorCode = error.code;
                         var errorMessage = error.message;
                     });
                 } else {
-                    window.location.replace("https://educationisttutoring.org")
+                    window.location.replace("https://educationisttutoring.org/webapp/logout")
                 }
             }
         });
         function logout() {
-            console.log("HI")
             firebase.auth().signOut().then(() => {
                 console.log("Logged out successfully")
-                window.location.replace("https://www.educationisttutoring.org/webapp/logout")
             }).catch((error) => {
                 console.log(error)
             });
