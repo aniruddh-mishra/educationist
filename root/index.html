@@ -88,7 +88,6 @@
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
                 var uid = user.uid;
-                alert("This website is still in development. To switch back to the main educationist website, please log out. Thank you for your time, and we can't wait to see what you do during your time with Educationist!");
             } else {
                 const queryString = window.location.search;
                 const urlParams = new URLSearchParams(queryString);
@@ -97,6 +96,7 @@
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
+                        alert("This website is still in development. To switch back to the main educationist website, please log out. Thank you for your time, and we can't wait to see what you do during your time with Educationist!");
                         window.location.replace("https://app.educationisttutoring.org")
                     })
                     .catch((error) => {
