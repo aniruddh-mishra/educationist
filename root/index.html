@@ -108,6 +108,7 @@
                 var token = getCookie('token');
                 document.cookie = "token=;domain=.educationisttutoring.org;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC;";
                 if (token != "") {
+                    console.log(token)
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
