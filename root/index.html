@@ -107,9 +107,7 @@
             } else {
                 var token = getCookie('token');
                 document.cookie = "token=;domain=.educationisttutoring.org;path=/;expires=Thu, 01 Jan 1970 00:00:00 UTC;";
-                console.log(document.cookie)
                 if (token != "") {
-                    console.log(token)
                     firebase.auth().signInWithCustomToken(token)
                     .then((userCredential) => {
                         var user = userCredential.user;
@@ -117,7 +115,7 @@
                     .catch((error) => {
                         var errorCode = error.code;
                         var errorMessage = error.message;
-                        alert(errorMessage);
+                        alert(errorCode);
                     });
                 }
                 window.location.replace("https://educationisttutoring.org/webapp/logout")
