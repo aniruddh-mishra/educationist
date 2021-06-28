@@ -8,6 +8,8 @@
 
 body {
 	font-family: Poppins, sans-serif;
+  margin: 0px;
+  padding-left: 0px;
 }
 
 a {
@@ -57,8 +59,12 @@ input {
 }
 
 .container {
-  height: calc(var(--vh, 1vh) * 100);
-  width: 100vw;
+  position: absolute;
+  height:100%;
+  width:100%;
+  display: flex;
+  justify-content: center;
+  align-content: right;
   background: linear-gradient(-135deg, #02acbc, #38b18a);
 }
 
@@ -67,6 +73,10 @@ input {
 }
 
 .login-box {
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 25px;
+  margin-left: 25px;
   width: 100%;
   max-width: 960px;
   height: fit-content;
