@@ -5,7 +5,7 @@ const app = express();
 
 app.get('/login', (request, response) => {
     console.log(request.ip)
-    response.sendFile('./root/login.html');
+    response.sendFile(__dirname + '/root/login.html');
 });
 
 app.get('/css', (request, response) => {
