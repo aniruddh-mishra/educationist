@@ -52,36 +52,64 @@ function login() {
 
 function validate(value) {
     if (value == "password") {
-        var decorator = document.getElementById("password-decorator")
-        var password = document.getElementById("password")
-        if (decorator.classList.contains("error-decorator")) {
-            if (password.value != "") {
-                decorator.classList.remove("error-decorator")
-                decorator.classList.add("input-decorator")
-            }
+        if (validatePassword() && validateEid(true)) {
+            document.getElementById("error").innerHTML = "‏‏‎ "
         }
-        else {
-            if (password.value == "") {
-                console.log("added")
-                decorator.classList.add("error-decorator")
-                decorator.classList.remove("input-decorator")
+    }
+    else {
+        console.log(validateEid(), validatePassword(true))
+        if (validateEid() && validatePassword(true)) {
+            document.getElementById("error").innerHTML = "‏‏‎ "
+        }
+    }
+}
+
+function validatePassword(check) {
+    var decorator = document.getElementById("password-decorator")
+    var password = document.getElementById("password")
+    if (decorator.classList.contains("error-decorator")) {
+        if (password.value != "") {
+            if (check) {
+                return true
             }
+            decorator.classList.remove("error-decorator")
+            decorator.classList.add("input-decorator")
+            return true
         }
         return
     }
+    if (password.value == "") {
+        if (check) {
+            return
+        }
+        decorator.classList.add("error-decorator")
+        decorator.classList.remove("input-decorator")
+        return
+    }
+    return true
+}
+
+function validateEid(check) {
     var decorator = document.getElementById("eid-decorator")
     var eid = document.getElementById("eid")
     if (decorator.classList.contains("error-decorator")) {
         if (eid.value != "") {
+            if (check) {
+                return true
+            }
             decorator.classList.remove("error-decorator")
             decorator.classList.add("input-decorator")
+            return true
         }
+        return
     }
-    else {
-        if (eid.value == "") {
-            console.log("added")
-            decorator.classList.add("error-decorator")
-            decorator.classList.remove("input-decorator")
+    if (eid.value == "") {
+        if (check) {
+            return
         }
+        decorator.classList.add("error-decorator")
+        decorator.classList.remove("input-decorator")
+        return
     }
+    return true
 }
