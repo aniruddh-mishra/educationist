@@ -8,7 +8,6 @@
 
 body {
 	font-family: Poppins, sans-serif;
-  overflow: auto;
   margin: 0;
   padding: 0;
   align-items: center;
@@ -61,14 +60,14 @@ input {
   padding: 0 25px 0 25px;
 }
 
-.container {
+/* .container {
   height: 100%;
   width: 100%;
   background-color: black;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-}
+} */
 
 .form-box {
   width: 290px;
