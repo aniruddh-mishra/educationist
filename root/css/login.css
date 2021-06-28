@@ -61,6 +61,7 @@ input {
 .container {
   position: absolute;
   height:100%;
+  height: -webkit-fill-available;
   width:100%;
   display: flex;
   justify-content: center;
