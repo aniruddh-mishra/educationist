@@ -5,13 +5,7 @@ const app = express();
 
 app.get('/login', (request, response) => {
     console.log(request.ip)
-    readFile('./root/login.html', 'utf8', (err, html) => {
-        if (err) {
-            response.status(500).send(err);
-        }
-
-        response.send(html);
-    })
+    response.sendFile('./root/login.html');
 });
 
 app.get('/css', (request, response) => {
