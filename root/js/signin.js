@@ -1,4 +1,10 @@
 document.getElementById('loginButton').addEventListener('click', login);
+window.addEventListener('resize', appHeight)
+appHeight()
+
+function appHeight() {
+    document.documentElement.style.setProperty('--app-height', `${window.innerHeight}px`)
+}
 
 function login() {
     document.getElementById("container").classList.add("blur")
