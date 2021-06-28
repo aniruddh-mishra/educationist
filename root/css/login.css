@@ -12,6 +12,10 @@ body {
   padding-left: 0px;
 }
 
+html {  
+  height: -webkit-fill-available;
+}
+
 a {
 	font-size: 14px;
 	line-height: 1.7;
@@ -60,7 +64,6 @@ input {
 
 .container {
   position: absolute;
-  height:100%;
   height: -webkit-fill-available;
   width:100%;
   display: flex;
