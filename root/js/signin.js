@@ -38,7 +38,7 @@ function login() {
         firebase.auth().signInWithCustomToken(token)
         .then((userCredential) => {
             var user = userCredential.user;
-            window.location.replace("https://app.educationisttutoring.org")
+            window.location.replace("https://educationisttutoring.org")
         })
         .catch((error) => {
             var errorMessage = error.message;
