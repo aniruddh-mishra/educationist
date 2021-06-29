@@ -98,11 +98,13 @@ input {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  padding: 90px 130px 80px 95px;
+  padding: 70px 130px 60px 95px;
 }
 
 .login-pic {
   width: 50%;
+  margin-top: auto;
+  margin-bottom: auto;
   max-height: fit-content;
 }
 
@@ -111,7 +113,7 @@ input {
   justify-content: center;
   width: 100%;
   max-height: fit-content;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
 }
 
 .profile-image {
