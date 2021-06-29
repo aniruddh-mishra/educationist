@@ -3,8 +3,11 @@ const fs = require('fs')
 
 const app = express();
 
+app.get('/', (request, response) => {
+    response.sendFile(__dirname + '/root/index.html');
+});
+
 app.get('/login', (request, response) => {
-    console.log(request.ip)
     response.sendFile(__dirname + '/root/login.html');
 });
 
