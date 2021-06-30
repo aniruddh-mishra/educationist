@@ -11,6 +11,10 @@ app.get('/login', (request, response) => {
     response.sendFile(__dirname + '/root/login.html');
 });
 
+app.get('/testing/availabilities', (request, response) => {
+    response.sendFile(__dirname + '/root/availabilities.html');
+});
+
 app.get('/css', (request, response) => {
     const fileName = request.query.file;
     if (fileName) {
