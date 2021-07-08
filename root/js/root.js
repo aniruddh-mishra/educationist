@@ -11,6 +11,7 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged((user) => {
+    console.log(window.location.pathname)
     if (user) {
         if (window.location.pathname === "/login") {
             window.location.replace("https://dashboard.educationisttutoring.org")
