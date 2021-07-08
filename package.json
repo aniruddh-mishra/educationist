@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/Educationist-Tutoring/webapp#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "stripe": "^8.160.0"
   }
 }

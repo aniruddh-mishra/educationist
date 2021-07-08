@@ -1,99 +1,55 @@
-var availabilities = {};
+const tabList = ["first", "availabilities", "second", "login"]
 
-function showForm(elem) {
-    document.getElementById("popup").classList.toggle("show");
-    if (elem.innerHTML.includes("+")) {
-        elem.innerHTML = "- New Availability"
-    }
-    else {
-        elem.innerHTML = "+ New Availability"
-    }
+const stepNum = {
+    student: 4,
+    volunteer: 4,
+    parent: 3
 }
 
-function addAvailability() {
-    var table = document.getElementById('table');
-    var tr = document.createElement("tr");
-    tr.setAttribute("onclick", "removeAvailability(this);");
-    tr.classList.add("availability");
-    var day = document.getElementById("day").value;
-    var hour1 = document.getElementById("start").value
-    var format1 = document.getElementById("format1").value
-    var hour2 = document.getElementById("end").value
-    var format2 = document.getElementById("format2").value
-    var startTime = hour1 + ":00 " + format1;
-    var endTime = hour2 + ":00 " + format2;
-    [hour1, hour2] = parseHours(hour1, hour2, format1, format2);
-    if (hour1 === false) {
-        return
+function next() {
+    tabNum = tab()
+    if (tabNum === 0) {
+        document.getElementById("prevBtn").classList.remove("tab")
+        document.getElementById("welcome").classList.replace("welcome-message", "welcome-none")
     }
-    for (let i = hour1; i < hour2; i++) {
-        var current = availabilities[day]
-        if (current) {
-            if (current.includes(i)) {
-                document.getElementById("error").innerHTML = "All or part of this timing exists!";
-                return false;
-            }
-            current.push(i)
-        }
-        else {
-            current = [i]
-        }
-        availabilities[day] = current
-    } 
-    var dayTh = document.createElement("th");
-    var startTimeTh = document.createElement("th");
-    var endTimeTh = document.createElement("th");
-    dayTh.appendChild(document.createTextNode(day));
-    startTimeTh.appendChild(document.createTextNode(startTime));
-    endTimeTh.appendChild(document.createTextNode(endTime));
-    tr.appendChild(dayTh);
-    tr.appendChild(startTimeTh);
-    tr.appendChild(endTimeTh);
-    table.appendChild(tr);
+    if (tabNum === 2) {
+        document.getElementById("nextBtn").classList.add("tab")
+    }
+    document.getElementById(tabList[tabNum + 1]).classList.toggle("display-tab")
+    var status = document.getElementById("status").childNodes
+    for (let i = 0; i < tabNum + 1; i++) {
+        status[i].classList.add("status-complete")
+    }
+    
 }
 
-function removeAvailability(element) {
-    var row = element.childNodes;
-    var day = row[0].textContent;
-    var startTime = row[1].textContent;
-    var endTime = row[2].textContent;
-    var hour1 = startTime.slice(0, -6);
-    var format1 = startTime.substr(-2);
-    var hour2 = endTime.slice(0, -6);
-    var format2 = endTime.substr(-2);
-    [hour1, hour2] = parseHours(hour1, hour2, format1, format2);
-    if (hour1 === false) {
-        return false;
+function prev() {
+    tabNum = tab()
+    if (tabNum === 1) {
+        document.getElementById("prevBtn").classList.add("tab")
+        document.getElementById("welcome").classList.replace("welcome-none", "welcome-message")
     }
-    for (let i = hour1; i < hour2; i++) {
-        var current = availabilities[day]
-        current = current.filter(function(ele){ 
-            return ele != i;
-        });
-        availabilities[day] = current
-    } 
-    element.remove();
+    if (tabNum === 3) {
+        document.getElementById("nextBtn").classList.remove("tab")
+    }
+    document.getElementById(tabList[tabNum - 1]).classList.toggle("display-tab")
 }
 
-function parseHours(hour1, hour2, format1, format2) {
-    hour1 = parseInt(hour1)
-    hour2 = parseInt(hour2)
-    if (hour1 == 12) {
-        hour1 -= 12;
+function tab() {
+    let currentTab = document.getElementsByClassName("display-tab")[0]
+    currentTab.classList.toggle("display-tab")
+    return tabList.findIndex((element) => element === currentTab.id)
+}
+
+function steps() {
+    var status = document.getElementById("status")
+    while (status.firstChild) {
+        status.removeChild(status.firstChild);
     }
-    if (hour2 == 12) {
-        hour2 -= 12;
+    let stepCount = stepNum[document.getElementById("role").value]
+    console.log(stepCount)
+    for (let i = 0; i < stepCount; i++) {
+        var span = document.createElement("span")
+        status.appendChild(span)
     }
-    if (format1 == "PM") {
-        hour1 += 12
-    }
-    if (format2 == "PM") {
-        hour2 += 12
-    }
-    if (hour2 <= hour1) {
-        document.getElementById("error").innerHTML = "End time must be after start!"
-        return [false, false]
-    }
-    document.getElementById("error").innerHTML = " ‎"
-    return [hour1, hour2]
 }

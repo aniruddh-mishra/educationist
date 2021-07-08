@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs')
+const fs = require('fs');
 
 const app = express();
 
@@ -39,6 +39,34 @@ app.get('/js', (request, response) => {
         return
     }
     response.status(404).send("We could not find that file!")
+});
+
+app.get('/donate', function(request, response) {
+    response.sendFile(__dirname + '/root/donate.html');
+});
+
+app.post('/donate', function(request, response) {
+    const itemsJson = JSON.parse(data)
+    const itemsArray = itemsJson.music.concat(itemsJson.merch)
+    let total = 0
+    req.body.items.forEach(function(item) {
+        const itemJson = itemsArray.find(function(i) {
+        return i.id == item.id
+        })
+        total = total + itemJson.price * item.quantity
+    })
+
+    stripe.charges.create({
+        amount: total,
+        source: req.body.stripeTokenId,
+        currency: 'usd'
+    }).then(function() {
+        console.log('Charge Successful')
+        res.json({ message: 'Successfully purchased items' })
+    }).catch(function() {
+        console.log('Charge Fail')
+        res.status(500).end()
+    })
 });
 
 app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
