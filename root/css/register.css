@@ -63,6 +63,10 @@ h2 {
     justify-content: space-between;
 }
 
+.invisible {
+    display: none;
+}
+
 .tab {
     display: none;
 }
