@@ -23,12 +23,27 @@ a:hover {
     color: white;
 }
 
+button {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
 img {
     width: 100%;
 }
 
 header {
     margin: auto;
+}
+
+.logo {
+    cursor: pointer;
+    display: inline-block;
+    width: 60px;
 }
 
 .navbar li {
@@ -56,6 +71,12 @@ header {
 
 .hamburger-container {
   display: none;
+}
+
+.container {
+    margin: auto;
+    height: 100%;
+    padding: 2% 10% 5% 10%;
 }
 
 @media (max-width: 700px) {

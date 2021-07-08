@@ -29,15 +29,6 @@ input::placeholder {
   color: rgb(127, 129, 127);
 }
 
-button {
-  margin: 0;
-  padding: 0;
-	outline: none;
-	border: none;
-  background: none;
-  cursor: pointer;
-}
-
 h1 {
   font-size: 3.2em;
 }
@@ -48,12 +39,6 @@ h2 {
   margin-bottom: 3%;
 }
 
-.container {
-  margin: auto;
-  height: 100%;
-  padding: 2% 10% 5% 10%;
-}
-
 .blur {
   filter: blur(5px);
   pointer-events: none;
@@ -62,12 +47,6 @@ h2 {
 .login-box {
   display: flex;
   justify-content: space-between;
-}
-
-.logo {
-  cursor: pointer;
-  display: inline-block;
-  width: 60px;
 }
 
 .profile-img-container {
