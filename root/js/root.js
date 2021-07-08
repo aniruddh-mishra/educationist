@@ -13,5 +13,5 @@ firebase.initializeApp(firebaseConfig);
 function openMenu(value) {
     value.classList.toggle('change');
     document.getElementsByClassName('title')[0].classList.toggle('invisible')
-    document.getElementsByClassName('login-box')[0].classList.toggle('invisible')
+    document.getElementsByClassName('main-body')[0].classList.toggle('invisible')
 }
