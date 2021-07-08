@@ -49,10 +49,6 @@ h2 {
   justify-content: space-between;
 }
 
-.invisible {
-  display: none;
-}
-
 .profile-img-container {
   width: 100%;
   max-width: 400px;
@@ -171,6 +167,10 @@ h2 {
     
     .main-body {
       display: block;
+    }
+
+    .invisible {
+      display: none;
     }
 
     #login-btn {
