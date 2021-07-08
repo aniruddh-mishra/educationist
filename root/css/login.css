@@ -5,28 +5,6 @@
   --educationist-blue: #16a9b6;
 }
 
-html, body {
-  font-family: Poppins, sans-serif;
-  color: var(--educationist-green);
-  margin: 0;
-  padding: 0;
-  background-color: rgb(17, 19, 18);
-}
-
-a {
-  text-decoration: none;
-  font-size: 1em;
-  color: var(--educationist-green);
-}
-
-a:hover {
-  color: white;
-}
-
-img {
-  width: 100%;
-}
-
 input {
   outline: none;
   background: none;
@@ -68,37 +46,6 @@ h2 {
   font-size: 1.2em;
   margin: 0;
   margin-bottom: 3%;
-}
-
-header {
-    margin: auto;
-}
-
-.navbar li {
-  padding: 0 5% 0 5%;
-  float: left;
-  cursor: pointer;
-}
-
-.navbar {
-  float: right;
-  padding: 0;
-  width: 26em;
-  list-style-type: none;
-}
-
-.navbarBtn {
-  font-size: 1em;
-  font-family: Poppins;
-  color: var(--educationist-green);
-}
-
-.navbarBtn:hover {
-  color: white;
-}
-
-.hamburger-container {
-  display: none;
 }
 
 .container {
@@ -251,54 +198,4 @@ header {
     .menu {
       margin: auto;
     }
-}
-
-@media (max-width: 700px) {
-  .navbar {
-    display: none;
-  }
-
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .hamburger-container {
-    height: fit-content;
-    cursor: pointer;
-    float: right;
-    display: block;
-  }
-
-  .bar1, .bar2, .bar3 {
-    margin-top: 6px;
-    width: 35px;
-    height: 5px;
-    background-color: white;
-    margin-top: 6px;
-    transition: 0.4s;
-  }
-
-  .bar1 {
-    margin-top: 0;
-  }
-
-  .change .bar1 {
-    transform: rotate(-45deg) translate(-9px, 6px) ;
-  }
-  
-  /* Fade out the second bar */
-  .change .bar2 {
-    opacity: 0;
-  }
-  
-  /* Rotate last bar */
-  .change .bar3 {
-    transform: rotate(45deg) translate(-8px, -8px) ;
-  }
-
-  .invisible {
-    display: none;
-  }
 }

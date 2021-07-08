@@ -1,3 +1,9 @@
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        window.location.replace("https://dashboard.educationisttutoring.org/");
+    }
+});
+
 function login() {
     document.getElementById("container").classList.add("blur")
     document.getElementById("loader-container").classList.replace("loader-none", "loader-container")
@@ -85,10 +91,4 @@ function validateEid(check) {
         }
         return
     }
-}
-
-function openMenu(value) {
-    value.classList.toggle('change');
-    document.getElementsByClassName('title')[0].classList.toggle('invisible')
-    document.getElementsByClassName('login-box')[0].classList.toggle('invisible')
 }
