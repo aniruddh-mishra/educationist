@@ -10,6 +10,17 @@ var firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        if (window.location.pathname === "/login") {
+            window.location.replace("https://dashboard.educationisttutoring.org")
+        }
+    }
+    else {
+        window.location.replace("https://dashboard.educationisttutoring.org/login")
+    }
+});
+
 function openMenu(value) {
     value.classList.toggle('change');
     document.getElementsByClassName('title')[0].classList.toggle('invisible')
