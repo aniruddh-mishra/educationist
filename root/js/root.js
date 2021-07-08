@@ -12,14 +12,14 @@ firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged((user) => {
     console.log(window.location.pathname)
-    // if (user) {
-    //     if (window.location.pathname === "/login") {
-    //         window.location.replace("https://dashboard.educationisttutoring.org")
-    //     }
-    // }
-    // else {
-    //     window.location.replace("https://dashboard.educationisttutoring.org/login")
-    // }
+    if (user) {
+        if (window.location.pathname !== "/login") {
+            window.location.replace("https://dashboard.educationisttutoring.org")
+        }
+    }
+    else {
+        window.location.replace("https://dashboard.educationisttutoring.org/login")
+    }
 });
 
 function openMenu(value) {
