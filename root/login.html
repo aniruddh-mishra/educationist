@@ -5,15 +5,15 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="https://dashboard.educationisttutoring.org/css?file=navigation.css">
-	<link rel="stylesheet" type="text/css" href="https://dashboard.educationisttutoring.org/css?file=login.css">
+	<link rel="stylesheet" href="/css?file=navigation.css">
+	<link rel="stylesheet" type="text/css" href="/css?file=login.css">
 	<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png">
     <link rel="manifest" href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest">
 	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-	<script src="https://dashboard.educationisttutoring.org/js?file=root.js"></script>
+	<script src="/js?file=root.js"></script>
 </head>
 <body>
 	<div id="loader-container" class="loader-none">
@@ -32,9 +32,10 @@
 			</div>
             <ul class="navbar">
                 <li><a href="https://educationisttutoring.org">Home</a></li>
+				<li><a href="/donate">Donate</a></li>
                 <li><a href="">Contact Us</a></li>
                 <li><a href="">Rules</a></li>
-                <li><button class="navbarBtn">Account</button></li>
+                <li><button onclick="accountPage()" class="navbarBtn">Account</button></li>
             </ul>
         </header>
 
@@ -63,11 +64,11 @@
 						<div id="error" style="text-align: center; padding-top: 20px; padding-bottom: 20px;">‏‏‎ </div>
 						
 						<div style="text-align: center;">
-							<a href="#">Forgot Password</a>
+							<a href="/reset">Forgot Password</a>
 						</div>
 	
 						<div style="text-align: center; margin-top: 3%;">
-							<a href="/register">Create your Account</a>
+							<a href="https://docs.google.com/forms/d/1y4a3cGxJ-1xe6EabBvKDf6YDH2tXahbSDTOy-yPwbnA/">Create your Account</a>
 						</div>
 					</div>
 				</form>
@@ -78,6 +79,6 @@
 			</div>
 		</div>
 	</div>
-	<script src="https://dashboard.educationisttutoring.org/js?file=login.js"></script>
+	<script src="/js?file=login.js"></script>
 </body>
 </html>

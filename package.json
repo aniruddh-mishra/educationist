@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js --ext js,html,css,json"
   },
   "repository": {
     "type": "git",
@@ -18,7 +19,12 @@
   },
   "homepage": "https://github.com/Educationist-Tutoring/webapp#readme",
   "dependencies": {
+    "axios": "^0.21.1",
     "express": "^4.17.1",
+    "firebase-admin": "^9.10.0",
     "stripe": "^8.160.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.10"
   }
 }

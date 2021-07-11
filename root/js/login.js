@@ -31,10 +31,10 @@ function login() {
             console.log("Wrong Password")
             return
         }
+        localStorage.setItem("eid", eid)
         firebase.auth().signInWithCustomToken(token)
         .then((userCredential) => {
             var user = userCredential.user;
-            window.location.replace("https://educationisttutoring.org")
         })
         .catch((error) => {
             var errorMessage = error.message;

@@ -1,14 +1,39 @@
 const express = require('express');
 const fs = require('fs');
+const admin = require("firebase-admin");
+const { response } = require('express');
+console.log(process.env.STRIPE_KEY)
+const stripe = require("stripe")(process.env.STRIPE_KEY);
+const serviceAccount = require(__dirname + "/firebase.json");
+const axios = require('axios')
 
 const app = express();
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://educationist-42b45-default-rtdb.firebaseio.com"
+});
+
+var db = admin.database();
+
+db = db.ref("/")
+
+app.use(express.json());
 
 app.get('/', (request, response) => {
     response.sendFile(__dirname + '/root/index.html');
 });
 
+app.get('/logout', (request, response) => {
+    response.sendFile(__dirname + '/root/logout.html');
+});
+
 app.get('/login', (request, response) => {
     response.sendFile(__dirname + '/root/login.html');
+});
+
+app.get('/reset', (request, response) => {
+    response.sendFile(__dirname + "/root/reset.html");
 });
 
 app.get('/testing/availabilities', (request, response) => {
@@ -41,32 +66,90 @@ app.get('/js', (request, response) => {
     response.status(404).send("We could not find that file!")
 });
 
-app.get('/donate', function(request, response) {
+app.get('/donate', (request, response) => {
     response.sendFile(__dirname + '/root/donate.html');
 });
 
-app.post('/donate', function(request, response) {
-    const itemsJson = JSON.parse(data)
-    const itemsArray = itemsJson.music.concat(itemsJson.merch)
-    let total = 0
-    req.body.items.forEach(function(item) {
-        const itemJson = itemsArray.find(function(i) {
-        return i.id == item.id
+app.post("/reset", (request, response) => {
+    let {email} = request.body;
+    let actioncodesettings = {
+        url: "https://dashboard.educationisttutoring.org/login"
+    }
+    admin
+    .auth()
+    .generatePasswordResetLink(email, actioncodesettings)
+    .then((link) => {
+        axios
+        .post('https://mainframe.educationisttutoring.org/reset', {
+            email: email,
+            link: link
         })
-        total = total + itemJson.price * item.quantity
+        .then(res => {
+            response.send("Success")
+        })
+        .catch(error => {
+            response.status(400)
+        })
     })
+    .catch((error) => {
+        if (error.code === "auth/email-not-found") {
+            return response.status(500).send("Failure")
+        }
+        console.log(error)
+        return response.status(400).send("Failure")
+    });
+})
 
-    stripe.charges.create({
-        amount: total,
-        source: req.body.stripeTokenId,
-        currency: 'usd'
-    }).then(function() {
-        console.log('Charge Successful')
-        res.json({ message: 'Successfully purchased items' })
-    }).catch(function() {
-        console.log('Charge Fail')
-        res.status(500).end()
-    })
+app.post("/create-payment-intent", async (request, response) => {
+    const {eid, amount} = request.body;
+
+    const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd"
+    });
+
+    response.send({
+        clientSecret: paymentIntent.client_secret,
+        id: paymentIntent.id
+    });
 });
+
+app.post("/webhook", (request, response) => {
+    const event = request.body;
+    switch (event.type) {
+        case 'charge.succeeded':
+            const checkoutSession = event.data.object;
+            db.child("Payment Intents").child(checkoutSession.payment_intent).once('value', (data) => {
+                const eid = data.val()
+                if (eid === null) {
+                    return
+                }
+                const amount = checkoutSession.amount_captured
+                db.child("Payment Intents").child(checkoutSession.payment_intent).set(null);
+                db.child("Activated IDs").child(eid).once('value', (data) => {
+                    const information = data.val()
+                    if (information === null) {
+                        return
+                    }
+                    var donations = information.Donations
+                    if (donations === undefined) {
+                        donations = 0
+                    }
+                    donations += amount
+                    db.child("Activated IDs").child(eid).child("Donations").set(donations)
+                    var records = information["Donation Records"]
+                    if (records === undefined) {
+                        records = []
+                    }
+                    records.push(checkoutSession.payment_intent)
+                    db.child("Activated IDs").child(eid).child("Donation Records").set(records)
+                });
+            });
+            break;
+        default:
+            console.log(`Unhandled event type ${event.type}.`);
+    }
+    response.send("Done")
+});    
 
 app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
