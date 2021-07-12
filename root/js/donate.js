@@ -1,4 +1,4 @@
-var stripe = Stripe("pk_test_51JAhG7KLrMOnvMuZNDxtEAjQWvvB1eySpGxvBJIf8jRjhLI4W2g2ZLd7f5t7tovYZtQN2RQQmcSg4YcV9iWIWWnf00xmWig0oM");
+var stripe = Stripe("pk_live_51JAhG7KLrMOnvMuZrF60VL91bAktd7aOVunjKIjhyXOF5XQPwcBaMbWbFdtWvb3DKO7qyQkM1W6X75IriADAFmpv00OW4v8fWc");
 const dbRef = firebase.database().ref();
 var eid = localStorage.getItem("eid");
 
