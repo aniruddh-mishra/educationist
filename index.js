@@ -2,7 +2,6 @@ const express = require('express');
 const fs = require('fs');
 const admin = require("firebase-admin");
 const { response } = require('express');
-console.log(process.env.STRIPE_KEY)
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const serviceAccount = require(__dirname + "/firebase.json");
 const axios = require('axios')
@@ -116,12 +115,15 @@ app.post("/create-payment-intent", async (request, response) => {
 
 app.post("/webhook", (request, response) => {
     const event = request.body;
+    console.log(event.type)
     switch (event.type) {
         case 'charge.succeeded':
+            console.log(event.type)
             const checkoutSession = event.data.object;
             db.child("Payment Intents").child(checkoutSession.payment_intent).once('value', (data) => {
                 const eid = data.val()
                 if (eid === null) {
+                    console.log("NO EID")
                     return
                 }
                 const amount = checkoutSession.amount_captured
@@ -129,6 +131,7 @@ app.post("/webhook", (request, response) => {
                 db.child("Activated IDs").child(eid).once('value', (data) => {
                     const information = data.val()
                     if (information === null) {
+                        console.log("NO EID INFORMATION")
                         return
                     }
                     var donations = information.Donations
@@ -136,6 +139,7 @@ app.post("/webhook", (request, response) => {
                         donations = 0
                     }
                     donations += amount
+                    console.log(donations)
                     db.child("Activated IDs").child(eid).child("Donations").set(donations)
                     var records = information["Donation Records"]
                     if (records === undefined) {
