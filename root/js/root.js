@@ -53,6 +53,6 @@ function accountPage() {
     if (user) {
         window.location.replace("/")
     } else {
-        window.location.replace("/login")
+        window.location.replace("/login?path=" + window.location.pathname)
     }
 }

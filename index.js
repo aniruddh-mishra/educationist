@@ -122,14 +122,15 @@ app.post("/webhook", (request, response) => {
             const checkoutSession = event.data.object;
             db.child("Payment Intents").child(checkoutSession.payment_intent).once('value', (data) => {
                 const eid = data.val()
+                console.log(eid)
                 if (eid === null) {
-                    console.log("NO EID")
                     return
                 }
                 const amount = checkoutSession.amount_captured
                 db.child("Payment Intents").child(checkoutSession.payment_intent).set(null);
                 db.child("Activated IDs").child(eid).once('value', (data) => {
                     const information = data.val()
+                    console.log(information)
                     if (information === null) {
                         console.log("NO EID INFORMATION")
                         return
