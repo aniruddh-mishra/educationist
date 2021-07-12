@@ -126,9 +126,7 @@ app.post("/webhook", (request, response) => {
                     return
                 }
                 const amount = checkoutSession.amount_captured
-                console.log(checkoutSession.payment_intent)
                 db.child("Payment Intents").child(checkoutSession.payment_intent).set(null);
-                console.log(checkoutSession.payment_intent)
                 db.child("Activated IDs").child(eid).once('value', (data) => {
                     const information = data.val()
                     if (information === null) {

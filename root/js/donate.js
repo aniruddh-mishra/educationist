@@ -144,6 +144,7 @@ function orderComplete() {
   document.getElementById("my-body").classList.remove("blur")
   document.getElementById("title").classList.remove("blur")
   document.querySelector("header").classList.remove("blur")
+  window.location.replace("/success")
 };
 
 function showError(errorMsgText) {
