@@ -122,17 +122,16 @@ app.post("/webhook", (request, response) => {
             const checkoutSession = event.data.object;
             db.child("Payment Intents").child(checkoutSession.payment_intent).once('value', (data) => {
                 const eid = data.val()
-                console.log(eid)
                 if (eid === null) {
                     return
                 }
                 const amount = checkoutSession.amount_captured
+                console.log(checkoutSession.payment_intent)
                 db.child("Payment Intents").child(checkoutSession.payment_intent).set(null);
+                console.log(checkoutSession.payment_intent)
                 db.child("Activated IDs").child(eid).once('value', (data) => {
                     const information = data.val()
-                    console.log(information)
                     if (information === null) {
-                        console.log("NO EID INFORMATION")
                         return
                     }
                     var donations = information.Donations
@@ -140,7 +139,6 @@ app.post("/webhook", (request, response) => {
                         donations = 0
                     }
                     donations += amount
-                    console.log(donations)
                     db.child("Activated IDs").child(eid).child("Donations").set(donations)
                     var records = information["Donation Records"]
                     if (records === undefined) {
