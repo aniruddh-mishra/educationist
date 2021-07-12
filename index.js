@@ -115,10 +115,8 @@ app.post("/create-payment-intent", async (request, response) => {
 
 app.post("/webhook", (request, response) => {
     const event = request.body;
-    console.log(event.type)
     switch (event.type) {
         case 'charge.succeeded':
-            console.log(event.type)
             const checkoutSession = event.data.object;
             db.child("Payment Intents").child(checkoutSession.payment_intent).once('value', (data) => {
                 const eid = data.val()
@@ -145,12 +143,11 @@ app.post("/webhook", (request, response) => {
                     records.push(checkoutSession.payment_intent)
                     db.child("Activated IDs").child(eid).child("Donation Records").set(records)
                 });
-            });
+            }).then(() => response.send("Done"))
             break;
         default:
             console.log(`Unhandled event type ${event.type}.`);
     }
-    response.send("Done")
 });    
 
 app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
