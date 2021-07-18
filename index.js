@@ -6,6 +6,15 @@ const stripe = require("stripe")(process.env.STRIPE_KEY);
 const serviceAccount = require(__dirname + '/firebase.json');
 const { sendMail } = require(__dirname + '/emailer.js');
 
+const secretKeys = {
+    donate: {
+        keys: [{
+            name: 'STRIPE_KEY',
+            key: process.env.STRIPE_PUBLIC
+        }]
+    }
+}
+
 const app = express();
 
 admin.initializeApp({
@@ -53,13 +62,24 @@ app.get('/css', (request, response) => {
 });
 
 app.get('/js', (request, response) => {
-    const fileName = request.query.file;
+    var fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/js/' + fileName
+        fileName = fileName.replace('.js', '')
         if (fs.existsSync(file) == false) {
-            response.status(404).send("We could not find that file!")
+            return response.status(404).send("We could not find that file!")
         }
-        response.sendFile(file)
+        fs.readFile(file, 'utf8', (error, data) => {
+            if (error) {
+                return response.status(404).send("We could not find that file!")
+            }
+            if (secretKeys[fileName]) {
+                for (key of secretKeys[fileName].keys) {
+                    data = data.replace(key.name, key.key)
+                }
+            }
+            response.send(data)
+        })
         return
     }
     response.status(404).send("We could not find that file!")
