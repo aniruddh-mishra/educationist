@@ -138,6 +138,12 @@ h2 {
     margin-left: 2%;
 }
 
+#email {
+    width: 100%;
+    max-width: none;
+    margin-bottom: 5%;
+}
+
 #charge {
     color: white;
 	background: var(--educationist-blue);
@@ -180,7 +186,7 @@ h2 {
     margin-bottom: 32px;
 }
 
-#payment-form {
+#payment-form, #email-form {
     position: fixed;
     margin: auto;
     background-color: #94bc0271;
@@ -202,7 +208,7 @@ h2 {
     border-color: red;
 }
 
-#submit {
+#submit, #submit-email {
     background: var(--educationist-blue);
     color: #ffffff;
     font-family: Arial, sans-serif;

@@ -3,8 +3,8 @@ const fs = require('fs');
 const admin = require("firebase-admin");
 const { response } = require('express');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
-const serviceAccount = require(__dirname + "/firebase.json");
-const axios = require('axios')
+const serviceAccount = require(__dirname + '/firebase.json');
+const { sendMail } = require(__dirname + '/emailer.js');
 
 const app = express();
 
@@ -78,33 +78,30 @@ app.post("/reset", (request, response) => {
     .auth()
     .generatePasswordResetLink(email, actioncodesettings)
     .then((link) => {
-        axios
-        .post('https://mainframe.educationisttutoring.org/reset', {
-            email: email,
-            link: link
-        })
-        .then(res => {
-            response.send("Success")
-        })
-        .catch(error => {
-            response.status(400)
-        })
+        options = [{
+            key: 'link1',
+            text: link
+        }]
+        
+        sendMail(email, 'Password Reset Educationist Tutoring', 'emails/reset.html', options)
+        response.send("Success")
     })
     .catch((error) => {
         if (error.code === "auth/email-not-found") {
             return response.status(500).send("Failure")
         }
-        console.log(error)
+        console.log('Reset Error: ' + error)
         return response.status(400).send("Failure")
     });
 })
 
 app.post("/create-payment-intent", async (request, response) => {
-    const {eid, amount} = request.body;
+    const {email, amount} = request.body;
 
     const paymentIntent = await stripe.paymentIntents.create({
         amount: amount,
-        currency: "usd"
+        currency: "usd",
+        receipt_email: email
     });
 
     response.send({
@@ -143,7 +140,23 @@ app.post("/webhook", (request, response) => {
                     records.push(checkoutSession.payment_intent)
                     db.child("Activated IDs").child(eid).child("Donation Records").set(records)
                 });
-            }).then(() => response.send("Done"))
+            })
+            .then(() => {
+                const date = new Date()
+                const email = checkoutSession.receipt_email;
+                const amount = checkoutSession.amount_captured;
+                options = [{
+                    key: 'amount',
+                    text: amount
+                },
+                {
+                    key: 'date',
+                    text: date.toDateString()
+                }]
+                
+                sendMail(email, 'Donation Confirmation Educationist Tutoring', 'emails/receipt.html', options)
+                response.send("Done")
+            })
             break;
         default:
             console.log(`Unhandled event type ${event.type}.`);

@@ -66,12 +66,22 @@
                             <button class="plus" onclick="increment(true);">+</button>
                         </div>
                         
-                        <button type="submit" id="charge" onclick="validate();">Donate</button>
+                        <button type="submit" id="charge" onclick="emailPopup();">Donate</button>
                     </form>
                 </div>
                 <div class="main-image-container">
                     <img src="https://cdn.educationisttutoring.org/images/wallet.svg" alt="Thank You!">
                 </div>
+            </div>
+            <div id="email-form" class="hidden">
+                <form onsubmit="return false;" class="payment">
+                    <h2 style="color: black;">Email</h2>
+                    <input onchange="validate(false)" type="email" id="email">
+                    <button id="submit-email" onclick="validate(true)">
+                        <span id="button-text">Continue to Checkout</span>
+                    </button>
+                </form>
+                <button id="cancel" onclick="cancel();">Cancel</button>
             </div>
             <div id="payment-form" class="hidden">
                 <form class="payment">

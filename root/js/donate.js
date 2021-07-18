@@ -39,7 +39,25 @@ function cancel() {
   window.location.replace('/donate')
 }
 
-function validate() {
+function emailPopup() {
+  document.getElementById("email-form").classList.remove("hidden")
+  document.getElementById("my-body").classList.add("blur")
+  document.getElementById("title").classList.add("blur")
+  document.querySelector("header").classList.add("blur")
+}
+
+function validate(change) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var email = document.getElementById("email")
+  if (!re.test(String(email.value).toLowerCase())) {
+    email.classList.add("error-input")
+    return
+  }
+  email.classList.remove("error-input")
+  if (!change) {
+    return
+  }
+  document.getElementById("email-form").classList.add("hidden")
   var recur = document.getElementById("recur").value
   if (recur !== "one") {
     document.getElementById("recur").classList.add("error-input")
@@ -63,13 +81,14 @@ function validate() {
 
 function createIntent(amount) {
   document.querySelector("button").disabled = true;
+  const email = document.getElementById("email").value;
   fetch("/create-payment-intent", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      eid: eid,
+      email: email,
       amount: amount
     })
   })
