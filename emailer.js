@@ -14,7 +14,6 @@ function sendMail(recipient, subject, fileName, options) {
         var data = fs.readFileSync(fileName, 'utf8')
         if (options) {
             for (change of options) {
-                console.log(data)
                 data = data.replace(new RegExp(change.key, 'g'), change.text);
             }
         }
