@@ -6,8 +6,6 @@ const stripe = require("stripe")(process.env.STRIPE_KEY);
 const serviceAccount = require(__dirname + '/firebase.json');
 const { sendMail } = require(__dirname + '/emailer.js');
 
-sendMail('aniruddhm17@gmail.com', 'Donation Confirmation Educationist Tutoring', 'root/emails/receipt.html')
-
 const secretKeys = {
     donate: {
         keys: [{
@@ -31,6 +29,7 @@ db = db.ref("/")
 app.use(express.json());
 
 app.get('/', (request, response) => {
+    sendMail('aniruddhm17@gmail.com', 'Donation Confirmation Educationist Tutoring', 'root/emails/receipt.html')
     response.sendFile(__dirname + '/root/index.html');
 });
 
