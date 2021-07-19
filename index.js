@@ -6,6 +6,8 @@ const stripe = require("stripe")(process.env.STRIPE_KEY);
 const serviceAccount = require(__dirname + '/firebase.json');
 const { sendMail } = require(__dirname + '/emailer.js');
 
+console.log(__dirname)
+
 const secretKeys = {
     donate: {
         keys: [{
