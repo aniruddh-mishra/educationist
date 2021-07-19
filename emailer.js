@@ -11,7 +11,7 @@ var transporter = nodemailer.createTransport({
 
 function sendMail(recipient, subject, fileName, options) {
     try {
-        var data = fs.readFileSync(__dirname + fileName, 'utf8')
+        var data = fs.readFileSync(fileName, 'utf8')
         if (options) {
             for (change of options) {
                 data = data.replaceAll(change.key, change.text)
