@@ -1,3 +1,11 @@
+var navigation = document.getElementById('navigation')
+
+if (navigation) {
+    var header = document.createElement('header');
+    header.innerHTML = `NAVIGATION`    
+    navigation.replaceWith(header)
+}
+
 var firebaseConfig = {
     apiKey: "AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM",
     authDomain: "educationist-42b45.firebaseapp.com",
@@ -8,6 +16,7 @@ var firebaseConfig = {
     appId: "1:842761677930:web:a4c21f30788d79cc7cae13",
     measurementId: "G-MQ60CQZ0TH"
 };
+
 firebase.initializeApp(firebaseConfig);
 
 firebase.auth().onAuthStateChanged((user) => {

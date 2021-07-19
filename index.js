@@ -4,11 +4,19 @@ const { emailError } = require('./emailer');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin } = require(__dirname + '/emailer.js');
 
+const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
+
 const secretKeys = {
     donate: {
         keys: [{
             name: 'STRIPE_KEY',
             key: process.env.STRIPE_PUBLIC
+        }]
+    },
+    root: {
+        keys: [{
+            name: 'NAVIGATION',
+            key: navBar
         }]
     }
 }

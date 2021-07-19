@@ -16,28 +16,11 @@
 	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-	<script src="/js?file=root.js"></script>
 </head>
 <body>
     <div class="container">
-        <header>
-            <div onclick="window.location.replace('https://educationisttutoring.org');" class="logo">
-                <img id="logo-img" src="https://cdn.educationisttutoring.org/images/light-logos/educationist.png" alt="Logo">
-            </div>
-            <div class="hamburger-container" onclick="openMenu(this)">
-                <div class="bar1"></div>
-                <div class="bar2"></div>
-                <div class="bar3"></div>
-            </div>
-            <ul class="navbar">
-                <li><a href="https://educationisttutoring.org">Home</a></li>
-                <li><a href="/donate">Donate</a></li>
-                <li><a href="">Contact Us</a></li>
-                <li><a href="">Rules</a></li>
-                <li><button onclick="accountPage()" class="navbarBtn">Account</button></li>
-            </ul>
-        </header>
-
+        <div id="navigation"></div>
+        <script src="/js?file=root.js"></script>
         <h1 id="title" class="title">Donate</h1>
 
         <div class="main-body">
