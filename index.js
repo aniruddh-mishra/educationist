@@ -1,9 +1,9 @@
-const exp = require('constants');
 const express = require('express');
 const fs = require('fs');
 const { emailError } = require('./emailer');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin } = require(__dirname + '/emailer.js');
+const { Respond } = require(__dirname + '/send.js')
 
 const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
 
@@ -26,39 +26,28 @@ const app = express();
 
 app.use(express.json());
 
-function expire(response) {
-    response.setHeader("Cache-Control", "public, max-age=0.01");
-    response.setHeader("Expires", new Date(Date.now() + 1).toUTCString());
-    return response
-}
-
 app.get('/', async (request, response) => {
-    response = expire(response);
-    response.sendFile(__dirname + '/root/index.html');
+    new Respond(response).sendFile(__dirname + '/root/index.html')
 });
 
 app.get('/logout', (request, response) => {
-    response = expire(response);
-    response.sendFile(__dirname + '/root/logout.html');
+    new Respond(response).sendFile(__dirname + '/root/logout.html');
 });
 
 app.get('/login', (request, response) => {
-    response = expire(response);
-    response.sendFile(__dirname + '/root/login.html');
+    new Respond(response).sendFile(__dirname + '/root/login.html');
 });
 
 app.get('/reset', (request, response) => {
-    response = expire(response);
-    response.sendFile(__dirname + "/root/reset.html");
+    new Respond(response).sendFile(__dirname + "/root/reset.html");
 });
 
 app.get('/testing/availabilities', (request, response) => {
-    response = expire(response);
-    response.sendFile(__dirname + '/root/availabilities.html');
+    new Respond(response).sendFile(__dirname + '/root/availabilities.html');
 });
 
 app.get('/css', (request, response) => {
-    response = expire(response);
+    response = new Respond(response);
     const fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/css/' + fileName
@@ -72,7 +61,7 @@ app.get('/css', (request, response) => {
 });
 
 app.get('/js', (request, response) => {
-    response = expire(response);
+    response = new Respond(response);
     var fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/js/' + fileName
@@ -93,16 +82,15 @@ app.get('/js', (request, response) => {
         })
         return
     }
-    response.status(404).send("We could not find that file!")
+    response.status(500).send("Missing query!")
 });
 
 app.get('/donate', (request, response) => {
-    response = expire(response);
-    response.sendFile(__dirname + '/root/donate.html');
+    new Respond(response).sendFile(__dirname + '/root/donate.html');
 });
 
 app.post("/reset", async (request, response) => {
-    response = expire(response);
+    response = new Respond(response);
     let {email} = request.body;
     let actioncodesettings = {
         url: "https://dashboard.educationisttutoring.org/login"
@@ -136,7 +124,6 @@ app.post("/reset", async (request, response) => {
 })
 
 app.post("/create-payment-intent", async (request, response) => {
-    response = expire(response);
     const {email, amount} = request.body;
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -145,14 +132,14 @@ app.post("/create-payment-intent", async (request, response) => {
         receipt_email: email
     });
 
-    response.send({
+    new Respond(response).send({
         clientSecret: paymentIntent.client_secret,
         id: paymentIntent.id
     });
 });
 
 app.post("/webhook", (request, response) => {
-    response = expire(response);
+    response = new Respond(response);
     const event = request.body;
     switch (event.type) {
         case 'charge.succeeded':
@@ -203,12 +190,12 @@ app.post("/webhook", (request, response) => {
                     emailError(email, 'receipt', options)
                 }
 
-                response.send("Done")
+                response.send("Done");
             })
             break;
         default:
             console.log(`Unhandled event type ${event.type}.`);
-            return response.send("Unhandled event type")
+            return response.send("Unhandled event type");
     }
 });    
 
