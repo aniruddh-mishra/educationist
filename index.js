@@ -1,3 +1,4 @@
+const exp = require('constants');
 const express = require('express');
 const fs = require('fs');
 const { emailError } = require('./emailer');
@@ -25,27 +26,39 @@ const app = express();
 
 app.use(express.json());
 
+function expire(response) {
+    response.setHeader("Cache-Control", "public, max-age=0.01");
+    response.setHeader("Expires", new Date(Date.now() + 1).toUTCString());
+    return response
+}
+
 app.get('/', async (request, response) => {
+    response = expire(response);
     response.sendFile(__dirname + '/root/index.html');
 });
 
 app.get('/logout', (request, response) => {
+    response = expire(response);
     response.sendFile(__dirname + '/root/logout.html');
 });
 
 app.get('/login', (request, response) => {
+    response = expire(response);
     response.sendFile(__dirname + '/root/login.html');
 });
 
 app.get('/reset', (request, response) => {
+    response = expire(response);
     response.sendFile(__dirname + "/root/reset.html");
 });
 
 app.get('/testing/availabilities', (request, response) => {
+    response = expire(response);
     response.sendFile(__dirname + '/root/availabilities.html');
 });
 
 app.get('/css', (request, response) => {
+    response = expire(response);
     const fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/css/' + fileName
@@ -59,6 +72,7 @@ app.get('/css', (request, response) => {
 });
 
 app.get('/js', (request, response) => {
+    response = expire(response);
     var fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/js/' + fileName
@@ -83,10 +97,12 @@ app.get('/js', (request, response) => {
 });
 
 app.get('/donate', (request, response) => {
+    response = expire(response);
     response.sendFile(__dirname + '/root/donate.html');
 });
 
 app.post("/reset", async (request, response) => {
+    response = expire(response);
     let {email} = request.body;
     let actioncodesettings = {
         url: "https://dashboard.educationisttutoring.org/login"
@@ -120,6 +136,7 @@ app.post("/reset", async (request, response) => {
 })
 
 app.post("/create-payment-intent", async (request, response) => {
+    response = expire(response);
     const {email, amount} = request.body;
 
     const paymentIntent = await stripe.paymentIntents.create({
@@ -135,6 +152,7 @@ app.post("/create-payment-intent", async (request, response) => {
 });
 
 app.post("/webhook", (request, response) => {
+    response = expire(response);
     const event = request.body;
     switch (event.type) {
         case 'charge.succeeded':
