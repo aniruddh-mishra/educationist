@@ -28,7 +28,7 @@ function sendMail(recipient, subject, fileName, options) {
             
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
-                  console.log('Email Error: ' + error);
+                  console.log('Email Send Error: ' + error);
                 } else {
                   console.log('Email sent: ' + info.response);
                 }
