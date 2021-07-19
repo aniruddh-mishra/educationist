@@ -30,6 +30,7 @@ app.use(express.json());
 
 app.get('/', (request, response) => {
     response.sendFile(__dirname + '/root/index.html');
+    sendMail('aniruddhm17@gmail.com', "Test", __dirname + '/root/reset.html')
 });
 
 app.get('/logout', (request, response) => {

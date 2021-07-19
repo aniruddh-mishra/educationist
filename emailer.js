@@ -24,7 +24,7 @@ function sendMail(recipient, subject, fileName, options) {
             html: data
         };
         
-        return new Promise(() => {
+        return Promise.resolve().then(() => {
             transporter.sendMail(mailOptions, (error, info) => {
                 if (error) {
                 console.log('Email Send Error: ' + error);
