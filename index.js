@@ -103,7 +103,7 @@ app.post("/reset", (request, response) => {
             text: link
         }]
         
-        sendMail(email, 'Password Reset Educationist Tutoring', 'emails/reset.html', options)
+        sendMail(email, 'Password Reset Educationist Tutoring', 'root/emails/reset.html', options)
         response.send("Success")
     })
     .catch((error) => {
@@ -174,7 +174,7 @@ app.post("/webhook", (request, response) => {
                     text: date.toDateString()
                 }]
                 
-                sendMail(email, 'Donation Confirmation Educationist Tutoring', 'emails/receipt.html', options)
+                sendMail(email, 'Donation Confirmation Educationist Tutoring', 'root/emails/receipt.html', options)
                 response.send("Done")
             })
             break;
