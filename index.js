@@ -30,7 +30,6 @@ app.use(express.json());
 
 app.get('/', (request, response) => {
     response.sendFile(__dirname + '/root/index.html');
-    sendMail('aniruddhm17@gmail.com', "Test", __dirname + '/root/reset.html')
 });
 
 app.get('/logout', (request, response) => {
@@ -176,11 +175,12 @@ app.post("/webhook", (request, response) => {
                 }]
                 
                 sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
-                response.send("Done")
+                return response.send("Done")
             })
             break;
         default:
             console.log(`Unhandled event type ${event.type}.`);
+            return response.send("Unhandled event type")
     }
 });    
 
