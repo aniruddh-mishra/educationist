@@ -18,7 +18,8 @@ const app = express();
 app.use(express.json());
 
 app.get('/', async (request, response) => {
-    response.sendFile(__dirname + '/root/inex.html');
+    console.log(test)
+    response.sendFile(__dirname + '/root/index.html');
 });
 
 app.get('/logout', (request, response) => {
