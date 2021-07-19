@@ -102,7 +102,7 @@ app.post("/reset", (request, response) => {
             key: 'link1',
             text: link
         }]
-        
+        sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
         sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
         return response.send("Success")
     })
