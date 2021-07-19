@@ -29,7 +29,6 @@ db = db.ref("/")
 app.use(express.json());
 
 app.get('/', (request, response) => {
-    sendMail('aniruddhm17@gmail.com', 'Donation Confirmation Educationist Tutoring', 'root/resetEmail.html')
     response.sendFile(__dirname + '/root/index.html');
 });
 
@@ -104,7 +103,7 @@ app.post("/reset", (request, response) => {
             text: link
         }]
         
-        sendMail(email, 'Password Reset Educationist Tutoring', 'root/emails/reset.html', options)
+        sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
         response.send("Success")
     })
     .catch((error) => {
@@ -175,7 +174,7 @@ app.post("/webhook", (request, response) => {
                     text: date.toDateString()
                 }]
                 
-                sendMail(email, 'Donation Confirmation Educationist Tutoring', 'root/emails/receipt.html', options)
+                sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
                 response.send("Done")
             })
             break;
