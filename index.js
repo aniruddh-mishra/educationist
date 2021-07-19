@@ -29,7 +29,6 @@ db = db.ref("/")
 app.use(express.json());
 
 app.get('/', (request, response) => {
-    sendMail('aniruddhm17@gmail.com', 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html')
     response.sendFile(__dirname + '/root/index.html');
 });
 
@@ -176,7 +175,7 @@ app.post("/webhook", (request, response) => {
                 }]
                 
                 sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
-                response.send("Done")
+                response.send(value)
             })
             break;
         default:

@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
+const { resolve } = require('path');
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -24,14 +25,15 @@ function sendMail(recipient, subject, fileName, options) {
             html: data
         };
         
-        return transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-            console.log('Email Send Error: ' + error);
-            } else {
-            console.log('Email sent: ' + info.response);
+        transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+                console.log('Email Send Error: ' + err);
             }
-            return info
-        })
+            else {
+                console.log('Email sent: ' + info.response);
+            }
+            return Promise.resolve(info)
+        }).then(value => console.log(value))
     } catch (error) {
         console.log("Email Error: " + error)
     }
