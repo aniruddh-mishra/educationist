@@ -1,11 +1,8 @@
 const express = require('express');
 const fs = require('fs');
-const admin = require("firebase-admin");
-const { response } = require('express');
-const { send } = require('process');
+const { emailError } = require('./emailer');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
-const serviceAccount = require(__dirname + '/firebase.json');
-const { sendMail } = require(__dirname + '/emailer.js');
+const { sendMail, db, admin } = require(__dirname + '/emailer.js');
 
 const secretKeys = {
     donate: {
@@ -17,15 +14,6 @@ const secretKeys = {
 }
 
 const app = express();
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://educationist-42b45-default-rtdb.firebaseio.com"
-});
-
-var db = admin.database();
-
-db = db.ref("/")
 
 app.use(express.json());
 
@@ -104,7 +92,14 @@ app.post("/reset", async (request, response) => {
             text: link
         }]
 
-        await sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
+        try {
+            await sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
+        } catch (err) {
+            console.log("Reset Email Error: " + err)
+            emailError(email, 'reset', options)
+            return response.status(400).send("Failure")
+        }
+        
         response.send("Success")
     })
     .catch((error) => {
@@ -175,7 +170,13 @@ app.post("/webhook", (request, response) => {
                     text: date.toDateString()
                 }]
                 
-                await sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
+                try {
+                    await sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
+                } catch (err) {
+                    console.log("Receipt Email Error: " + err)
+                    emailError(email, 'receipt', options)
+                }
+
                 response.send("Done")
             })
             break;

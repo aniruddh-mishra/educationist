@@ -1,7 +1,16 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
-const { resolve } = require('path');
-const { send } = require('process');
+const admin = require("firebase-admin");
+const serviceAccount = require(__dirname + '/firebase.json');
+
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+    databaseURL: "https://educationist-42b45-default-rtdb.firebaseio.com"
+});
+
+var db = admin.database();
+
+db = db.ref("/")
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -39,4 +48,16 @@ function sendMail(recipient, subject, fileName, options) {
     })
 }
 
+function emailError(recipient, routine, options) {
+    const id = Date.now() + Math.random().toString(36).substring(7)
+    db.child("Email Que").child(id).set({
+        options: options,
+        recipient: recipient,
+        routine: routine
+    });
+}
+
 module.exports.sendMail = sendMail;
+module.exports.emailError = emailError
+module.exports.db = db
+module.exports.admin = admin
