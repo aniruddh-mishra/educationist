@@ -174,7 +174,7 @@ app.post("/webhook", (request, response) => {
                     text: date.toDateString()
                 }]
                 
-                sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
+                sendMail(email, 'Donation Confirmation Educationist Tutoring', '/root/emails/receipt.html', options)
                 response.send("Done")
             })
             break;
