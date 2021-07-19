@@ -15,7 +15,7 @@ function sendMail(recipient, subject, fileName, options) {
         if (options) {
             for (change of options) {
                 console.log(data)
-                data = data.replaceAll(change.key, change.text)
+                data = data.replace(new RegExp(change.key, 'g'), change.text);
             }
         }
         var mailOptions = {
