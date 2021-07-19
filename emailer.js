@@ -41,7 +41,7 @@ function sendMail(recipient, subject, fileName, options) {
                 reject(err)
             }
             else {
-                console.log('Email sent: ' + info.response);
+                console.log('Email Sent: ' + info.response);
                 resolve(info)
             }
         })
