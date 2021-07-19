@@ -29,6 +29,7 @@ db = db.ref("/")
 app.use(express.json());
 
 app.get('/', (request, response) => {
+    sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html')
     response.sendFile(__dirname + '/root/index.html');
 });
 
@@ -102,9 +103,9 @@ app.post("/reset", (request, response) => {
             key: 'link1',
             text: link
         }]
-        sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
+
         sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
-        return response.send("Success")
+        response.send("Success")
     })
     .catch((error) => {
         if (error.code === "auth/email-not-found") {
@@ -175,7 +176,7 @@ app.post("/webhook", (request, response) => {
                 }]
                 
                 sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
-                return response.send("Done")
+                response.send("Done")
             })
             break;
         default:
