@@ -11,6 +11,7 @@ var transporter = nodemailer.createTransport({
 
 function sendMail(recipient, subject, fileName, options) {
     fs.readFile(fileName, 'utf8', (error, data) => {
+        console.log(fileName)
         if(error) {
             console.log("Email Error: " + error)
         } else {
