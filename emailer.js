@@ -24,15 +24,13 @@ function sendMail(recipient, subject, fileName, options) {
             html: data
         };
         
-        return Promise.resolve().then(() => {
-            transporter.sendMail(mailOptions, (error, info) => {
-                if (error) {
-                console.log('Email Send Error: ' + error);
-                } else {
-                console.log('Email sent: ' + info.response);
-                }
-                return info
-            })
+        return transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+            console.log('Email Send Error: ' + error);
+            } else {
+            console.log('Email sent: ' + info.response);
+            }
+            return info
         })
     } catch (error) {
         console.log("Email Error: " + error)
