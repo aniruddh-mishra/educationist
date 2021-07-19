@@ -24,13 +24,16 @@ function sendMail(recipient, subject, fileName, options) {
             html: data
         };
         
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-              console.log('Email Send Error: ' + error);
-            } else {
-              console.log('Email sent: ' + info.response);
-            }
-        });
+        return new Promise(() => {
+            transporter.sendMail(mailOptions, (error, info) => {
+                if (error) {
+                console.log('Email Send Error: ' + error);
+                } else {
+                console.log('Email sent: ' + info.response);
+                }
+                return info
+            })
+        })
     } catch (error) {
         console.log("Email Error: " + error)
     }

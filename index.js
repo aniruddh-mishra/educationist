@@ -167,7 +167,7 @@ app.post("/webhook", (request, response) => {
                 const amount = checkoutSession.amount_captured;
                 options = [{
                     key: 'amount',
-                    text: amount
+                    text: '$' + String(parseFloat(amount/100).toFixed(2))
                 },
                 {
                     key: 'date',
