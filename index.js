@@ -29,7 +29,7 @@ db = db.ref("/")
 app.use(express.json());
 
 app.get('/', (request, response) => {
-    sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html')
+    sendMail('aniruddhm17@gmail.com', 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html')
     response.sendFile(__dirname + '/root/index.html');
 });
 
