@@ -104,7 +104,7 @@ app.post("/reset", (request, response) => {
         }]
         
         sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
-        response.send("Success")
+        return response.send("Success")
     })
     .catch((error) => {
         if (error.code === "auth/email-not-found") {
