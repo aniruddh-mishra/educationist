@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const admin = require("firebase-admin");
 const { response } = require('express');
+const { send } = require('process');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const serviceAccount = require(__dirname + '/firebase.json');
 const { sendMail } = require(__dirname + '/emailer.js');
@@ -28,7 +29,7 @@ db = db.ref("/")
 
 app.use(express.json());
 
-app.get('/', (request, response) => {
+app.get('/', async (request, response) => {
     response.sendFile(__dirname + '/root/index.html');
 });
 
@@ -89,7 +90,7 @@ app.get('/donate', (request, response) => {
     response.sendFile(__dirname + '/root/donate.html');
 });
 
-app.post("/reset", (request, response) => {
+app.post("/reset", async (request, response) => {
     let {email} = request.body;
     let actioncodesettings = {
         url: "https://dashboard.educationisttutoring.org/login"
@@ -97,13 +98,13 @@ app.post("/reset", (request, response) => {
     admin
     .auth()
     .generatePasswordResetLink(email, actioncodesettings)
-    .then((link) => {
+    .then(async (link) => {
         options = [{
             key: 'link1',
             text: link
         }]
 
-        sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
+        await sendMail(email, 'Password Reset Educationist Tutoring', __dirname + '/root/emails/reset.html', options)
         response.send("Success")
     })
     .catch((error) => {
@@ -161,7 +162,7 @@ app.post("/webhook", (request, response) => {
                     db.child("Activated IDs").child(eid).child("Donation Records").set(records)
                 });
             })
-            .then(() => {
+            .then(async () => {
                 const date = new Date()
                 const email = checkoutSession.receipt_email;
                 const amount = checkoutSession.amount_captured;
@@ -174,7 +175,7 @@ app.post("/webhook", (request, response) => {
                     text: date.toDateString()
                 }]
                 
-                sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
+                await sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
                 response.send("Done")
             })
             break;

@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const { resolve } = require('path');
+const { send } = require('process');
 
 var transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -11,32 +12,31 @@ var transporter = nodemailer.createTransport({
 });
 
 function sendMail(recipient, subject, fileName, options) {
-    try {
-        var data = fs.readFileSync(fileName, 'utf8')
-        if (options) {
-            for (change of options) {
-                data = data.replace(new RegExp(change.key, 'g'), change.text);
-            }
+    var data = fs.readFileSync(fileName, 'utf8')
+    if (options) {
+        for (change of options) {
+            data = data.replace(new RegExp(change.key, 'g'), change.text);
         }
-        var mailOptions = {
-            from: 'Educationist Tutoring <educationist@educationisttutoring.org>',
-            to: recipient,
-            subject: subject,
-            html: data
-        };
-        
+    }
+    var mailOptions = {
+        from: 'Educationist Tutoring <educationist@educationisttutoring.org>',
+        to: recipient,
+        subject: subject,
+        html: data
+    };
+
+    return new Promise((resolve, reject) => {
         transporter.sendMail(mailOptions, (err, info) => {
             if (err) {
                 console.log('Email Send Error: ' + err);
+                reject(err)
             }
             else {
                 console.log('Email sent: ' + info.response);
+                resolve(info)
             }
-            return Promise.resolve(info)
-        }).then(value => console.log(value))
-    } catch (error) {
-        console.log("Email Error: " + error)
-    }
+        })
+    })
 }
 
 module.exports.sendMail = sendMail;
