@@ -175,7 +175,7 @@ app.post("/webhook", (request, response) => {
                 }]
                 
                 sendMail(email, 'Donation Confirmation Educationist Tutoring', __dirname + '/root/emails/receipt.html', options)
-                response.send(value)
+                response.send("Done")
             })
             break;
         default:
