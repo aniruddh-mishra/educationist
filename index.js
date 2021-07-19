@@ -18,7 +18,6 @@ const app = express();
 app.use(express.json());
 
 app.get('/', async (request, response) => {
-    console.log(test)
     response.sendFile(__dirname + '/root/index.html');
 });
 
