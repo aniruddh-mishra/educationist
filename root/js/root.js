@@ -53,6 +53,7 @@ firebase.auth().onAuthStateChanged((user) => {
 
 function openMenu(value) {
     value.classList.toggle('change');
+    document.querySelector('.navbar').classList.toggle('navbar-vertical')
     document.getElementsByClassName('title')[0].classList.toggle('invisible')
     document.getElementsByClassName('main-body')[0].classList.toggle('invisible')
 }
