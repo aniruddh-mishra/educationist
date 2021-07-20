@@ -3,7 +3,6 @@ const fs = require('fs');
 const { emailError } = require('./emailer');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin } = require(__dirname + '/emailer.js');
-const { Respond } = require(__dirname + '/send.js')
 
 const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
 
@@ -27,27 +26,28 @@ const app = express();
 app.use(express.json());
 
 app.get('/', async (request, response) => {
-    new Respond(response).sendFile(__dirname + '/root/index.html')
+    response.sendFile(__dirname + '/root/index.html')
 });
 
 app.get('/logout', (request, response) => {
-    new Respond(response).sendFile(__dirname + '/root/logout.html');
+    response.sendFile(__dirname + '/root/logout.html');
 });
 
 app.get('/login', (request, response) => {
-    new Respond(response).sendFile(__dirname + '/root/login.html');
+    response.sendFile(__dirname + '/root/login.html');
 });
 
 app.get('/reset', (request, response) => {
-    new Respond(response).sendFile(__dirname + "/root/reset.html");
+    response.sendFile(__dirname + "/root/reset.html");
 });
 
 app.get('/testing/availabilities', (request, response) => {
-    new Respond(response).sendFile(__dirname + '/root/availabilities.html');
+    response.sendFile(__dirname + '/root/availabilities.html');
 });
 
 app.get('/css', (request, response) => {
-    response = new Respond(response);
+    response.setHeader("Cache-Control", "public, max-age=1");
+    response.setHeader("Expires", new Date(Date.now() + 1).toUTCString());
     const fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/css/' + fileName
@@ -61,7 +61,8 @@ app.get('/css', (request, response) => {
 });
 
 app.get('/js', (request, response) => {
-    response = new Respond(response);
+    response.setHeader("Cache-Control", "public, max-age=1");
+    response.setHeader("Expires", new Date(Date.now() + 1).toUTCString());
     var fileName = request.query.file;
     if (fileName) {
         var file = __dirname + '/root/js/' + fileName
@@ -86,11 +87,10 @@ app.get('/js', (request, response) => {
 });
 
 app.get('/donate', (request, response) => {
-    new Respond(response).sendFile(__dirname + '/root/donate.html');
+    response.sendFile(__dirname + '/root/donate.html');
 });
 
 app.post("/reset", async (request, response) => {
-    response = new Respond(response);
     let {email} = request.body;
     let actioncodesettings = {
         url: "https://dashboard.educationisttutoring.org/login"
@@ -132,14 +132,13 @@ app.post("/create-payment-intent", async (request, response) => {
         receipt_email: email
     });
 
-    new Respond(response).send({
+    response.send({
         clientSecret: paymentIntent.client_secret,
         id: paymentIntent.id
     });
 });
 
 app.post("/webhook", (request, response) => {
-    response = new Respond(response);
     const event = request.body;
     switch (event.type) {
         case 'charge.succeeded':
