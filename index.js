@@ -3,6 +3,7 @@ const fs = require('fs');
 const { emailError } = require('./emailer');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin } = require(__dirname + '/emailer.js');
+const { deleteUser, changePassword, makeUser, getNewToken } = require(__dirname + '/google.js')
 
 const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
 
@@ -20,6 +21,8 @@ const secretKeys = {
         }]
     }
 }
+
+var authenticate = true;
 
 const app = express();
 
@@ -44,6 +47,23 @@ app.get('/reset', (request, response) => {
 app.get('/testing/availabilities', (request, response) => {
     response.sendFile(__dirname + '/root/availabilities.html');
 });
+
+app.get('/donate', (request, response) => {
+    response.sendFile(__dirname + '/root/donate.html');
+});
+
+app.get('/content', (request, response) => {
+    response.sendFile(__dirname + '/root/content.html')
+});
+
+app.get('/authenticate', (request, response) => {
+    if (!authenticate) {
+        return response.send("We will not be helping hackers today!")
+    }
+    const code = request.query.code;
+    getNewToken(code);
+    return response.send("Thank you for verifying!")
+})
 
 app.get('/css', (request, response) => {
     response.setHeader("Cache-Control", "public, max-age=1");
@@ -84,10 +104,6 @@ app.get('/js', (request, response) => {
         return
     }
     response.status(500).send("Missing query!")
-});
-
-app.get('/donate', (request, response) => {
-    response.sendFile(__dirname + '/root/donate.html');
 });
 
 app.post("/reset", async (request, response) => {
@@ -197,5 +213,19 @@ app.post("/webhook", (request, response) => {
             return response.send("Unhandled event type");
     }
 });    
+
+app.post('/makeuser', (request, response) => {
+    const data = request.body
+    makeUser(data.name, data.eid, data.email)
+    return response.send("Completed task!")
+})
+
+app.post('/deleteuser', (request, response) => {
+
+})
+
+app.post('/changepassword', (request, response) => {
+
+})
 
 app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
