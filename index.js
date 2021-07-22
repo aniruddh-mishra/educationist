@@ -222,7 +222,6 @@ app.post('/changepassword', (request, response) => {
 
 })
 
-authorize().then(() => {
-    app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
-})
-.catch(error => console.log("Start Error: " + error))
+authorize()
+
+app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
