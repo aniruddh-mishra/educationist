@@ -222,7 +222,7 @@ app.post('/changepassword', (request, response) => {
 
 })
 
-authorize(oauth2Client).then(() => {
+authorize().then(() => {
     app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
 })
 .catch(error => console.log("Start Error: " + error))
