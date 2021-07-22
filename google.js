@@ -48,6 +48,7 @@ async function newURL(oauth2Client) {
 }
 
 async function getNewToken(code) {
+  try {
     const {tokens} = await oauth2Client.getToken(code);
     oauth2Client.setCredentials(tokens);
     console.log(tokens)
@@ -58,6 +59,9 @@ async function getNewToken(code) {
         'Content-Type': 'application/json'
       }
     })
+  } catch (error) {
+    console.log('Token Collection Error: ' + error);
+  }
 }
 
 function makeUser(name, eid, homeEmail) {
