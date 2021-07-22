@@ -101,6 +101,6 @@ function updateUser(email, data) {
 }
 
 module.exports.deleteUser = deleteUser
-module.exports.changePassword = changePassword
+module.exports.changePassword = updateUser
 module.exports.makeUser = makeUser
 module.exports.getNewToken = getNewToken
