@@ -219,7 +219,7 @@ app.post('/makeuser', (request, response) => {
     .then(() => {
         return response.send("Completed task!")
     })
-    .catch(error => console.log('Token Collection Error: ' + error))
+    .catch(error => console.log('Make User Error: ' + error))
 })
 
 app.post('/deleteuser', (request, response) => {

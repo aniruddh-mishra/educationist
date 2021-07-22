@@ -8,6 +8,8 @@ require('dotenv').config({
 
 const SCOPES = ['https://www.googleapis.com/auth/admin.directory.user'];
 
+// axios.post('http://dashboard.educationisttutoring.org/makeuser', {name: 'Aniruddh Mishra', 'eid': 'mG8Z', email: 'aniruddhm17@gmail.com'})
+
 const {client_secret, client_id, redirect_uris} = JSON.parse(process.env.GOOGLE_CERT).web;
 var oauth2Client = new google.auth.OAuth2(
   client_id,
