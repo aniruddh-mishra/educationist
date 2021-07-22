@@ -1,19 +1,19 @@
 const fs = require('fs');
 const {google} = require('googleapis');
 const axios = require('axios');
+require('dotenv').config({
+  path: __dirname + '/.env'
+});
 
 const SCOPES = ['https://www.googleapis.com/auth/admin.directory.user'];
-var oauth2Client;
 
-fs.readFile('credentials.json', (err, content) => {
-  const {client_secret, client_id, redirect_uris} = JSON.parse(content).web;
-  oauth2Client = new google.auth.OAuth2(
-    client_id,
-    client_secret,
-    redirect_uris
-  );
-  newURL(oauth2Client);
-});
+const {client_secret, client_id, redirect_uris} = JSON.parse(process.env.GOOGLE_CERT).web;
+var oauth2Client = new google.auth.OAuth2(
+  client_id,
+  client_secret,
+  redirect_uris
+);
+newURL(oauth2Client);
 
 var userRequest;
 

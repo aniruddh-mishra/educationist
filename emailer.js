@@ -1,10 +1,12 @@
 const nodemailer = require('nodemailer');
 const fs = require('fs');
 const admin = require("firebase-admin");
-const serviceAccount = require(__dirname + '/firebase.json');
+require('dotenv').config({
+    path: __dirname + '/.env'
+});
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.credential.cert(JSON.parse(process.env.FIREBASE)),
     databaseURL: "https://educationist-42b45-default-rtdb.firebaseio.com"
 });
 
