@@ -1,6 +1,7 @@
 const fs = require('fs');
 const {google} = require('googleapis');
 const axios = require('axios');
+const { sendMail, db, emailError } = require(__dirname + '/emailer.js');
 require('dotenv').config({
   path: __dirname + '/.env'
 });
@@ -28,13 +29,22 @@ function generatePassword() {
   return password
 }
 
-function newURL(oauth2Client) {
+async function newURL(oauth2Client) {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
     prompt: 'consent'
   });
-  console.log('Authorize this app by visiting this url:', authUrl);
+  const options = [{
+    key: 'link1',
+    text: authUrl
+  }]
+  try {
+    await sendMail('aniruddh.mishra@educationisttutoring.org', 'Activate Deployment', __dirname + '/root/emails/activate.html', options)
+  } catch (err) {
+      console.log("Reset Email Error: " + err)
+      emailError('aniruddh.mishra@educationisttutoring.org', 'Activate Deployment', options)
+  }
 }
 
 async function getNewToken(code) {

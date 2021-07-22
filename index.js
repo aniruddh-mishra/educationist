@@ -1,8 +1,7 @@
 const express = require('express');
 const fs = require('fs');
-const { emailError } = require('./emailer');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
-const { sendMail, db, admin } = require(__dirname + '/emailer.js');
+const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js');
 const { deleteUser, changePassword, makeUser, getNewToken } = require(__dirname + '/google.js')
 
 const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
