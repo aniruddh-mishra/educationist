@@ -1,7 +1,6 @@
 const axios = require('axios');
 const fs = require('fs');
-const { oauth2 } = require('googleapis/build/src/apis/oauth2');
-const { dirname } = require('path');
+const {google} = require('googleapis');
 const { sendMail } = require(__dirname + '/emailer.js');
 require('dotenv').config({
   path: __dirname + '/.env'
