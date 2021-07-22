@@ -87,22 +87,16 @@ function makeUser(name, eid, homeEmail) {
         primary: true
     }]
   }
-  userRequest.post('https://admin.googleapis.com/admin/directory/v1/users', userData)
-  .then(value => console.log(value))
-  .catch(error => console.error(error))
+  return userRequest.post('https://admin.googleapis.com/admin/directory/v1/users', userData)
 }
 
 function deleteUser(email) {
   userRequest.delete('https://admin.googleapis.com/admin/directory/v1/users/' + email)
 }
 
-function changePassword(email) {
+function updateUser(email, data) {
   const password = generatePassword()
   console.log(password)
-  const data = {
-    password: password,
-    changePasswordAtNextLogin: true
-  }
   userRequest.put('https://admin.googleapis.com/admin/directory/v1/users/' + email, data)
 }
 

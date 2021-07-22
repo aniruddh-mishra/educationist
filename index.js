@@ -216,7 +216,10 @@ app.post("/webhook", (request, response) => {
 app.post('/makeuser', (request, response) => {
     const data = request.body
     makeUser(data.name, data.eid, data.email)
-    return response.send("Completed task!")
+    .then(() => {
+        return response.send("Completed task!")
+    })
+    .catch(error => console.log('Token Collection Error: ' + error))
 })
 
 app.post('/deleteuser', (request, response) => {
