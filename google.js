@@ -1,7 +1,10 @@
 const axios = require('axios');
 const fs = require('fs');
-const {google} = require('googleapis');
+const { google } = require('googleapis');
+const { send } = require('process');
+const { db } = require('./emailer');
 const { sendMail } = require(__dirname + '/emailer.js');
+
 require('dotenv').config({
   path: __dirname + '/.env'
 });
@@ -30,8 +33,7 @@ function generatePassword() {
 function authorize() {
   try {
     if (oauth2Client) {
-      console.log(oauth2Client.credentials)
-      if (oauth2Client.credentials) {
+      if (oauth2Client.credentials == {}) {
         return true
       }
       let tokens = fs.readFileSync(__dirname + '/token.json');
@@ -65,7 +67,7 @@ async function newURL() {
     key: 'link1',
     text: authUrl
   }]
-  return sendMail('aniruddh.mishra@educationisttutoring.org', 'Activate Deployment', __dirname + '/root/emails/activate.html', options)
+  await sendMail('aniruddh.mishra@educationisttutoring.org', 'Activate Deployment', __dirname + '/root/emails/activate.html', options)
 }
 
 async function getNewToken(code) {
@@ -118,6 +120,20 @@ function makeUser(name, eid, homeEmail) {
     data: userData,
     headers: headers
   })
+  .then(() => {
+    addUser(email, eid, homeEmail).then(() => {
+      return
+    })
+  })
+  .catch(error => {
+    if (error.response.data.error.code === 409) {
+      addUser(email, eid, homeEmail).then(() => {
+        return
+      })
+    } else {
+      db.child('Email Making Errors').child(eid).set(email);
+    }
+  })
 }
 
 function deleteUser(email) {
@@ -147,6 +163,15 @@ function updateUser(email, data) {
     data: data,
     headers: headers
   })
+}
+
+function addUser(email, eid, homeEmail) {
+  db.child('Activated IDs').child(eid).child('Educationist Email').set(email);
+  const options = [{
+    key: 'email1',
+    text: email
+  }]
+  return sendMail(homeEmail, 'Educationist Google Workspace Account Created', __dirname + '/root/emails/email_made.html', options);
 }
 
 module.exports.deleteUser = deleteUser

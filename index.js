@@ -3,23 +3,7 @@ const fs = require('fs');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js');
 const { deleteUser, updateUser, makeUser, getNewToken, authorize } = require(__dirname + '/google.js')
-
-const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
-
-const secretKeys = {
-    donate: {
-        keys: [{
-            name: 'STRIPE_KEY',
-            key: process.env.STRIPE_PUBLIC
-        }]
-    },
-    root: {
-        keys: [{
-            name: 'NAVIGATION',
-            key: navBar
-        }]
-    }
-}
+const { secretKeys, processURL } = require(__dirname + '/setup.js')
 
 const app = express();
 
@@ -210,8 +194,7 @@ app.post("/webhook", (request, response) => {
 
 app.post('/makeuser', (request, response) => {
     const data = request.body
-    makeUser(data.name, data.eid, data.email)
-    return response.send('Done')
+    return response.send(makeUser(data.name, data.eid, data.email))
 })
 
 app.post('/deleteuser', (request, response) => {
@@ -224,4 +207,4 @@ app.post('/changepassword', (request, response) => {
 
 authorize()
 
-app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
+app.listen(80, () => console.log('App available on', processURL))
