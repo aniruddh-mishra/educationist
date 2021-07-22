@@ -65,8 +65,6 @@ async function getNewToken(code) {
 }
 
 function makeUser(name, eid, homeEmail) {
-  name = 'test tutor 1'
-  homeEmail = 'aniruddhm17@gmail.com'
   const firstName = name.split(" ")[0]
   const lastName = name.split(" ").splice(1).join(" ")
   const password = generatePassword()
