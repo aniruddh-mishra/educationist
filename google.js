@@ -1,10 +1,21 @@
 const axios = require('axios');
+const fs = require('fs');
+const { oauth2 } = require('googleapis/build/src/apis/oauth2');
+const { dirname } = require('path');
 const { sendMail } = require(__dirname + '/emailer.js');
 require('dotenv').config({
   path: __dirname + '/.env'
 });
 
 const SCOPES = ['https://www.googleapis.com/auth/admin.directory.user'];
+
+const {client_secret, client_id, redirect_uris} = JSON.parse(process.env.GOOGLE_CERT).web;
+
+var oauth2Client = new google.auth.OAuth2(
+  client_id,
+  client_secret,
+  redirect_uris[0]
+);
 
 function generatePassword() {
   const alphabet = "abcdefghijklmnopqrstuvwxyz"
@@ -17,7 +28,35 @@ function generatePassword() {
   return password
 }
 
-async function newURL(oauth2Client) {
+function authorize() {
+  try {
+    if (oauth2Client) {
+      console.log(oauth2Client.credentials)
+      if (oauth2Client.credentials) {
+        return true
+      }
+      let tokens = fs.readFileSync(__dirname + '/token.json');
+      oauth2Client.credentials = JSON.parse(tokens)
+      return true
+    } else {
+      const {client_secret, client_id, redirect_uris} = JSON.parse(process.env.GOOGLE_CERT).web;
+
+      oauth2Client = new google.auth.OAuth2(
+        client_id,
+        client_secret,
+        redirect_uris[0]
+      );
+
+      let tokens = fs.readFileSync(__dirname + '/token.json');
+      oauth2Client.credentials = JSON.parse(tokens)
+      return true
+    }
+  } catch {
+    newURL()
+  }
+}
+
+async function newURL() {
   const authUrl = oauth2Client.generateAuthUrl({
     access_type: 'offline',
     scope: SCOPES,
@@ -30,25 +69,30 @@ async function newURL(oauth2Client) {
   return sendMail('aniruddh.mishra@educationisttutoring.org', 'Activate Deployment', __dirname + '/root/emails/activate.html', options)
 }
 
-async function getNewToken(code, oauth2Client) {
+async function getNewToken(code) {
   try {
     const {tokens} = await oauth2Client.getToken(code);
-    oauth2Client.setCredentials(tokens);
-    console.log(tokens)
-    const userRequest = axios.create({
-      headers: {
-        'Authorization': 'Bearer ' + oauth2Client.credentials.access_token,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    })
-    return userRequest
+    storeToken(tokens)
   } catch (error) {
     console.log('Token Collection Error: ' + error);
   }
 }
 
-function makeUser(userRequest, name, eid, homeEmail) {
+function storeToken(tokens) {
+  const TOKEN_PATH = __dirname + '/token.json'
+  fs.writeFile(TOKEN_PATH, JSON.stringify(tokens), (err) => {
+    if (err) return console.warn(`Token not stored to ${TOKEN_PATH}`, err);
+    authorize()
+    console.log(`Token stored to ${TOKEN_PATH}`);
+  });
+}
+
+function makeUser(name, eid, homeEmail) {
+  const headers = {
+    'Authorization': 'Bearer ' + oauth2Client.credentials.access_token,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
   const firstName = name.split(" ")[0]
   const lastName = name.split(" ").splice(1).join(" ")
   const password = generatePassword()
@@ -69,21 +113,45 @@ function makeUser(userRequest, name, eid, homeEmail) {
         primary: true
     }]
   }
-  return userRequest.post('https://admin.googleapis.com/admin/directory/v1/users', userData)
+  axios({
+    method: 'post',
+    url: 'https://admin.googleapis.com/admin/directory/v1/users/',
+    data: userData,
+    headers: headers
+  })
 }
 
-function deleteUser(userRequest, email) {
-  userRequest.delete('https://admin.googleapis.com/admin/directory/v1/users/' + email)
+function deleteUser(email) {
+  const headers = {
+    'Authorization': 'Bearer ' + oauth2Client.credentials.access_token,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+  axios({
+    method: 'delete',
+    url: 'https://admin.googleapis.com/admin/directory/v1/users/' + email,
+    headers: headers
+  })
 }
 
-function updateUser(userRequest, email, data) {
+function updateUser(email, data) {
+  const headers = {
+    'Authorization': 'Bearer ' + oauth2Client.credentials.access_token,
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
   const password = generatePassword()
   console.log(password)
-  userRequest.put('https://admin.googleapis.com/admin/directory/v1/users/' + email, data)
+  axios({
+    method: 'put',
+    url: 'https://admin.googleapis.com/admin/directory/v1/users/' + email,
+    data: data,
+    headers: headers
+  })
 }
 
 module.exports.deleteUser = deleteUser
 module.exports.changePassword = updateUser
 module.exports.makeUser = makeUser
 module.exports.getNewToken = getNewToken
-module.exports.newURL = newURL
+module.exports.authorize = authorize

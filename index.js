@@ -2,8 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js');
-const { deleteUser, updateUser, makeUser, getNewToken, newURL } = require(__dirname + '/google.js')
-const {google} = require('googleapis');
+const { deleteUser, updateUser, makeUser, getNewToken, authorize } = require(__dirname + '/google.js')
 
 const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
 
@@ -21,18 +20,6 @@ const secretKeys = {
         }]
     }
 }
-
-const {client_secret, client_id, redirect_uris} = JSON.parse(process.env.GOOGLE_CERT).web;
-
-var oauth2Client = new google.auth.OAuth2(
-  client_id,
-  client_secret,
-  redirect_uris
-);
-
-var authenticate = true;
-
-var userRequest;
 
 const app = express();
 
@@ -67,11 +54,8 @@ app.get('/content', (request, response) => {
 });
 
 app.get('/authenticate', (request, response) => {
-    if (!authenticate) {
-        return response.send("We will not be helping hackers today!")
-    }
     const code = request.query.code;
-    userRequest = getNewToken(code);
+    getNewToken(code);
     return response.send("Thank you for verifying!")
 })
 
@@ -226,11 +210,8 @@ app.post("/webhook", (request, response) => {
 
 app.post('/makeuser', (request, response) => {
     const data = request.body
-    makeUser(userRequest, data.name, data.eid, data.email)
-    .then(() => {
-        return response.send("Completed task!")
-    })
-    .catch(error => console.log('Make User Error: ' + error))
+    makeUser(data.name, data.eid, data.email)
+    return response.send('Done')
 })
 
 app.post('/deleteuser', (request, response) => {
@@ -241,8 +222,7 @@ app.post('/changepassword', (request, response) => {
 
 })
 
-
-newURL(oauth2Client).then(() => {
+authorize(oauth2Client).then(() => {
     app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
 })
 .catch(error => console.log("Start Error: " + error))
