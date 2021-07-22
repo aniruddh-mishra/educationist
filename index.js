@@ -2,7 +2,8 @@ const express = require('express');
 const fs = require('fs');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js');
-const { deleteUser, changePassword, makeUser, getNewToken } = require(__dirname + '/google.js')
+const { deleteUser, updateUser, makeUser, getNewToken, newURL } = require(__dirname + '/google.js')
+const {google} = require('googleapis');
 
 const navBar = fs.readFileSync(__dirname + '/root/navBar.html', 'utf8')
 
@@ -21,7 +22,17 @@ const secretKeys = {
     }
 }
 
+const {client_secret, client_id, redirect_uris} = JSON.parse(process.env.GOOGLE_CERT).web;
+
+var oauth2Client = new google.auth.OAuth2(
+  client_id,
+  client_secret,
+  redirect_uris
+);
+
 var authenticate = true;
+
+var userRequest;
 
 const app = express();
 
@@ -60,7 +71,7 @@ app.get('/authenticate', (request, response) => {
         return response.send("We will not be helping hackers today!")
     }
     const code = request.query.code;
-    getNewToken(code);
+    userRequest = getNewToken(code);
     return response.send("Thank you for verifying!")
 })
 
@@ -215,7 +226,7 @@ app.post("/webhook", (request, response) => {
 
 app.post('/makeuser', (request, response) => {
     const data = request.body
-    makeUser(data.name, data.eid, data.email)
+    makeUser(userRequest, data.name, data.eid, data.email)
     .then(() => {
         return response.send("Completed task!")
     })
@@ -230,4 +241,8 @@ app.post('/changepassword', (request, response) => {
 
 })
 
-app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
+
+newURL(oauth2Client).then(() => {
+    app.listen(80, () => console.log('App available on https://dashboard.educationisttutoring.org'))
+})
+.catch(error => console.log("Start Error: " + error))
