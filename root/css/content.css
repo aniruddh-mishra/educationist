@@ -1,5 +1,136 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
+
+:root {
+  --educationist-green: #38b18a;
+  --educationist-blue: #16a9b6;
+}
+
+.main-body {
+    margin-top: 5vh;
+    display: flex;
+}
+
+.filter {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    min-width: 300px;
+    margin-right: 4vw;
+}
+
+#search {
+    margin-bottom: 4vh;
+}
+
+#refresh {
+    float: right;
+    color: white;
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+    padding: 0;
+    border-radius: .25em;
+    display: flex;
+    width: 30px;
+    justify-content: center;
+    margin-bottom: 4vh;
+}
+
+#cards {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.card {
+    box-shadow: 0 0 10px var(--educationist-blue);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    min-width: 200px;
+    max-width: 250px;
+    height: 40vh;
+    max-height: 400px;
+    background-color: rgb(30, 34, 32);
+    border-radius: 2.5rem;
+    padding: 30px 30px;
+    margin: 0 2vw;
+    margin-bottom: 5vh;
+    overflow-x: hidden;
+}
+
+.card:hover {
+    background-color: rgb(48, 56, 52);
+}
+
+.card a {
+    color: inherit;
+}
+
+.card a:hover {
+    color: var(--educationist-green);
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    height: 23vh;
+    overflow: hidden;
+}
+
+.title {
+    width: 100%;
+    font-size: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+#tags {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+    line-height: 2;
+}
+
+#tags a {
+    font-weight: 700;
+    color: #7a7a8c;
+    text-transform: uppercase;
+    font-size: .5rem;
+    border: 3px solid var(--educationist-blue);
+    border-radius: 2rem;
+    padding: .2rem .65rem;
+}
+
+#tags a:hover {
+    background: linear-gradient(90deg,var(--educationist-blue), var(--educationist-green));
+    color: white;
+    border-color: white;
+}
+
 @media (max-width:950px) {
+    .filter {
+        min-width: 200px;
+    }
+
     .invisible {
         display: none;
+    }
+
+    .main-body {
+        display: block;
+        text-align: center;
+    }
+    
+    .search {
+        text-align: center;
+    }
+    
+    #cards {
+        justify-content: center;
     }
 }

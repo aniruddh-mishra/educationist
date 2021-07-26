@@ -14,15 +14,37 @@
 	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-    <script src="https://unpkg.com/react@17/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 </head>
 <body>
     <div class="container">
         <div id="navigation"></div>
         <script src="/js?file=root.js"></script>
+        <div class="main-body">
+            <div class="filter">
+                <button onclick="refresh()" id="refresh">
+                    <img src="https://cdn.educationisttutoring.org/images/circle-arrow.svg" alt="Refresh">
+                </button>
+                <input onchange="filter()" id="search" placeholder="Tags" type="text">
+                <select onchange="filter()" id="subjects">
+                    <option value="none">Select</option>
+                </select>
+            </div>
+            <template id="card-template">
+                    <article class="card">
+                        <div class="banner">
+                            <img id="banner-image" src="" alt="Science Content Image">
+                        </div>
+                        <h2 class="title">Title</h2>
+                        <div class="card-author">
+                            <div class="author-name">
+                            Anonymous
+                            </div>
+                        </div>
+                        <div id="tags"></div>
+                    </article>
+            </template>
+        </div>
+        <script src="/js?file=content.js"></script>
     </div>
-	<script type="text/babel" src="/js?file=content.js"></script>
 </body>
 </html>

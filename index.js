@@ -4,6 +4,18 @@ const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js');
 const { deleteUser, updateUser, makeUser, getNewToken, authorize } = require(__dirname + '/google.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
+const rateLimit = require("express-rate-limit");
+
+function ban() {
+    const file = fs.readFileSync(__dirname + '/root/ban.html', 'utf-8');
+    return file
+}
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 50,
+  message: ban()
+});
 
 const app = express();
 
@@ -33,7 +45,7 @@ app.get('/donate', (request, response) => {
     response.sendFile(__dirname + '/root/donate.html');
 });
 
-app.get('/content', (request, response) => {
+app.get('/content', limiter, (request, response) => {
     response.sendFile(__dirname + '/root/content.html')
 });
 
@@ -83,6 +95,10 @@ app.get('/js', (request, response) => {
     }
     response.status(500).send("Missing query!")
 });
+
+app.post("/ban", (request, response) => {
+    db.child('Banned IDs').child(request.body.uid).set(new Date().getTime() + (15 * 24 * 3600 * 1000));
+})
 
 app.post("/reset", async (request, response) => {
     let {email} = request.body;

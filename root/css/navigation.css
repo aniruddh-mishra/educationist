@@ -40,6 +40,50 @@ header {
     margin: auto;
 }
 
+input {
+  outline: none;
+  background: none;
+  box-sizing: border-box;
+  border: 1px solid rgb(66, 71, 66);
+  border-radius: 0.5em;
+  padding: 0.55em 0.75em 0.55em 0.75em;
+  font-weight: 200;
+  font-size: 0.9em;
+  color: #ffffff;
+  font-weight: 400;
+  margin-bottom: 5%;
+  width: 100%;
+  max-width: 400px;
+}
+
+input:focus {
+  border: 1px solid var(--educationist-green);
+}
+
+input::placeholder {
+  color: rgb(127, 129, 127);
+}
+
+select {
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: transparent;
+  border: 1px solid rgb(66, 71, 66);
+  border-radius: 0.5rem;
+  font-size: 0.9em;
+  padding: 0.55em 0.75em 0.55em 0.75em;
+  color: #ffffff;
+  width: 100%;
+  max-width: 400px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-bottom: 5vh;
+}
+
+select:focus {
+  border: 1px solid var(--educationist-green);
+}
+
 .icons {
   display: inline;
 }
@@ -59,7 +103,7 @@ header {
 .navbar {
   float: right;
   padding: 0;
-  width: 38em;
+  width: 35em;
   list-style-type: none;
 }
 
