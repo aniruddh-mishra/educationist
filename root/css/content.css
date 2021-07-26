@@ -89,6 +89,14 @@
     text-align: center;
 }
 
+.card-author {
+    text-align: center;
+    color: grey;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #tags {
     display: flex;
     justify-content: space-around;

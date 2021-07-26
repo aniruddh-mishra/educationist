@@ -4,10 +4,15 @@ refresh(true)
 
 var contents;
 var counter = 0
+var limit = true
 
 function refresh(ban) {
-    if (counter >= 5) {
-        alert('You have passed the refresh limit! Try again in five minutes')
+    if (counter >= 2) {
+        if (limit) {
+            alert('You have passed the refresh limit! All further refreshes will simply be filters')
+            limit = false
+        }
+        filter()
         return
     }
     
@@ -15,13 +20,14 @@ function refresh(ban) {
         counter += 1
         setTimeout(() => {
             counter = 0
-        }, 5 * 60 * 1000)
+            limit = true
+        }, 15 * 60 * 1000)
     }
 
     dbRef.once('value', (data) => {
         if (data.exists()) {
             contents = data.val()
-            filter()
+            filter(ban)
         } else {
             console.log("No data available");
         }
@@ -32,16 +38,16 @@ function refresh(ban) {
     })
 }
 
-function filter() {
+function filter(search) {
     const tag = document.getElementById('search').value;
     const subjectSearch = document.getElementById('subjects').value;
     var cards = []
     var subjects = []
     for (subject in contents) {
+        subjects.push(subject)
         if (subjectSearch !== 'none' && subject.toLowerCase() !== subjectSearch.toLowerCase()) {
             continue
         }
-        subjects.push(subject)
         var tags = [subject.toLowerCase()]
         subject = contents[subject]
         for (type in subject) {
@@ -50,6 +56,7 @@ function filter() {
             for (age in type) {
                 tags.push(age)
                 if (tag !== '' && !tags.includes(tag.toLowerCase())) {
+                    tags.splice(2, 1)
                     continue
                 }
                 age = type[age]
@@ -65,15 +72,19 @@ function filter() {
         }
         tags.splice(0, 1)
     }
+    if (document.getElementById('not-found')) {
+        document.getElementById('not-found').remove()
+    }
     if (cards.length === 0) {
         var error = document.createElement('div')
+        error.id = 'not-found'
         error.innerHTML = 'There were no matches for this search... Please try again with a different query.'
         document.querySelector('.main-body').appendChild(error)
     }
-    insertCards(cards, subjects)
+    insertCards(cards, subjects, search)
 }
 
-function insertCards(cards, subjects) {
+function insertCards(cards, subjects, search) {
     var holder = document.getElementById('cards')
     if (holder) {
         holder.remove()
@@ -84,12 +95,15 @@ function insertCards(cards, subjects) {
         holder.appendChild(card)
     }
     document.querySelector('.main-body').appendChild(holder)
-    var subjectHolder = document.getElementById('subjects')
-    for (subject of subjects) {
-        var option = document.createElement('option');
-        option.setAttribute('value', subject.toLowerCase());
-        option.innerHTML = subject
-        subjectHolder.appendChild(option)
+    if (search) {
+        var subjectHolder = document.getElementById('subjects')
+        subjectHolder.innerHTML = '<option value="none">Select Subject --</option>'
+        for (subject of subjects) {
+            var option = document.createElement('option');
+            option.setAttribute('value', subject.toLowerCase());
+            option.innerHTML = subject
+            subjectHolder.appendChild(option)
+        }
     }
 }
 
