@@ -36,12 +36,15 @@
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({uid: user.uid})
+            }).then(() => {
+                alert('You have been banned from Educationist servers due to exessive reloads. Please contact an administrator if this was a bug.')
             })
         }
         else {
+            alert('You have been banned from Educationist servers due to exessive reloads. Please contact an administrator if this was a bug.')
         }
     });
-    alert('You have been banned from Educationist servers due to exessive reloads. Please contact an administrator if this was a bug.')
     </script>
+    <h1>You have been banned from Educationist servers due to exessive reloads. Please contact an administrator if this was a bug.</h1>
 </body>
 </html>

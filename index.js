@@ -13,7 +13,7 @@ function ban() {
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 50,
+  max: 20,
   message: ban()
 });
 
