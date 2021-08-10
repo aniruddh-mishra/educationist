@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const stripe = require("stripe")(process.env.STRIPE_KEY);
 const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js');
-const { deleteUser, updateUser, makeUser, getNewToken, authorize } = require(__dirname + '/google.js')
+// const { deleteUser, updateUser, makeUser, getNewToken, authorize } = require(__dirname + '/google.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
 const rateLimit = require("express-rate-limit");
 
@@ -37,9 +37,9 @@ app.get('/reset', (request, response) => {
     response.sendFile(__dirname + "/root/reset.html");
 });
 
-app.get('/testing/availabilities', (request, response) => {
-    response.sendFile(__dirname + '/root/availabilities.html');
-});
+// app.get('/testing/availabilities', (request, response) => {
+//     response.sendFile(__dirname + '/root/availabilities.html');
+// });
 
 app.get('/donate', (request, response) => {
     response.sendFile(__dirname + '/root/donate.html');
@@ -49,11 +49,11 @@ app.get('/content', limiter, (request, response) => {
     response.sendFile(__dirname + '/root/content.html')
 });
 
-app.get('/authenticate', (request, response) => {
-    const code = request.query.code;
-    getNewToken(code);
-    return response.send("Thank you for verifying!")
-})
+// app.get('/authenticate', (request, response) => {
+//     const code = request.query.code;
+//     getNewToken(code);
+//     return response.send("Thank you for verifying!")
+// })
 
 app.get('/css', (request, response) => {
     response.setHeader("Cache-Control", "public, max-age=1");
@@ -208,19 +208,19 @@ app.post("/webhook", (request, response) => {
     }
 });    
 
-app.post('/makeuser', (request, response) => {
-    const data = request.body
-    return response.send(makeUser(data.name, data.eid, data.email))
-})
+// app.post('/makeuser', (request, response) => {
+//     const data = request.body
+//     return response.send(makeUser(data.name, data.eid, data.email))
+// })
 
-app.post('/deleteuser', (request, response) => {
+// app.post('/deleteuser', (request, response) => {
 
-})
+// })
 
-app.post('/changepassword', (request, response) => {
+// app.post('/changepassword', (request, response) => {
 
-})
+// })
 
-authorize()
+// authorize()
 
 app.listen(80, () => console.log('App available on', processURL))
