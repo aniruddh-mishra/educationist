@@ -1,44 +1,55 @@
 const express = require('express')
 const fs = require('fs')
-// const { sendMail, db, admin, emailError } = require(__dirname + '/emailer.js')
-// // const { deleteUser, updateUser, makeUser, getNewToken, authorize } = require(__dirname + '/google.js')
-// const { secretKeys, processURL } = require(__dirname + '/setup.js')
-// const rateLimit = require('express-rate-limit')
+const admin = require('firebase-admin/app')
+const { getFirestore } = require('firebase-admin/firestore')
+const { sendMail } = require(__dirname + '/emailer.js')
+const { secretKeys, processURL } = require(__dirname + '/setup.js')
+const rateLimit = require('express-rate-limit')
+require('dotenv').config({
+    path: __dirname + '/.env',
+})
 
-// function ban() {
-//     const file = fs.readFileSync(__dirname + '/root/ban.html', 'utf-8')
-//     return file
-// }
+admin.initializeApp({
+    credential: admin.cert(JSON.parse(process.env.FIREBASE)),
+})
 
-// const limiter = rateLimit({
-//     windowMs: 15 * 60 * 1000,
-//     max: 20,
-//     message: ban(),
-// })
+var db = getFirestore()
 
-// const app = express()
+function ban() {
+    const file = fs.readFileSync(
+        __dirname + '/../public/pages/ban.html',
+        'utf-8'
+    )
+    return file
+}
 
-// app.use(express.json())
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    message: ban(),
+})
 
-// app.get('/', async (request, response) => {
-//     response.sendFile(__dirname + '/root/index.html')
-// })
+const pages = { root: './public/pages' }
+
+const app = express()
+
+app.use(express.json())
+
+app.get('/', async (request, response) => {
+    response.sendFile('index.html', pages)
+})
 
 // app.get('/logout', (request, response) => {
 //     response.sendFile(__dirname + '/root/logout.html')
 // })
 
-// app.get('/login', (request, response) => {
-//     response.sendFile(__dirname + '/root/login.html')
-// })
+app.get('/login', (request, response) => {
+    response.sendFile('login.html', pages)
+})
 
-// app.get('/reset', (request, response) => {
-//     response.sendFile(__dirname + '/root/reset.html')
-// })
-
-// // app.get('/testing/availabilities', (request, response) => {
-// //     response.sendFile(__dirname + '/root/availabilities.html');
-// // });
+app.get('/reset', (request, response) => {
+    response.sendFile('reset.html', pages)
+})
 
 // app.get('/donate', (request, response) => {
 //     response.sendFile(__dirname + '/root/donate.html')
@@ -54,46 +65,49 @@ const fs = require('fs')
 // //     return response.send("Thank you for verifying!")
 // // })
 
-// app.get('/css', (request, response) => {
-//     response.setHeader('Cache-Control', 'public, max-age=1')
-//     response.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
-//     const fileName = request.query.file
-//     if (fileName) {
-//         var file = __dirname + '/root/css/' + fileName
-//         if (fs.existsSync(file) == false) {
-//             response.status(404).send('We could not find that file!')
-//         }
-//         response.sendFile(file)
-//         return
-//     }
-//     response.status(500).send('Missing query!')
-// })
+app.get('/css/:filename', (request, response) => {
+    response.setHeader('Cache-Control', 'public, max-age=1')
+    response.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
+    const fileName = request.params.filename
+    if (fileName) {
+        const file = __dirname + '/../public/css/' + fileName
+        if (fs.existsSync(file) == false) {
+            response.status(404).send('We could not find that file!')
+        }
+        response.sendFile(fileName, { root: './public/css' })
+        return
+    }
+    response.status(500).send('Missing query!')
+})
 
-// app.get('/js', (request, response) => {
-//     response.setHeader('Cache-Control', 'public, max-age=1')
-//     response.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
-//     var fileName = request.query.file
-//     if (fileName) {
-//         var file = __dirname + '/root/js/' + fileName
-//         fileName = fileName.replace('.js', '')
-//         if (fs.existsSync(file) == false) {
-//             return response.status(404).send('We could not find that file!')
-//         }
-//         fs.readFile(file, 'utf8', (error, data) => {
-//             if (error) {
-//                 return response.status(404).send('We could not find that file!')
-//             }
-//             if (secretKeys[fileName]) {
-//                 for (key of secretKeys[fileName].keys) {
-//                     data = data.replace(key.name, key.key)
-//                 }
-//             }
-//             response.send(data)
-//         })
-//         return
-//     }
-//     response.status(500).send('Missing query!')
-// })
+app.get('/js/:filename', (request, response) => {
+    response.setHeader('Cache-Control', 'public, max-age=1')
+    response.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
+    const fileName = request.params.filename
+    if (fileName) {
+        const file = __dirname + '/../public/js/' + fileName
+        if (fs.existsSync(file) == false) {
+            return response.status(404).send('We could not find that file!')
+        }
+        if (secretKeys[fileName.replace('.js', '')]) {
+            fs.readFile(file, 'utf8', (error, data) => {
+                if (error) {
+                    return response
+                        .status(404)
+                        .send('We could not find that file!')
+                }
+                for (key of secretKeys[fileName].keys) {
+                    data = data.replace(key.name, key.key)
+                }
+                response.send(data)
+            })
+        } else {
+            response.sendFile(fileName, { root: './public/js' })
+        }
+        return
+    }
+    response.status(500).send('Missing query!')
+})
 
 // app.post('/ban', (request, response) => {
 //     db.child('Banned IDs')
@@ -252,4 +266,4 @@ const fs = require('fs')
 
 // // authorize()
 
-// app.listen(80, () => console.log('App available on', processURL))
+app.listen(80, () => console.log('App available on', processURL))

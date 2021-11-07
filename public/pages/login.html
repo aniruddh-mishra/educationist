@@ -1,68 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<title>Educationist Tutoring</title>
-	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/css?file=navigation.css">
-	<link rel="stylesheet" type="text/css" href="/css?file=login.css">
-	<link rel="apple-touch-icon" sizes="180x180" href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png">
-    <link rel="manifest" href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest">
-	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-	<script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
-</head>
-<body>
-	<div id="loader-container" class="loader-none">
-		<div id="loader" class="loader"></div>
-	</div>
+    <head>
+        <title>Educationist Tutoring</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../css/navigation.css" />
+        <link rel="stylesheet" type="text/css" href="../css/login.css" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png"
+        />
+        <link
+            rel="manifest"
+            href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest"
+        />
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    </head>
+    <body>
+        <div id="loader-container" class="loader-none">
+            <div id="loader" class="loader"></div>
+        </div>
 
-	<div id="container" class="container">
-		<div id="navigation"></div>
-        <script src="/js?file=root.js"></script>
+        <div id="container" class="container">
+            <div id="navigation"></div>
+            <script src="/js?file=root.js"></script>
 
-        <h1 class="title">Login</h1>
+            <h1 class="title">Login</h1>
 
-		<div class="main-body">
-			<div class="form">
-				<form onsubmit="return false;">
-					<div class="profile-img-container">
-						<div class="profile-image">
-							<img src="https://cdn.educationisttutoring.org/images/profile-picture.svg" alt="Profile Picture">
-						</div>
-					</div>
-						
-					<h2>Username</h2>
+            <div class="main-body">
+                <div class="form">
+                    <form onsubmit="return false;">
+                        <div class="profile-img-container">
+                            <div class="profile-image">
+                                <img
+                                    src="https://cdn.educationisttutoring.org/images/profile-picture.svg"
+                                    alt="Profile Picture"
+                                />
+                            </div>
+                        </div>
 
-					<input onkeyup="validate(this.id)" type="text" id="eid" placeholder="EID">
+                        <h2>Username</h2>
 
-					<h2>Password</h2>
+                        <input
+                            onkeyup="validate(this.id)"
+                            type="text"
+                            id="eid"
+                            placeholder="EID"
+                        />
 
-					<input onkeyup="validate(this.id)" type="password" id="password" placeholder="Password">
-					
-					<button id="login-btn" onclick="login();">Login</button>
+                        <h2>Password</h2>
 
-					<div class="menu">
-						<div id="error" style="text-align: center; padding-top: 20px; padding-bottom: 20px;">‏‏‎ </div>
-						
-						<div style="text-align: center;">
-							<a href="/reset">Forgot Password</a>
-						</div>
-	
-						<div style="text-align: center; margin-top: 3%;">
-							<a href="https://docs.google.com/forms/d/1y4a3cGxJ-1xe6EabBvKDf6YDH2tXahbSDTOy-yPwbnA/">Create your Account</a>
-						</div>
-					</div>
-				</form>
-			</div>
-			
-			<div class="login-img">
-				<img src="https://cdn.educationisttutoring.org/images/login.svg" alt="login-image">
-			</div>
-		</div>
-	</div>
-	<script src="/js?file=login.js"></script>
-</body>
+                        <input
+                            onkeyup="validate(this.id)"
+                            type="password"
+                            id="password"
+                            placeholder="Password"
+                        />
+
+                        <button id="login-btn" onclick="login();">Login</button>
+
+                        <div class="menu">
+                            <div
+                                id="error"
+                                style="
+                                    text-align: center;
+                                    padding-top: 20px;
+                                    padding-bottom: 20px;
+                                "
+                            >
+                                ‏‏‎
+                            </div>
+
+                            <div style="text-align: center">
+                                <a href="/reset">Forgot Password</a>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 3%">
+                                <a
+                                    href="https://docs.google.com/forms/d/1y4a3cGxJ-1xe6EabBvKDf6YDH2tXahbSDTOy-yPwbnA/"
+                                    >Create your Account</a
+                                >
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="login-img">
+                    <img
+                        src="https://cdn.educationisttutoring.org/images/login.svg"
+                        alt="login-image"
+                    />
+                </div>
+            </div>
+        </div>
+        <script src="/js?file=login.js"></script>
+    </body>
 </html>
