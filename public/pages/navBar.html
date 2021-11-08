@@ -1,6 +1,13 @@
 <div class="icons">
-    <div onclick="window.location.replace('https://educationisttutoring.org');" class="logo">
-        <img id="logo-img" src="https://cdn.educationisttutoring.org/images/light-logos/educationist.png" alt="Logo">
+    <div
+        onclick="window.location.replace('https://educationisttutoring.org');"
+        class="logo"
+    >
+        <img
+            id="logo-img"
+            src="https://cdn.educationisttutoring.org/images/light-logos/educationist.png"
+            alt="Logo"
+        />
     </div>
     <div class="hamburger-container" onclick="openMenu(this)">
         <div class="bar1"></div>
@@ -9,9 +16,18 @@
     </div>
 </div>
 <ul class="navbar">
-    <li><a href="https://educationisttutoring.org">Home</a></li>
+    <li><a href="/">Home</a></li>
     <li><a href="/content">Content</a></li>
     <li><a href="/donate">Donate</a></li>
-    <li><a href="https://www.educationisttutoring.org/system-rules">Rules</a></li>
-    <li><button onclick="accountPage()" class="navbarBtn">Account</button></li>
+    <li>
+        <a href="https://www.educationisttutoring.org/system-rules">Rules</a>
+    </li>
+    <li>
+        <div class="dropdown">
+            <button onclick="dropdown()" class="navbarBtn">Account</button>
+            <div id="myDropdown" class="dropdown-content">
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </li>
 </ul>

@@ -2,6 +2,7 @@ const express = require('express')
 const fs = require('fs')
 const admin = require('firebase-admin/app')
 const { getFirestore } = require('firebase-admin/firestore')
+const { getAuth } = require('firebase-admin/auth')
 const { sendMail } = require(__dirname + '/emailer.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
 const rateLimit = require('express-rate-limit')
@@ -39,9 +40,9 @@ app.get('/', async (request, response) => {
     response.sendFile('index.html', pages)
 })
 
-// app.get('/logout', (request, response) => {
-//     response.sendFile(__dirname + '/root/logout.html')
-// })
+app.get('/logout', (request, response) => {
+    response.sendFile('logout.html', pages)
+})
 
 app.get('/login', (request, response) => {
     response.sendFile('login.html', pages)
@@ -96,7 +97,7 @@ app.get('/js/:filename', (request, response) => {
                         .status(404)
                         .send('We could not find that file!')
                 }
-                for (key of secretKeys[fileName].keys) {
+                for (key of secretKeys[fileName.replace('.js', '')].keys) {
                     data = data.replace(key.name, key.key)
                 }
                 response.send(data)
@@ -109,11 +110,16 @@ app.get('/js/:filename', (request, response) => {
     response.status(500).send('Missing query!')
 })
 
-// app.post('/ban', (request, response) => {
-//     db.child('Banned IDs')
-//         .child(request.body.uid)
-//         .set(new Date().getTime() + 15 * 24 * 3600 * 1000)
-// })
+app.post('/login', async (request, response) => {
+    const users = db.collection('users')
+    const snapshot = await users.where('eid', '==', request.body.eid).get()
+    if (!snapshot) {
+        response.send('false')
+        return
+    }
+    const email = snapshot.docs[0].data().email
+    response.send(email)
+})
 
 // app.post('/reset', async (request, response) => {
 //     let { email } = request.body
@@ -250,20 +256,5 @@ app.get('/js/:filename', (request, response) => {
 //             return response.send('Unhandled event type')
 //     }
 // })
-
-// // app.post('/makeuser', (request, response) => {
-// //     const data = request.body
-// //     return response.send(makeUser(data.name, data.eid, data.email))
-// // })
-
-// // app.post('/deleteuser', (request, response) => {
-
-// // })
-
-// // app.post('/changepassword', (request, response) => {
-
-// // })
-
-// // authorize()
 
 app.listen(80, () => console.log('App available on', processURL))
