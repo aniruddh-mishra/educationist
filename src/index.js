@@ -121,45 +121,43 @@ app.post('/login', async (request, response) => {
     response.send(email)
 })
 
-// app.post('/reset', async (request, response) => {
-//     let { email } = request.body
-//     let actioncodesettings = {
-//         url: 'https://dashboard.educationisttutoring.org/login',
-//     }
-//     admin
-//         .auth()
-//         .generatePasswordResetLink(email, actioncodesettings)
-//         .then(async (link) => {
-//             options = [
-//                 {
-//                     key: 'link1',
-//                     text: link,
-//                 },
-//             ]
+app.post('/reset', async (request, response) => {
+    let { email } = request.body
+    let actioncodesettings = {
+        url: 'https://dashboard.educationisttutoring.org/login',
+    }
+    getAuth()
+        .generatePasswordResetLink(email, actioncodesettings)
+        .then(async (link) => {
+            options = [
+                {
+                    key: 'link1',
+                    text: link,
+                },
+            ]
 
-//             try {
-//                 await sendMail(
-//                     email,
-//                     'Password Reset Educationist Tutoring',
-//                     __dirname + '/root/emails/reset.html',
-//                     options
-//                 )
-//             } catch (err) {
-//                 console.log('Reset Email Error: ' + err)
-//                 emailError(email, 'reset', options)
-//                 return response.status(400).send('Failure')
-//             }
+            try {
+                await sendMail(
+                    email,
+                    'Password Reset Educationist Tutoring',
+                    __dirname + '/../public/emails/reset.html',
+                    options
+                )
+            } catch (err) {
+                console.log('Reset Email Error: ' + err)
+                return response.send('Failure')
+            }
 
-//             response.send('Success')
-//         })
-//         .catch((error) => {
-//             if (error.code === 'auth/email-not-found') {
-//                 return response.status(500).send('Failure')
-//             }
-//             console.log('Reset Error: ' + error)
-//             return response.status(400).send('Failure')
-//         })
-// })
+            response.send('Success')
+        })
+        .catch((error) => {
+            if (error.code === 'auth/email-not-found') {
+                return response.send('Not Exist')
+            }
+            console.log('Reset Error: ' + error)
+            response.send('Failure')
+        })
+})
 
 // app.post('/create-payment-intent', async (request, response) => {
 //     const { email, amount } = request.body
