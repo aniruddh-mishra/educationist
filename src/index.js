@@ -56,9 +56,9 @@ app.get('/reset', (request, response) => {
 //     response.sendFile(__dirname + '/root/donate.html')
 // })
 
-// app.get('/content', limiter, (request, response) => {
-//     response.sendFile(__dirname + '/root/content.html')
-// })
+app.get('/content', limiter, (request, response) => {
+    response.sendFile('content.html', pages)
+})
 
 // // app.get('/authenticate', (request, response) => {
 // //     const code = request.query.code;
