@@ -18,22 +18,8 @@ var upvoted
 var counter = 0
 var limit = true
 
-async function upvoteHistory() {
-    const snapshot = await db
-        .collection('users')
-        .where('eid', '==', localStorage.getItem('eid'))
-        .get()
-    for (doc of snapshot.docs) {
-        const user = await db.collection('users').doc(doc.id).get()
-        var upvoted = user.data()['upvote-content']
-    }
-
-    return upvoted
-}
-
 async function getContent() {
-    upvoted = await upvoteHistory()
-    snapshot = await db
+    const snapshot = await db
         .collection('content')
         .orderBy('upvotes', 'desc')
         .limit(20)
@@ -173,27 +159,29 @@ function openLink(link) {
 }
 
 async function upvote(id, button) {
-    if (upvoted.includes(id)) {
+    try {
+        await db
+            .collection('content')
+            .doc(id)
+            .update({ upvotes: firebase.firestore.FieldValue.increment(1) })
+    } catch {
         button.disabled = true
+        alert('You can only upvote an item one time!')
         return
     }
-    db.collection('content')
-        .doc(id)
-        .update({ upvotes: firebase.firestore.FieldValue.increment(1) })
-    const snapshot = await db
+    const doc = await db
         .collection('users')
-        .where('eid', '==', localStorage.getItem('eid'))
+        .doc(localStorage.getItem('uid'))
         .get()
-    snapshot.forEach((doc) => {
-        db.collection('users')
-            .doc(doc.id)
-            .update({
-                'upvote-content': firebase.firestore.FieldValue.arrayUnion(id),
-            })
-    })
-    upvoted.push(id)
+
+    db.collection('users')
+        .doc(doc.id)
+        .update({
+            upvotes: firebase.firestore.FieldValue.arrayUnion(id),
+        })
+
     button.disabled = true
-    console.log('Upvoted!')
+    alert('You have successfully upvoted this document!')
 }
 
 // // document.getElementById('banner-image').setAttribute('src', 'https://cdn.educationisttutoring.org/images/content-curation/' + (Math.floor(Math.random() * 9) + 1) + '.svg')

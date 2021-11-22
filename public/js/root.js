@@ -18,8 +18,8 @@ var db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged((user) => {
     if (user) {
-        if (localStorage.getItem('eid') === null) {
-            window.location.replace('/logout')
+        if (localStorage.getItem('uid') === null) {
+            logout()
         }
         if (window.location.pathname === '/login') {
             const params = new URLSearchParams(window.location.search)

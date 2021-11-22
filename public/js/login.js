@@ -46,6 +46,7 @@ function login() {
             .signInWithEmailAndPassword(email, password)
             .then((userCredential) => {
                 localStorage.setItem('eid', eid)
+                localStorage.setItem('uid', userCredential.user.uid)
             })
             .catch((error) => {
                 document.getElementById('container').classList.remove('blur')
