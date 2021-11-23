@@ -1,14 +1,23 @@
 {
   "name": "webapp",
-  "version": "1.0.0",
-  "description": "",
+  "version": "2.0.0",
+  "description": "Educationist Tutoring Dashboard Website",
   "main": "index.js",
   "scripts": {
     "start": "node ./src/index.js",
     "dev": "nodemon -e js,css,html ./src/index.js"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Educationist-Tutoring/webapp.git"
+  },
+  "keywords": [],
+  "author": "Aniruddh Mishra",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Educationist-Tutoring/webapp/issues"
+  },
+  "homepage": "https://github.com/Educationist-Tutoring/webapp#readme",
   "dependencies": {
     "algoliasearch": "^4.11.0",
     "dotenv": "^10.0.0",
