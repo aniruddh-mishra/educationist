@@ -1,8 +1,10 @@
+// Imports Libraries
 const fs = require('fs')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
 
+// Secret keys defined
 module.exports.secretKeys = {
     donate: {
         keys: [
@@ -25,6 +27,7 @@ module.exports.secretKeys = {
     },
 }
 
+// Defines the runtime as development or production
 module.exports.processURL =
     process.env.DEPLOYMENT === 'production'
         ? 'https://dashboard.educationisttutoring.org'

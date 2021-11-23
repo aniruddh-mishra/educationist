@@ -1,3 +1,4 @@
+// Imports Libraries
 const express = require('express')
 const fs = require('fs')
 const admin = require('firebase-admin/app')
@@ -5,17 +6,24 @@ const { getFirestore } = require('firebase-admin/firestore')
 const { getAuth } = require('firebase-admin/auth')
 const { sendMail } = require(__dirname + '/emailer.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
+const algoliasearch = require('algoliasearch')
 const rateLimit = require('express-rate-limit')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
 
+// Initialize Firestore
 admin.initializeApp({
     credential: admin.cert(JSON.parse(process.env.FIREBASE)),
 })
 
 var db = getFirestore()
 
+// // Initialize Algolia
+const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
+const index = client.initIndex('content_catalog')
+
+// Ban function if user spams a page
 function ban() {
     const file = fs.readFileSync(
         __dirname + '/../public/pages/ban.html',
@@ -30,12 +38,15 @@ const limiter = rateLimit({
     message: ban(),
 })
 
+// Sets pages variable to use in functions
 const pages = { root: './public/pages' }
 
+// Initializes express app
 const app = express()
 
 app.use(express.json())
 
+// Routes
 app.get('/', async (request, response) => {
     response.sendFile('index.html', pages)
 })
@@ -52,44 +63,50 @@ app.get('/reset', (request, response) => {
     response.sendFile('reset.html', pages)
 })
 
-// app.get('/donate', (request, response) => {
-//     response.sendFile(__dirname + '/root/donate.html')
-// })
-
 app.get('/content', limiter, (request, response) => {
     response.sendFile('content.html', pages)
 })
 
-// // app.get('/authenticate', (request, response) => {
-// //     const code = request.query.code;
-// //     getNewToken(code);
-// //     return response.send("Thank you for verifying!")
-// // })
-
 app.get('/css/:filename', (request, response) => {
+    // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
     response.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
+
+    // Searches for CSS file
     const fileName = request.params.filename
     if (fileName) {
         const file = __dirname + '/../public/css/' + fileName
+
+        // Error for invalid filename
         if (fs.existsSync(file) == false) {
             response.status(404).send('We could not find that file!')
         }
+
+        // Sends file
         response.sendFile(fileName, { root: './public/css' })
         return
     }
+
+    // If there is no filename send error
     response.status(500).send('Missing query!')
 })
 
 app.get('/js/:filename', (request, response) => {
+    // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
     response.setHeader('Expires', new Date(Date.now() + 1).toUTCString())
+
+    // Searches for JS file
     const fileName = request.params.filename
     if (fileName) {
         const file = __dirname + '/../public/js/' + fileName
+
+        // Error for invalid filename
         if (fs.existsSync(file) == false) {
             return response.status(404).send('We could not find that file!')
         }
+
+        // Adds secret variables to the js file before sending
         if (secretKeys[fileName.replace('.js', '')]) {
             fs.readFile(file, 'utf8', (error, data) => {
                 if (error) {
@@ -103,32 +120,46 @@ app.get('/js/:filename', (request, response) => {
                 response.send(data)
             })
         } else {
+            // Returns original file if no keys needed
             response.sendFile(fileName, { root: './public/js' })
         }
         return
     }
+
+    // If there is no filename send error
     response.status(500).send('Missing query!')
 })
 
 app.post('/login', async (request, response) => {
+    // Finds the user
     const users = db.collection('users')
     const snapshot = await users.where('eid', '==', request.body.eid).get()
+
+    // Error if the username does not exist
     if (!snapshot) {
         response.send('false')
         return
     }
+
+    // Returns the emails
     const email = snapshot.docs[0].data().email
     response.send(email)
 })
 
 app.post('/reset', async (request, response) => {
+    // Assigns email to variable
     let { email } = request.body
+
+    // Creates settings for reset url
     let actioncodesettings = {
         url: 'https://dashboard.educationisttutoring.org/login',
     }
+
+    // Generates password reset link
     getAuth()
         .generatePasswordResetLink(email, actioncodesettings)
         .then(async (link) => {
+            // Sends email
             options = [
                 {
                     key: 'link1',
@@ -144,6 +175,7 @@ app.post('/reset', async (request, response) => {
                     options
                 )
             } catch (err) {
+                // Some sort of error for email not being sent
                 console.log('Reset Email Error: ' + err)
                 return response.send('Failure')
             }
@@ -151,6 +183,7 @@ app.post('/reset', async (request, response) => {
             response.send('Success')
         })
         .catch((error) => {
+            // Email was not recognized error
             if (error.code === 'auth/email-not-found') {
                 return response.send('Not Exist')
             }
@@ -159,100 +192,11 @@ app.post('/reset', async (request, response) => {
         })
 })
 
-// app.post('/create-payment-intent', async (request, response) => {
-//     const { email, amount } = request.body
+app.post('/content', async (request, response) => {
+    const data = doc.data()
+    const objectID = doc.id
+    return index.saveObject({ ...data, objectID })
+})
 
-//     const paymentIntent = await stripe.paymentIntents.create({
-//         amount: amount,
-//         currency: 'usd',
-//         receipt_email: email,
-//     })
-
-//     response.send({
-//         clientSecret: paymentIntent.client_secret,
-//         id: paymentIntent.id,
-//     })
-// })
-
-// app.post('/webhook', (request, response) => {
-//     const event = request.body
-//     switch (event.type) {
-//         case 'charge.succeeded':
-//             const checkoutSession = event.data.object
-//             db.child('Payment Intents')
-//                 .child(checkoutSession.payment_intent)
-//                 .once('value', (data) => {
-//                     const eid = data.val()
-//                     if (eid === null) {
-//                         return
-//                     }
-//                     const amount = checkoutSession.amount_captured
-//                     db.child('Payment Intents')
-//                         .child(checkoutSession.payment_intent)
-//                         .set(null)
-//                     db.child('Activated IDs')
-//                         .child(eid)
-//                         .once('value', (data) => {
-//                             const information = data.val()
-//                             if (information === null) {
-//                                 return
-//                             }
-//                             var donations = information.Donations
-//                             if (donations === undefined) {
-//                                 donations = 0
-//                             }
-//                             donations += amount
-//                             db.child('Activated IDs')
-//                                 .child(eid)
-//                                 .child('Donations')
-//                                 .set(donations)
-//                             var records = information['Donation Records']
-//                             if (records === undefined) {
-//                                 records = []
-//                             }
-//                             records.push(checkoutSession.payment_intent)
-//                             db.child('Activated IDs')
-//                                 .child(eid)
-//                                 .child('Donation Records')
-//                                 .set(records)
-//                         })
-//                 })
-//                 .then(async () => {
-//                     const date = new Date()
-//                     const email = checkoutSession.receipt_email
-//                     const amount = checkoutSession.amount_captured
-//                     options = [
-//                         {
-//                             key: 'amount',
-//                             text:
-//                                 '$' +
-//                                 String(parseFloat(amount / 100).toFixed(2)),
-//                         },
-//                         {
-//                             key: 'date',
-//                             text: date.toDateString(),
-//                         },
-//                     ]
-
-//                     try {
-//                         await sendMail(
-//                             email,
-//                             'Donation Confirmation Educationist Tutoring',
-//                             __dirname + '/root/emails/receipt.html',
-//                             options
-//                         )
-//                     } catch (err) {
-//                         console.log('Receipt Email Error: ' + err)
-//                         emailError(email, 'receipt', options)
-//                     }
-
-//                     response.send('Done')
-//                 })
-//             break
-//         default:
-//             console.log(`Unhandled event type ${event.type}.`)
-//             return response.send('Unhandled event type')
-//     }
-// })
-
+// Starts express app
 app.listen(80, () => console.log('App available on', processURL))
