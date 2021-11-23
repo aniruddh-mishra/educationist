@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prod": "node ./src/index.js",
+    "build": "node ./src/index.js",
     "dev": "nodemon -e js,css,html ./src/index.js"
   },
   "author": "",
