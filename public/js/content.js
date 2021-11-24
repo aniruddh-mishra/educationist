@@ -26,10 +26,14 @@ async function getContent() {
         .get()
     snapshot.forEach((doc) => {
         const data = doc.data()
-        createCard(doc.id, data.link, data.title, data.subject, data.author, [
-            data.type,
-            data.age,
-        ])
+        createCard(
+            doc.id,
+            `/content/document?id=${doc.id}`,
+            data.title,
+            data.subject,
+            data.author,
+            [data.type, data.age]
+        )
     })
 }
 
@@ -85,7 +89,7 @@ async function search() {
     for (result of results.hits) {
         createCard(
             result.objectID,
-            result.link,
+            `/content/document?id=${result.objectID}`,
             result.title,
             result.subject,
             result.author,
@@ -107,7 +111,7 @@ async function upvote(id, button) {
     } catch {
         button.disabled = true
         document.getElementById('alert').innerHTML =
-            'You can only upvote an item one time!'
+            'You can only upvote an item once!'
         document.getElementById('toaster').classList.toggle('invisible')
         setTimeout(() => {
             document.getElementById('toaster').classList.toggle('invisible')

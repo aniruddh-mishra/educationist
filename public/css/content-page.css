@@ -12,9 +12,28 @@
     justify-content: space-between;
 }
 
+#alert {
+    color: red;
+}
+
+#preview-container {
+    display: column;
+    flex-direction: row;
+    align-items: center;
+}
+
 #preview {
-    width: 50vw;
+    width: 40vw;
     height: 70vh;
+}
+
+#action {
+    margin-left: 5vw;
+    width: 100%;
+}
+
+#info {
+    margin-top: 3vw;
 }
 
 #submit-report,
@@ -29,12 +48,14 @@
     border-radius: 0.25em;
     margin-top: 3%;
     display: block;
-    width: 100%;
-    max-width: 400px;
 }
 
 @media (max-width: 950px) {
     .main-body {
-        flex-direction: column;
+        flex-direction: column-reverse;
+    }
+
+    #preview {
+        width: 90vw;
     }
 }
