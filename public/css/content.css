@@ -7,13 +7,13 @@
 
 .main-body {
     margin-top: 5vh;
-    display: flex;
 }
 
 .filter {
-    align-items: center;
+    align-content: center;
+    justify-content: center;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     min-width: 300px;
     margin-right: 4vw;
 }
@@ -23,16 +23,15 @@
 }
 
 #refresh {
-    float: right;
+    cursor: pointer;
     color: white;
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
-    padding: 0;
+    padding: 5px;
     border-radius: 0.25em;
-    display: flex;
-    width: 30px;
-    justify-content: center;
-    margin-bottom: 4vh;
+    width: 25px;
+    height: 25px;
+    margin-left: 4vh;
 }
 
 #cards {

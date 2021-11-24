@@ -31,6 +31,9 @@
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
         <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch.umd.js"></script>
+
         <script defer src="../js/content.js"></script>
     </head>
     <body>
@@ -39,21 +42,17 @@
             <script src="../js/root.js"></script>
             <div class="main-body">
                 <div class="filter">
-                    <button onclick="refresh()" id="refresh">
-                        <img
-                            src="https://cdn.educationisttutoring.org/images/circle-arrow.svg"
-                            alt="Refresh"
-                        />
-                    </button>
                     <input
-                        onchange="filter()"
+                        onchange="search()"
                         id="search"
-                        placeholder="Tags"
+                        placeholder="Search (separate queries with commas)"
                         type="text"
                     />
-                    <select onchange="filter()" id="subjects">
-                        <option value="none">Select Subject --</option>
-                    </select>
+                    <img
+                        id="refresh"
+                        src="https://cdn.educationisttutoring.org/images/search.svg"
+                        alt="Refresh"
+                    />
                 </div>
                 <template id="card-template">
                     <article class="card">
