@@ -22,7 +22,7 @@ async function getContent() {
     const snapshot = await db
         .collection('content')
         .orderBy('upvotes', 'desc')
-        .limit(20)
+        .limit(40)
         .get()
     snapshot.forEach((doc) => {
         const data = doc.data()
