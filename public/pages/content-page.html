@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Educationist Tutoring</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../css/navigation.css" />
+        <link rel="stylesheet" type="text/css" href="../css/content-page.css" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png"
+        />
+        <link
+            rel="manifest"
+            href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest"
+        />
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch.umd.js"></script>
+
+        <script defer src="../js/content-page.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div id="navigation"></div>
+            <script src="../js/root.js"></script>
+            <div class="main-body">
+                <div id="preview-container">
+                    <iframe
+                        id="preview"
+                        src="https://docs.google.com/document/d/109a30v_jw6m4qr2-ztIwXm4cStnpOS-NL7Vq_MsJC7k/edit"
+                        frameborder="0"
+                    ></iframe>
+                    <button id="expand">Open</button>
+                </div>
+                <div id="action">
+                    <form id="report-form">
+                        <input placeholder="Report" type="text" />
+                        <button id="submit-report">Submit</button>
+                    </form>
+                    <div id="info">upvotes</div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

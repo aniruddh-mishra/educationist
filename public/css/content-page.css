@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
+
+:root {
+    --educationist-green: #38b18a;
+    --educationist-blue: #16a9b6;
+}
+
+.main-body {
+    margin-top: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#preview {
+    width: 50vw;
+    height: 70vh;
+}
+
+#submit-report,
+#expand {
+    color: white;
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+    padding: 5px 15px 5px 15px;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 1.1em;
+    border-radius: 0.25em;
+    margin-top: 3%;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+}
+
+@media (max-width: 950px) {
+    .main-body {
+        flex-direction: column;
+    }
+}
