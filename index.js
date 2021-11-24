@@ -64,6 +64,10 @@ app.get('/content', limiter, (request, response) => {
     response.sendFile('content.html', pages)
 })
 
+app.get('/content/document', async (request, response) => {
+    response.sendFile('content-page.html', pages)
+})
+
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
@@ -189,7 +193,7 @@ app.post('/reset', async (request, response) => {
         })
 })
 
-app.post('/content', async (request, response) => {
+app.post('loghours', async (request, response) => {
     const data = doc.data()
     const objectID = doc.id
     return index.saveObject({ ...data, objectID })

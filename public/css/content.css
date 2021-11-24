@@ -5,6 +5,27 @@
     --educationist-blue: #16a9b6;
 }
 
+#toaster.invisible {
+    visibility: hidden;
+}
+
+#toaster {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+#toaster span {
+    border-radius: 10px 10px 0px 0px;
+    font-size: 0.8rem;
+    padding: 5px;
+    background-color: rgb(107, 106, 106);
+    color: white;
+}
+
 .main-body {
     margin-top: 5vh;
 }
