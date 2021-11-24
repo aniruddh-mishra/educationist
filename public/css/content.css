@@ -11,7 +11,7 @@
 
 #toaster {
     position: fixed;
-    bottom: 0;
+    top: 0;
     left: 0;
     right: 0;
     display: flex;
@@ -19,7 +19,7 @@
 }
 
 #toaster span {
-    border-radius: 10px 10px 0px 0px;
+    border-radius: 0px 0px 10px 10px;
     font-size: 0.8rem;
     padding: 5px;
     background-color: rgb(107, 106, 106);
