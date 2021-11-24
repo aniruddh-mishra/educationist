@@ -4,8 +4,8 @@
   "description": "Educationist Tutoring Dashboard Website",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/index.js",
-    "dev": "nodemon -e js,css,html ./src/index.js"
+    "start": "node ./index.js",
+    "dev": "nodemon -e js,css,html ./index.js"
   },
   "repository": {
     "type": "git",

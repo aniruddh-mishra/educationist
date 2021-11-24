@@ -107,3 +107,4 @@ dist
 token.json
 
 test.js
+.vercel
