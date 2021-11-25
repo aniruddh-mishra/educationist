@@ -42,6 +42,43 @@ async function report() {
     })
 }
 
+async function upvote(id) {
+    const button = document.getElementById('upvote-button')
+    try {
+        await db
+            .collection('content')
+            .doc(documentID)
+            .update({ upvotes: firebase.firestore.FieldValue.increment(1) })
+    } catch {
+        button.disabled = true
+        document.getElementById('alert').innerHTML =
+            'You can only upvote an item once!'
+        document.getElementById('toaster').classList.toggle('invisible')
+        setTimeout(() => {
+            document.getElementById('toaster').classList.toggle('invisible')
+        }, 5000)
+        return
+    }
+    const doc = await db
+        .collection('users')
+        .doc(localStorage.getItem('uid'))
+        .get()
+
+    db.collection('users')
+        .doc(doc.id)
+        .update({
+            upvotes: firebase.firestore.FieldValue.arrayUnion(documentID),
+        })
+
+    button.disabled = true
+    document.getElementById('alert').innerHTML =
+        'You have successfully upvoted this item!'
+    document.getElementById('toaster').classList.toggle('invisible')
+    setTimeout(() => {
+        document.getElementById('toaster').classList.toggle('invisible')
+    }, 5000)
+}
+
 var form = document.getElementById('report-form')
 function handleForm(event) {
     event.preventDefault()

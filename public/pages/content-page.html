@@ -43,10 +43,9 @@
             <div class="main-body">
                 <div id="preview-container">
                     <iframe id="preview" frameborder="0"></iframe>
-                    <button id="expand">Open</button>
                 </div>
                 <div id="action">
-                    <p id="alert">
+                    <p id="message">
                         If the preview is not showing, the document may not be
                         shared with everyone. Please report any such occurences.
                         Thank you!
@@ -67,7 +66,12 @@
                         <p id="subject"></p>
                         <p id="type"></p>
                     </div>
+                    <button id="upvote-button" onclick="upvote()">+</button>
+                    <button id="expand">Open</button>
                 </div>
+            </div>
+            <div id="toaster" class="invisible">
+                <span id="alert"></span>
             </div>
         </div>
     </body>
