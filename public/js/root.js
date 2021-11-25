@@ -54,10 +54,11 @@ firebase.auth().onAuthStateChanged((user) => {
 function openMenu(value) {
     value.classList.toggle('change')
     document.querySelector('.navbar').classList.toggle('navbar-vertical')
-    document.getElementsByClassName('title')[0].classList.toggle('invisible')
-    document
-        .getElementsByClassName('main-body')[0]
-        .classList.toggle('invisible')
+    const title = document.querySelector('.title')
+    if (title) {
+        title.classList.toggle('invisible')
+    }
+    document.querySelector('.main-body').classList.toggle('invisible')
 }
 
 function accountPage() {

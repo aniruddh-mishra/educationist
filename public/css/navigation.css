@@ -41,7 +41,9 @@ header {
     margin: auto;
 }
 
-input {
+input,
+textarea {
+    resize: none;
     outline: none;
     background: none;
     box-sizing: border-box;
@@ -83,6 +85,10 @@ select {
 
 select:focus {
     border: 1px solid var(--educationist-green);
+}
+
+.invisible {
+    visibility: hidden;
 }
 
 .icons {

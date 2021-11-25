@@ -58,24 +58,30 @@
                         shared with everyone. Please report any such occurences.
                         Thank you!
                     </p>
-                    <form id="report-form">
-                        <input
-                            id="report-text"
-                            placeholder="Report"
-                            type="text"
-                        />
-                        <button onclick="report()" id="submit-report">
-                            Submit
-                        </button>
-                    </form>
-                    <div id="info">
-                        <p id="upvotes"></p>
-                        <p id="age"></p>
-                        <p id="subject"></p>
-                        <p id="type"></p>
+                    <div id="mobile-action">
+                        <form id="report-form">
+                            <textarea
+                                id="report-text"
+                                placeholder="Report"
+                                rows="10"
+                            ></textarea>
+                            <button onclick="report()" id="submit-report">
+                                Submit
+                            </button>
+                        </form>
+                        <div>
+                            <div id="info">
+                                <p id="upvotes"></p>
+                                <p id="age"></p>
+                                <p id="subject"></p>
+                                <p id="type"></p>
+                            </div>
+                            <button id="upvote-button" onclick="upvote()">
+                                +
+                            </button>
+                            <button id="expand">Open</button>
+                        </div>
                     </div>
-                    <button id="upvote-button" onclick="upvote()">+</button>
-                    <button id="expand">Open</button>
                 </div>
             </div>
             <div id="toaster" class="invisible">

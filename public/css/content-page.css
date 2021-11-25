@@ -116,4 +116,19 @@
         margin-left: 0;
         margin-bottom: 5vh;
     }
+
+    #mobile-action {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #info {
+        margin-top: 0;
+        margin-right: 10vw;
+    }
+
+    #report-text {
+        width: 40vw;
+        height: 20vh;
+    }
 }
