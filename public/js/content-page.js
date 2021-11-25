@@ -40,6 +40,11 @@ async function report() {
         user: localStorage.getItem('uid'),
         document: documentID,
     })
+    document.getElementById('alert').innerHTML = 'Your report has been sent!'
+    document.getElementById('toaster').classList.toggle('invisible')
+    setTimeout(() => {
+        document.getElementById('toaster').classList.toggle('invisible')
+    }, 5000)
 }
 
 async function upvote(id) {
