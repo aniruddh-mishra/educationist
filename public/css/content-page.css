@@ -118,6 +118,7 @@
     }
 
     #mobile-action {
+        margin-top: 5vh;
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
@@ -126,6 +127,10 @@
     #info {
         margin-top: 0;
         margin-right: 10vw;
+    }
+
+    #upvotes {
+        margin-top: 0;
     }
 
     #report-text {
