@@ -2,6 +2,7 @@
 const express = require('express')
 const fs = require('fs')
 const admin = require('firebase-admin/app')
+const firebase = require('firebase-admin')
 const { getFirestore } = require('firebase-admin/firestore')
 const { getAuth } = require('firebase-admin/auth')
 const { sendMail } = require(__dirname + '/emailer.js')
@@ -193,10 +194,21 @@ app.post('/reset', async (request, response) => {
         })
 })
 
-app.post('loghours', async (request, response) => {
+app.post('/loghours', async (request, response) => {
     const data = doc.data()
     const objectID = doc.id
     return index.saveObject({ ...data, objectID })
+})
+
+app.post('/ban', async (request, reponse) => {
+    const uid = request.body.uid
+    db.collection('users')
+        .doc(uid)
+        .update({
+            banned: firebase.firestore.Timestamp.fromMillis(
+                Date.now() + 30 * 24 * 60 * 60 * 1000
+            ),
+        })
 })
 
 // Starts express app

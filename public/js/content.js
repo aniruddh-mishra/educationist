@@ -2,6 +2,7 @@ var template = document.getElementById('card-template')
 var holder = document.createElement('section')
 document.querySelector('.main-body').appendChild(holder)
 holder.id = 'cards'
+const client = algoliasearch('M7ZXC6YNGS', '92c6702e4476ae4bd6246ecf3a75d8a0')
 
 const subjects = [
     'science',
@@ -19,11 +20,23 @@ var counter = 0
 var limit = true
 
 async function getContent() {
-    const snapshot = await db
-        .collection('content')
-        .orderBy('upvotes', 'desc')
-        .limit(40)
-        .get()
+    try {
+        const snapshot = await db
+            .collection('content')
+            .orderBy('upvotes', 'desc')
+            .limit(40)
+            .get()
+    } catch (e) {
+        if (e.code === 'permission-denied') {
+            alert(
+                'You have been banned from the Educationist servers because of detected spam. If this is an error please contact Edcuationist via email.'
+            )
+            setTimeout(() => {
+                window.location.replace('https://educationisttutoring.org')
+            }, 10000)
+            return
+        }
+    }
     snapshot.forEach((doc) => {
         const data = doc.data()
         createCard(
@@ -76,10 +89,6 @@ async function search() {
     if (query == '') {
         return getContent()
     }
-    const client = algoliasearch(
-        'M7ZXC6YNGS',
-        '92c6702e4476ae4bd6246ecf3a75d8a0'
-    )
     const index = client.initIndex('content_catalog')
     var results = await index.search(query)
     holder.innerHTML = ''
