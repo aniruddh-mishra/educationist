@@ -26,6 +26,17 @@ async function getContent() {
             .orderBy('upvotes', 'desc')
             .limit(40)
             .get()
+        snapshot.forEach((doc) => {
+            const data = doc.data()
+            createCard(
+                doc.id,
+                `/content/document?id=${doc.id}`,
+                data.title,
+                data.subject,
+                data.author,
+                [data.type, data.age]
+            )
+        })
     } catch (e) {
         if (e.code === 'permission-denied') {
             alert(
@@ -37,17 +48,6 @@ async function getContent() {
             return
         }
     }
-    snapshot.forEach((doc) => {
-        const data = doc.data()
-        createCard(
-            doc.id,
-            `/content/document?id=${doc.id}`,
-            data.title,
-            data.subject,
-            data.author,
-            [data.type, data.age]
-        )
-    })
 }
 
 getContent()
