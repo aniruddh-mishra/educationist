@@ -1,55 +1,26 @@
-const tabList = ["first", "availabilities", "second", "login"]
-
-const stepNum = {
-    student: 4,
-    volunteer: 4,
-    parent: 3
-}
-
 function next() {
-    tabNum = tab()
-    if (tabNum === 0) {
-        document.getElementById("prevBtn").classList.remove("tab")
-        document.getElementById("welcome").classList.replace("welcome-message", "welcome-none")
+    if (
+        !(
+            validate(document.getElementById('name')) &&
+            validate(document.getElementById('birthday')) &&
+            validate(document.getElementById('email')) &&
+            validate(document.getElementById('role'))
+        )
+    ) {
+        return
     }
-    if (tabNum === 2) {
-        document.getElementById("nextBtn").classList.add("tab")
-    }
-    document.getElementById(tabList[tabNum + 1]).classList.toggle("display-tab")
-    var status = document.getElementById("status").childNodes
-    for (let i = 0; i < tabNum + 1; i++) {
-        status[i].classList.add("status-complete")
-    }
-    
 }
 
-function prev() {
-    tabNum = tab()
-    if (tabNum === 1) {
-        document.getElementById("prevBtn").classList.add("tab")
-        document.getElementById("welcome").classList.replace("welcome-none", "welcome-message")
+function validate(element) {
+    if (element.value == '' || element.value == 'none') {
+        element.classList.add('error-decorator')
+        return true
     }
-    if (tabNum === 3) {
-        document.getElementById("nextBtn").classList.remove("tab")
-    }
-    document.getElementById(tabList[tabNum - 1]).classList.toggle("display-tab")
+    element.classList.remove('error-decorator')
 }
 
-function tab() {
-    let currentTab = document.getElementsByClassName("display-tab")[0]
-    currentTab.classList.toggle("display-tab")
-    return tabList.findIndex((element) => element === currentTab.id)
+var form = document.getElementById('register1')
+function handleForm(event) {
+    event.preventDefault()
 }
-
-function steps() {
-    var status = document.getElementById("status")
-    while (status.firstChild) {
-        status.removeChild(status.firstChild);
-    }
-    let stepCount = stepNum[document.getElementById("role").value]
-    console.log(stepCount)
-    for (let i = 0; i < stepCount; i++) {
-        var span = document.createElement("span")
-        status.appendChild(span)
-    }
-}
+form.addEventListener('submit', handleForm)

@@ -31,22 +31,20 @@ firebase.auth().onAuthStateChanged((user) => {
         }
     } else {
         if (window.location.pathname !== '/login') {
-            if (window.location.pathname !== '/logout') {
-                if (window.location.pathname === '/donate') {
-                    alert(
-                        'You are not signed in! Any donations made will not be attached to your Educationist account.'
-                    )
-                    return
-                }
-                if (window.location.pathname === '/reset') {
-                    return
-                }
-                window.location.replace(
-                    '/login?path=' + window.location.pathname
+            if (window.location.pathname === '/donate') {
+                alert(
+                    'You are not signed in! Any donations made will not be attached to your Educationist account.'
                 )
                 return
             }
-            window.location.replace('/login')
+            if (
+                window.location.pathname === '/reset' ||
+                window.location.pathname === '/register'
+            ) {
+                return
+            }
+            window.location.replace('/login?path=' + window.location.pathname)
+            return
         }
     }
 })

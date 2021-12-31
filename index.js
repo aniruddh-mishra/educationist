@@ -49,8 +49,8 @@ app.get('/', async (request, response) => {
     response.sendFile('index.html', pages)
 })
 
-app.get('/logout', (request, response) => {
-    response.sendFile('logout.html', pages)
+app.get('/register', (request, response) => {
+    response.sendFile('register.html', pages)
 })
 
 app.get('/login', (request, response) => {

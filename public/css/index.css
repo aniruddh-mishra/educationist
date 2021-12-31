@@ -1,0 +1,61 @@
+.account {
+    margin: 5vh 0;
+    display: flex;
+    padding: 10px;
+    overflow-x: auto;
+}
+
+.account .block {
+    height: 150px;
+    display: inline-block;
+    display: flex;
+    justify-content: center;
+}
+
+.big-blocks {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.block:hover {
+    background-color: rgb(48, 56, 52);
+}
+
+.block {
+    box-shadow: 0 0 10px var(--educationist-blue);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    background-color: rgb(30, 34, 32);
+    border-radius: 2.5rem;
+    padding: 30px 30px;
+    margin: 0 2vw;
+    margin-bottom: 5vh;
+    overflow-x: hidden;
+    word-break: break-all;
+    text-align: center;
+}
+
+.block-field {
+    font-size: 0.8rem;
+}
+
+.small {
+    width: 25%;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.large {
+    width: 70%;
+    min-width: 200px;
+    max-width: 700px;
+}
+
+#volunteerHours {
+    width: 100%;
+    max-width: 700px;
+}
