@@ -61,6 +61,10 @@ app.get('/reset', (request, response) => {
     response.sendFile('reset.html', pages)
 })
 
+app.get('/donate', (request, response) => {
+    response.redirect('https://www.paypal.com/paypalme/educationisttutoring')
+})
+
 app.get('/content', limiter, (request, response) => {
     response.sendFile('content.html', pages)
 })
