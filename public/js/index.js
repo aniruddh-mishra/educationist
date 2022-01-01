@@ -82,6 +82,11 @@ function placeData(data, dates) {
                 y: {
                     beginAtZero: true,
                 },
+                xAxes: [
+                    {
+                        display: false,
+                    },
+                ],
             },
             layout: {
                 padding: 20,
