@@ -9,7 +9,7 @@ async function getData() {
         .collection('volunteer-entries')
         .get()
 
-    if (volunteerHours.exists) {
+    if (!volunteerHours.empty) {
         const data = []
         volunteerHours.forEach((doc) => {
             data.push({
@@ -36,13 +36,14 @@ async function getData() {
             hours.push(Number((doc.minutes / 60).toFixed(1)))
         })
         placeData(userData.data(), [dates, hours])
+    } else {
+        placeData(userData.data(), false)
     }
-    placeData(userData.data(), false)
 }
 
 getData()
 
-function placeData(data, dates) {
+async function placeData(data, dates) {
     var spacer = document.createElement('div')
     spacer.className = 'spacer'
     document.querySelector('.account').appendChild(spacer)
@@ -53,12 +54,16 @@ function placeData(data, dates) {
     })
     dataFields = []
     for (dataField of dataSet) {
+        if (data[dataField] == undefined) {
+            continue
+        }
         createBlock(
             dataField.charAt(0).toUpperCase() + dataField.slice(1),
             [data[dataField]],
             'small'
         )
     }
+
     if (dates) {
         const volunteerHours = data['volunteer-hours']
         const minutes =
@@ -66,9 +71,21 @@ function placeData(data, dates) {
             volunteerHours['tutor']['total'] +
             volunteerHours['content']['total']
         createBlock('Volunteer Hours', [minutes / 60 + ' Hours'], 'small')
-        spacer = document.createElement('div')
-        spacer.className = 'spacer'
-        document.querySelector('.account').appendChild(spacer)
+    }
+
+    spacer = document.createElement('div')
+    spacer.className = 'spacer'
+    document.querySelector('.account').appendChild(spacer)
+
+    if (data.role === 'student') {
+        document.querySelector('.matching-request').className =
+            'matching-request active'
+    } else {
+        document.querySelector('.matches').innerHTML = ''
+        await matchRequests()
+    }
+
+    if (dates) {
         createBlock(
             'Volunteer Hours',
             ['<canvas id="volunteerHours"></canvas>'],
@@ -111,10 +128,51 @@ function placeData(data, dates) {
     }
 }
 
+async function matchRequests() {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', '/match-requests', true)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(
+            JSON.stringify({
+                uid: localStorage.getItem('uid'),
+            })
+        )
+        xhr.onload = function () {
+            if (this.response === 'false') {
+                logout()
+                return
+            }
+            const data = JSON.parse(this.response)
+            var counter = 1
+            spacer = document.createElement('div')
+            spacer.className = 'spacer'
+            document.querySelector('.matches').appendChild(spacer)
+            for (request of data) {
+                createBlock(
+                    'Student #' + counter,
+                    [
+                        'Name: ' + request.eid,
+                        'Subject: ' +
+                            request.subject.charAt(0).toUpperCase() +
+                            request.subject.slice(1),
+                        'Timezone: ',
+                    ],
+                    'small request'
+                )
+                counter += 1
+            }
+            spacer = document.createElement('div')
+            spacer.className = 'spacer'
+            document.querySelector('.matches').appendChild(spacer)
+            resolve('Done')
+        }
+    })
+}
+
 function createBlock(title, fields, size) {
     var block = document.createElement('div')
-    block.className = 'block'
-    block.classList.add(size)
+    block.className = 'block ' + size
     var titleBlock = document.createElement('h3')
     titleBlock.className = 'title-block'
     titleBlock.innerHTML = title
@@ -130,6 +188,34 @@ function createBlock(title, fields, size) {
         object = '.account'
     } else if (size === 'large') {
         object = '.big-blocks'
+    } else if (size === 'small request') {
+        object = '.matches'
     }
     document.querySelector(object).appendChild(block)
+}
+
+async function request() {
+    document.getElementById('request-btn').disabled = true
+    const subject = document.getElementById('subject').value
+    if (subject === '') {
+        document.getElementById('request-btn').disabled = false
+        return
+    }
+    const snapshot = await db
+        .collection('requests')
+        .where('eid', '==', localStorage.getItem('eid'))
+        .where('subject', '==', subject)
+        .get()
+
+    if (!snapshot.empty) {
+        token('You have already requested ' + subject)
+        document.getElementById('request-btn').disabled = false
+        return
+    }
+    await db.collection('requests').add({
+        eid: localStorage.getItem('eid'),
+        subject: subject,
+    })
+    token('You have successfully requested ' + subject)
+    document.getElementById('request-btn').disabled = false
 }

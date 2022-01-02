@@ -153,6 +153,24 @@ app.get('/js/:filename', (request, response) => {
     response.status(500).send('Missing query!')
 })
 
+app.post('/match-requests', async (request, response) => {
+    const uid = request.body.uid
+    const snapshot = await db.collection('users').doc(uid).get()
+    if (!snapshot.exists) {
+        return response.send('false')
+    }
+    const subjects = snapshot.data().subjects
+    var requests = await db
+        .collection('requests')
+        .where('subject', 'in', subjects)
+        .get()
+    var responseObject = []
+    requests.forEach((doc) => {
+        responseObject.push(doc.data())
+    })
+    return response.send(responseObject)
+})
+
 app.post('/create', async (request, response) => {
     const code = request.body.code
     const password = request.body.password

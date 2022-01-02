@@ -52,7 +52,28 @@
                 <h1>Account Information</h1>
                 <div class="account"></div>
                 <div class="classes"></div>
-                <div class="matches"></div>
+                <div class="matches">
+                    <form class="matching-request inactive">
+                        <h2>Subject</h2>
+                        <select id="subject">
+                            <option disabled selected value="">
+                                -- Select Option
+                            </option>
+                            <option value="science">Science</option>
+                            <option value="math">Math</option>
+                            <option value="english">English</option>
+                            <option value="python">Python</option>
+                            <option value="web-development">
+                                Web Development
+                            </option>
+                            <option value="chess">Chess</option>
+                            <option value="scratch">Scratch</option>
+                        </select>
+                        <button id="request-btn" onclick="request()">
+                            Request Class
+                        </button>
+                    </form>
+                </div>
                 <div class="big-blocks"></div>
             </div>
             <div id="toaster" class="invisible">

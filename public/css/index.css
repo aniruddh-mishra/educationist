@@ -1,8 +1,13 @@
+.inactive {
+    display: none;
+}
+
 .main-body {
     margin-top: 2vh;
 }
 
-.account {
+.account,
+.matches {
     margin-bottom: 5vh;
     display: grid;
     grid-gap: 1rem;
@@ -13,6 +18,12 @@
 
 .account .block {
     height: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+.matches .block {
+    height: 200px;
     display: inline-block;
     display: flex;
     justify-content: center;
@@ -68,4 +79,34 @@
 #volunteerHours {
     width: 100%;
     max-width: 700px;
+}
+
+.active {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.matching-request button {
+    color: white;
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+    padding: 5px 15px 5px 15px;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 1.1em;
+    border-radius: 0.25em;
+    margin-top: 3%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+}
+
+#subject {
+    margin-bottom: 0;
+    width: 100%;
+    max-width: 400px;
 }
