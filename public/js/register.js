@@ -21,7 +21,6 @@ async function upload() {
 
     const msPerYear = 1000 * 60 * 60 * 24 * 365
 
-    console.log((Date.now() - birthday) / msPerYear, 13)
     if (role === 'tutor' && (Date.now() - birthday) / msPerYear < 13) {
         token('You must be at least 13 to be a tutor!')
         setTimeout(() => {

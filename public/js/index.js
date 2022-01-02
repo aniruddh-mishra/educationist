@@ -4,6 +4,11 @@ async function getData() {
     const uid = localStorage.getItem('uid')
     const userData = await db.collection('users').doc(uid).get()
     localStorage.setItem('timezone', userData.data().timezone)
+    const msPerYear = 1000 * 60 * 60 * 24 * 365
+    const age =
+        new Date().getFullYear() -
+        userData.data().birthday.toDate().getFullYear()
+    localStorage.setItem('age', age)
     const volunteerHours = await db
         .collection('users')
         .doc(uid)
@@ -172,6 +177,7 @@ async function request() {
         eid: localStorage.getItem('eid'),
         subject: subject,
         timezone: localStorage.getItem('timezone'),
+        age: localStorage.getItem('age'),
     })
     token('You have successfully requested ' + subject)
     document.getElementById('request-btn').disabled = false
@@ -218,6 +224,7 @@ async function matchRequests() {
                             request.subject.charAt(0).toUpperCase() +
                             request.subject.slice(1),
                         'Timezone: ' + request.timezone,
+                        'Age: ' + request.age,
                     ],
                     'small request'
                 )
