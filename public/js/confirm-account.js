@@ -50,6 +50,11 @@ async function upload() {
             setTimeout(() => {
                 window.location.replace('/login')
             }, 10000)
+        } else if (confirm == 'error') {
+            token('This confirm token was already used to create an account.')
+            setTimeout(() => {
+                window.location.replace('/')
+            }, 1000)
         } else {
             token('This username is already used!')
             document.getElementById('submit').disabled = false

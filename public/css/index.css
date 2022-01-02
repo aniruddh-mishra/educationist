@@ -10,7 +10,7 @@
 .matches {
     margin-bottom: 5vh;
     display: grid;
-    grid-gap: 1rem;
+    grid-gap: 3vw;
     padding-top: 10px;
     grid-auto-flow: column;
     overflow-x: auto;
@@ -58,6 +58,7 @@
     overflow-x: hidden;
     word-break: break-all;
     text-align: center;
+    overflow-y: hidden;
 }
 
 .block-field {

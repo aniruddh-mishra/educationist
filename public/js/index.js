@@ -1,8 +1,9 @@
-dataSet = ['name', 'birthday', 'email']
+dataSet = ['name', 'birthday', 'email', 'timezone']
 
 async function getData() {
     const uid = localStorage.getItem('uid')
     const userData = await db.collection('users').doc(uid).get()
+    localStorage.setItem('timezone', userData.data().timezone)
     const volunteerHours = await db
         .collection('users')
         .doc(uid)
@@ -44,9 +45,6 @@ async function getData() {
 getData()
 
 async function placeData(data, dates) {
-    var spacer = document.createElement('div')
-    spacer.className = 'spacer'
-    document.querySelector('.account').appendChild(spacer)
     data.birthday = data.birthday.toDate().toLocaleString('default', {
         month: 'long',
         day: 'numeric',
@@ -128,48 +126,6 @@ async function placeData(data, dates) {
     }
 }
 
-async function matchRequests() {
-    return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', '/match-requests', true)
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(
-            JSON.stringify({
-                uid: localStorage.getItem('uid'),
-            })
-        )
-        xhr.onload = function () {
-            if (this.response === 'false') {
-                logout()
-                return
-            }
-            const data = JSON.parse(this.response)
-            var counter = 1
-            spacer = document.createElement('div')
-            spacer.className = 'spacer'
-            document.querySelector('.matches').appendChild(spacer)
-            for (request of data) {
-                createBlock(
-                    'Student #' + counter,
-                    [
-                        'Name: ' + request.eid,
-                        'Subject: ' +
-                            request.subject.charAt(0).toUpperCase() +
-                            request.subject.slice(1),
-                        'Timezone: ',
-                    ],
-                    'small request'
-                )
-                counter += 1
-            }
-            spacer = document.createElement('div')
-            spacer.className = 'spacer'
-            document.querySelector('.matches').appendChild(spacer)
-            resolve('Done')
-        }
-    })
-}
-
 function createBlock(title, fields, size) {
     var block = document.createElement('div')
     block.className = 'block ' + size
@@ -215,7 +171,91 @@ async function request() {
     await db.collection('requests').add({
         eid: localStorage.getItem('eid'),
         subject: subject,
+        timezone: localStorage.getItem('timezone'),
     })
     token('You have successfully requested ' + subject)
     document.getElementById('request-btn').disabled = false
+}
+
+async function matchRequests() {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', '/match-requests', true)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(
+            JSON.stringify({
+                uid: localStorage.getItem('uid'),
+            })
+        )
+        xhr.onload = function () {
+            if (this.response === 'false') {
+                logout()
+                return
+            }
+            const data = JSON.parse(this.response)
+            if (data.length === 0) {
+                token('There are no student requests currently')
+                return resolve('Done')
+            }
+            const information = document.createElement('h3')
+            information.innerText = 'Student Requests'
+            document
+                .querySelector('.match-instructions')
+                .appendChild(information)
+            const instructions = document.createElement('p')
+            instructions.innerText =
+                'Click the student boxes to start tutoring a student!'
+            document
+                .querySelector('.match-instructions')
+                .appendChild(instructions)
+            var counter = 1
+            for (request of data) {
+                createBlock(
+                    'Student #' + counter,
+                    [
+                        'Name: ' + request.eid,
+                        'Subject: ' +
+                            request.subject.charAt(0).toUpperCase() +
+                            request.subject.slice(1),
+                        'Timezone: ' + request.timezone,
+                    ],
+                    'small request'
+                )
+                counter += 1
+            }
+            spacer = document.createElement('div')
+            spacer.className = 'spacer'
+            document.querySelector('.matches').appendChild(spacer)
+            const blocks = document.querySelectorAll('.request')
+            for (block of blocks) {
+                block.addEventListener('click', match)
+            }
+            resolve('Done')
+        }
+    })
+}
+
+async function match() {
+    this.removeEventListener('click', match)
+    const requestBlock = this
+    const eid = this.childNodes[1].innerText.slice(6)
+    const subject = this.childNodes[2].innerText.slice(9)
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/match-commit', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+        JSON.stringify({
+            tutor: localStorage.getItem('uid'),
+            subject: subject,
+            student: eid,
+        })
+    )
+    xhr.onload = function () {
+        if (this.response == 'false') {
+            token('Something went wrong, and your match was not completed!')
+            return
+        }
+        token('Student matched. Check your email!')
+        requestBlock.remove()
+    }
 }

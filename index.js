@@ -78,18 +78,6 @@ app.get('/create', async (request, response) => {
     response.sendFile('register-finish.html', pages)
 })
 
-app.get('/confirm', async (request, response) => {
-    const documentId = request.query.document
-    const snapshot = await db.collection('confirmations').doc(documentId).get()
-    if (!snapshot.exists) {
-        return response.send('This confirmation code is now invalid')
-    }
-    const data = snapshot.data()
-    if (data.type === 'creation') {
-        return response.redirect('/create?confirm=' + documentId)
-    }
-})
-
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
@@ -153,6 +141,7 @@ app.get('/js/:filename', (request, response) => {
     response.status(500).send('Missing query!')
 })
 
+// Commits a request for a class to database
 app.post('/match-requests', async (request, response) => {
     const uid = request.body.uid
     const snapshot = await db.collection('users').doc(uid).get()
@@ -171,12 +160,81 @@ app.post('/match-requests', async (request, response) => {
     return response.send(responseObject)
 })
 
+app.post('/match-commit', async (request, response) => {
+    var tutor = request.body.tutor
+    var student = request.body.student
+    const subject =
+        request.body.subject.charAt(0).toLowerCase() +
+        request.body.subject.slice(1)
+    student = await db
+        .collection('users')
+        .where('eid', '==', student)
+        .limit(1)
+        .get()
+    student = student.docs[0]
+    const tutorData = (await db.collection('users').doc(tutor).get()).data()
+    const studentData = student.data()
+    await db.collection('matches').add({
+        creation: firebase.firestore.Timestamp.fromMillis(Date.now()),
+        student: student.id,
+        studentEmail: studentData.email,
+        tutor: tutor,
+        tutorEmail: tutorData.email,
+        subject: subject,
+    })
+    student = studentData
+    tutor = tutorData
+    const options = [
+        {
+            key: 'subject1',
+            text: subject,
+        },
+        {
+            key: 'information1',
+            text:
+                'Tutor: ' +
+                tutor.name +
+                '<br>Tutor Email: ' +
+                tutor.email +
+                '<br>Student: ' +
+                student.name +
+                '<br>Student Email: ' +
+                student.email,
+        },
+    ]
+
+    try {
+        await sendMail(
+            [tutor.email, student.email],
+            'Educationist Tutoring Class Update',
+            __dirname + '/public/emails/match.html',
+            options
+        )
+        const snapshot = await db
+            .collection('requests')
+            .where('eid', '==', student.eid)
+            .where('subject', '==', subject)
+            .get()
+        const document = snapshot.docs[0].id
+        await db.collection('requests').doc(document).delete()
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+        return response.send('false')
+    }
+    response.send('true')
+})
+
+// Creates accounts
 app.post('/create', async (request, response) => {
     const code = request.body.code
     const password = request.body.password
     const eid = request.body.eid
-    const data = (await db.collection('confirmations').doc(code).get()).data()
-        .data
+    var data = await db.collection('confirmations').doc(code).get()
+    if (!data.exists) {
+        return response.send('error')
+    }
+    data = data.data().data
     const timeStamp = new Date(data.timestamp)
     const birthday = new Date(data.birthday)
 
@@ -189,6 +247,7 @@ app.post('/create', async (request, response) => {
         eid: eid,
         role: data.role,
         birthday: firebase.firestore.Timestamp.fromMillis(birthday.getTime()),
+        timezone: data.timezone,
     }
 
     const users = db.collection('users')
@@ -255,7 +314,7 @@ app.post('/register', async (request, response) => {
     const options = [
         {
             key: 'link1',
-            text: processURL + '/confirm?document=' + documentId,
+            text: processURL + '/create?confirm=' + documentId,
         },
     ]
 
@@ -319,12 +378,6 @@ app.post('/reset', async (request, response) => {
             console.log('Reset Error: ' + error)
             response.send('Failure')
         })
-})
-
-app.post('/loghours', async (request, response) => {
-    const data = doc.data()
-    const objectID = doc.id
-    return index.saveObject({ ...data, objectID })
 })
 
 app.post('/ban', async (request, reponse) => {
