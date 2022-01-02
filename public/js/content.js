@@ -119,12 +119,7 @@ async function upvote(id, button) {
             .update({ upvotes: firebase.firestore.FieldValue.increment(1) })
     } catch {
         button.disabled = true
-        document.getElementById('alert').innerHTML =
-            'You can only upvote an item once!'
-        document.getElementById('toaster').classList.toggle('invisible')
-        setTimeout(() => {
-            document.getElementById('toaster').classList.toggle('invisible')
-        }, 5000)
+        token('You can only upvote once!')
         return
     }
     const doc = await db
@@ -139,10 +134,5 @@ async function upvote(id, button) {
         })
 
     button.disabled = true
-    document.getElementById('alert').innerHTML =
-        'You have successfully upvoted this item!'
-    document.getElementById('toaster').classList.toggle('invisible')
-    setTimeout(() => {
-        document.getElementById('toaster').classList.toggle('invisible')
-    }, 5000)
+    token('You have successfully upvoted this item!')
 }

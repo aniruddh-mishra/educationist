@@ -39,7 +39,8 @@ firebase.auth().onAuthStateChanged((user) => {
             }
             if (
                 window.location.pathname === '/reset' ||
-                window.location.pathname === '/register'
+                window.location.pathname === '/register' ||
+                window.location.pathname === '/create'
             ) {
                 return
             }
@@ -92,4 +93,12 @@ window.onclick = function (event) {
             }
         }
     }
+}
+
+function token(message) {
+    document.getElementById('alert').innerHTML = message
+    document.getElementById('toaster').classList.toggle('invisible')
+    setTimeout(() => {
+        document.getElementById('toaster').classList.toggle('invisible')
+    }, 5000)
 }

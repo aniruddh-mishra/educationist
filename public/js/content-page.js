@@ -40,11 +40,7 @@ async function report() {
         user: localStorage.getItem('uid'),
         document: documentID,
     })
-    document.getElementById('alert').innerHTML = 'Your report has been sent!'
-    document.getElementById('toaster').classList.toggle('invisible')
-    setTimeout(() => {
-        document.getElementById('toaster').classList.toggle('invisible')
-    }, 5000)
+    token('Your report has been sent!')
 }
 
 async function upvote(id) {
@@ -56,12 +52,7 @@ async function upvote(id) {
             .update({ upvotes: firebase.firestore.FieldValue.increment(1) })
     } catch {
         button.disabled = true
-        document.getElementById('alert').innerHTML =
-            'You can only upvote an item once!'
-        document.getElementById('toaster').classList.toggle('invisible')
-        setTimeout(() => {
-            document.getElementById('toaster').classList.toggle('invisible')
-        }, 5000)
+        token('You can only upvote an item once!')
         return
     }
     const doc = await db
@@ -76,12 +67,7 @@ async function upvote(id) {
         })
 
     button.disabled = true
-    document.getElementById('alert').innerHTML =
-        'You have successfully upvoted this item!'
-    document.getElementById('toaster').classList.toggle('invisible')
-    setTimeout(() => {
-        document.getElementById('toaster').classList.toggle('invisible')
-    }, 5000)
+    token('You have successfully upvoted this item!')
 }
 
 var form = document.getElementById('report-form')

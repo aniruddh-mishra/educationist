@@ -1,7 +1,13 @@
+.main-body {
+    margin-top: 2vh;
+}
+
 .account {
-    margin: 5vh 0;
-    display: flex;
-    padding: 10px;
+    margin-bottom: 5vh;
+    display: grid;
+    grid-gap: 1rem;
+    padding-top: 10px;
+    grid-auto-flow: column;
     overflow-x: auto;
 }
 
@@ -10,6 +16,10 @@
     display: inline-block;
     display: flex;
     justify-content: center;
+}
+
+.spacer {
+    width: 10px;
 }
 
 .big-blocks {
@@ -40,7 +50,7 @@
 }
 
 .block-field {
-    font-size: 0.8rem;
+    font-size: 0.9rem;
 }
 
 .small {

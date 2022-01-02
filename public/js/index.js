@@ -2,7 +2,6 @@ dataSet = ['name', 'birthday', 'email']
 
 async function getData() {
     const uid = localStorage.getItem('uid')
-    console.log(uid)
     const userData = await db.collection('users').doc(uid).get()
     const volunteerHours = await db
         .collection('users')
@@ -10,37 +9,43 @@ async function getData() {
         .collection('volunteer-entries')
         .get()
 
-    const data = []
-    volunteerHours.forEach((doc) => {
-        data.push({
-            date: doc.data().date.toDate(),
-            minutes: doc.data().minutes,
-        })
-    })
-
-    data.sort((a, b) => {
-        return a.date < b.date ? -1 : a.date == b.date ? 0 : 1
-    })
-
-    const minutes = []
-    const dates = []
-
-    data.forEach((doc) => {
-        dates.push(
-            doc.date.toLocaleString('default', {
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric',
+    if (volunteerHours.exists) {
+        const data = []
+        volunteerHours.forEach((doc) => {
+            data.push({
+                date: doc.data().date.toDate(),
+                minutes: doc.data().minutes,
             })
-        )
-        minutes.push(doc.minutes)
-    })
-    placeData(userData.data(), [dates, minutes])
+        })
+
+        data.sort((a, b) => {
+            return a.date < b.date ? -1 : a.date == b.date ? 0 : 1
+        })
+
+        const hours = []
+        const dates = []
+
+        data.forEach((doc) => {
+            dates.push(
+                doc.date.toLocaleString('default', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric',
+                })
+            )
+            hours.push(Number((doc.minutes / 60).toFixed(1)))
+        })
+        placeData(userData.data(), [dates, hours])
+    }
+    placeData(userData.data(), false)
 }
 
 getData()
 
 function placeData(data, dates) {
+    var spacer = document.createElement('div')
+    spacer.className = 'spacer'
+    document.querySelector('.account').appendChild(spacer)
     data.birthday = data.birthday.toDate().toLocaleString('default', {
         month: 'long',
         day: 'numeric',
@@ -54,45 +59,56 @@ function placeData(data, dates) {
             'small'
         )
     }
-    createBlock(
-        'Volunteer Hours',
-        ['<canvas id="volunteerHours"></canvas>'],
-        'large'
-    )
-    var volunteerHoursChart = new Chart('volunteerHours', {
-        type: 'line',
-        data: {
-            labels: dates[0],
-            datasets: [
-                {
-                    label: 'Volunteer Hours',
-                    pointRadius: 5,
-                    pointBackgroundColor: 'white',
-                    data: dates[1],
-                    borderWidth: 1,
-                    backgroundColor: '#38b18a',
-                },
-            ],
-        },
-        options: {
-            legend: {
-                display: false,
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
-                xAxes: [
+    if (dates) {
+        const volunteerHours = data['volunteer-hours']
+        const minutes =
+            volunteerHours['admin']['total'] +
+            volunteerHours['tutor']['total'] +
+            volunteerHours['content']['total']
+        createBlock('Volunteer Hours', [minutes / 60 + ' Hours'], 'small')
+        spacer = document.createElement('div')
+        spacer.className = 'spacer'
+        document.querySelector('.account').appendChild(spacer)
+        createBlock(
+            'Volunteer Hours',
+            ['<canvas id="volunteerHours"></canvas>'],
+            'large'
+        )
+        new Chart('volunteerHours', {
+            type: 'line',
+            data: {
+                labels: dates[0],
+                datasets: [
                     {
-                        display: false,
+                        label: 'Volunteer Hours',
+                        pointRadius: 5,
+                        pointBackgroundColor: 'white',
+                        data: dates[1],
+                        borderWidth: 1,
+                        backgroundColor: '#38b18a',
                     },
                 ],
             },
-            layout: {
-                padding: 20,
+            options: {
+                legend: {
+                    display: false,
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                    xAxes: [
+                        {
+                            display: false,
+                        },
+                    ],
+                },
+                layout: {
+                    padding: 20,
+                },
             },
-        },
-    })
+        })
+    }
 }
 
 function createBlock(title, fields, size) {

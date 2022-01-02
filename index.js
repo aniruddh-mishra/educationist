@@ -19,6 +19,7 @@ admin.initializeApp({
 })
 
 var db = getFirestore()
+var auth = getAuth()
 
 // // Initialize Algolia
 const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
@@ -71,6 +72,22 @@ app.get('/content', limiter, (request, response) => {
 
 app.get('/content/document', async (request, response) => {
     response.sendFile('content-page.html', pages)
+})
+
+app.get('/create', async (request, response) => {
+    response.sendFile('register-finish.html', pages)
+})
+
+app.get('/confirm', async (request, response) => {
+    const documentId = request.query.document
+    const snapshot = await db.collection('confirmations').doc(documentId).get()
+    if (!snapshot.exists) {
+        return response.send('This confirmation code is now invalid')
+    }
+    const data = snapshot.data()
+    if (data.type === 'creation') {
+        return response.redirect('/create?confirm=' + documentId)
+    }
 })
 
 app.get('/css/:filename', (request, response) => {
@@ -136,13 +153,66 @@ app.get('/js/:filename', (request, response) => {
     response.status(500).send('Missing query!')
 })
 
+app.post('/create', async (request, response) => {
+    const code = request.body.code
+    const password = request.body.password
+    const eid = request.body.eid
+    const data = (await db.collection('confirmations').doc(code).get()).data()
+        .data
+    const timeStamp = new Date(data.timestamp)
+    const birthday = new Date(data.birthday)
+
+    const userInfo = {
+        registration: firebase.firestore.Timestamp.fromMillis(
+            timeStamp.getTime()
+        ),
+        email: data.email,
+        name: data.name,
+        eid: eid,
+        role: data.role,
+        birthday: firebase.firestore.Timestamp.fromMillis(birthday.getTime()),
+    }
+
+    const users = db.collection('users')
+    const responses = await users.where('eid', '==', eid).get()
+
+    // Checks if there were users with the previous query
+    if (!responses.empty) {
+        return response.send('false')
+    }
+    const uid = (
+        await auth.createUser({
+            email: userInfo.email,
+            password: password,
+        })
+    ).uid
+    db.collection('users').doc(uid).create(userInfo)
+    db.collection('confirmations').doc(code).delete()
+    return response.send('true')
+})
+
+app.post('/verify', async (request, response) => {
+    // Defines email
+    const email = request.body.email
+
+    // Finds users with the defined email
+    const users = db.collection('users')
+    const responses = await users.where('email', '==', email).get()
+
+    // Checks if there were users with the previous query
+    if (responses.empty) {
+        return response.send('true')
+    }
+    return response.send('false')
+})
+
 app.post('/login', async (request, response) => {
     // Finds the user
     const users = db.collection('users')
     const snapshot = await users.where('eid', '==', request.body.eid).get()
 
     // Error if the username does not exist
-    if (!snapshot) {
+    if (snapshot.empty) {
         response.send('false')
         return
     }
@@ -150,6 +220,41 @@ app.post('/login', async (request, response) => {
     // Returns the emails
     const email = snapshot.docs[0].data().email
     response.send(email)
+})
+
+app.post('/register', async (request, response) => {
+    const documentId = (
+        await db.collection('confirmations').add({
+            type: 'creation',
+            data: request.body,
+        })
+    ).id
+
+    setTimeout(() => {
+        db.collection('confirmations').doc(documentId).delete()
+    }, 1000 * 60 * 60 * 24 * 10)
+
+    const options = [
+        {
+            key: 'link1',
+            text: processURL + '/confirm?document=' + documentId,
+        },
+    ]
+
+    try {
+        await sendMail(
+            request.body.email,
+            'Welcome to Educationist Tutoring',
+            __dirname + '/public/emails/confirm.html',
+            options
+        )
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+        return response.send('Failure')
+    }
+
+    response.send('true')
 })
 
 app.post('/reset', async (request, response) => {
