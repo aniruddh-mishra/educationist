@@ -219,7 +219,7 @@ async function matchRequests() {
                 createBlock(
                     'Student #' + counter,
                     [
-                        'Name: ' + request.eid,
+                        'EID: ' + request.eid,
                         'Subject: ' +
                             request.subject.charAt(0).toUpperCase() +
                             request.subject.slice(1),

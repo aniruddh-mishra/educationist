@@ -5,14 +5,12 @@ async function upload() {
     var email = validate(document.getElementById('email'))
     var role = validate(document.getElementById('role'))
     var timezone = validate(document.getElementById('timezone'))
+
     if (!(name && birthday && email && role && timezone)) {
         document.getElementById('submit').disabled = false
         return
     }
-    if (!(await verify(document.getElementById('email').value))) {
-        document.getElementById('submit').disabled = false
-        return
-    }
+
     name = document.getElementById('name').value
     birthday = new Date(document.getElementById('birthday').value)
     email = document.getElementById('email').value
@@ -34,6 +32,25 @@ async function upload() {
         return
     }
 
+    if (
+        role === 'student' &&
+        (Date.now() - birthday) / msPerYear < 13 &&
+        document.getElementById('email-header').innerHTML == 'Email'
+    ) {
+        token(
+            "You must acquire parent permission. Fill in your parent's email address to continue"
+        )
+        document.getElementById('email-header').innerHTML = 'Parent Email'
+        document.getElementById('email').value = ''
+        document.getElementById('submit').disabled = false
+        return
+    }
+
+    if (!(await verify(document.getElementById('email').value))) {
+        document.getElementById('submit').disabled = false
+        return
+    }
+
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/register', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -47,6 +64,7 @@ async function upload() {
             timestamp: new Date(Date.now()),
         })
     )
+
     xhr.onload = function () {
         var confirm = this.response
         if (confirm == 'true') {
@@ -84,7 +102,7 @@ function verify(email) {
 }
 
 function validate(element) {
-    if (element.value == '') {
+    if (element.value === '') {
         element.classList.add('error-decorator')
         return false
     }
