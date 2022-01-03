@@ -143,12 +143,10 @@ app.get('/js/:filename', (request, response) => {
 
 // Commits a request for a class to database
 app.post('/match-requests', async (request, response) => {
-    const uid = request.body.uid
-    const snapshot = await db.collection('users').doc(uid).get()
-    if (!snapshot.exists) {
-        return response.send('false')
+    const subjects = request.body.subjects
+    if (subjects === undefined) {
+        return response.send('error')
     }
-    const subjects = snapshot.data().subjects
     var requests = await db
         .collection('requests')
         .where('subject', 'in', subjects)
@@ -160,6 +158,7 @@ app.post('/match-requests', async (request, response) => {
     return response.send(responseObject)
 })
 
+// Creates a match between tutor and student
 app.post('/match-commit', async (request, response) => {
     var tutor = request.body.tutor
     var student = request.body.student
@@ -300,6 +299,15 @@ app.post('/login', async (request, response) => {
 })
 
 app.post('/register', async (request, response) => {
+    // Finds users with the defined email
+    const users = db.collection('users')
+    const responses = await users.where('email', '==', request.body.email).get()
+
+    // Checks if there were users with the previous query
+    if (!responses.empty) {
+        return response.send('used')
+    }
+
     const documentId = (
         await db.collection('confirmations').add({
             type: 'creation',

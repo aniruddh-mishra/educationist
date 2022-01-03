@@ -1,28 +1,24 @@
-dataSet = ['name', 'birthday', 'email', 'timezone']
+dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
 
 async function getData() {
     const uid = localStorage.getItem('uid')
     const userData = await db.collection('users').doc(uid).get()
     localStorage.setItem('timezone', userData.data().timezone)
-    const msPerYear = 1000 * 60 * 60 * 24 * 365
+    const subjects = userData.data().subjects
     const age =
         new Date().getFullYear() -
         userData.data().birthday.toDate().getFullYear()
     localStorage.setItem('age', age)
-    const volunteerHours = await db
-        .collection('users')
-        .doc(uid)
-        .collection('volunteer-entries')
-        .get()
+    const volunteerHours = userData.data()['volunteer-entries']
 
-    if (!volunteerHours.empty) {
+    if (volunteerHours != undefined) {
         const data = []
-        volunteerHours.forEach((doc) => {
+        for (entry of volunteerHours) {
             data.push({
-                date: doc.data().date.toDate(),
-                minutes: doc.data().minutes,
+                date: entry.date.toDate(),
+                minutes: entry.minutes,
             })
-        })
+        }
 
         data.sort((a, b) => {
             return a.date < b.date ? -1 : a.date == b.date ? 0 : 1
@@ -41,20 +37,29 @@ async function getData() {
             )
             hours.push(Number((doc.minutes / 60).toFixed(1)))
         })
-        placeData(userData.data(), [dates, hours])
+        placeData(userData.data(), [dates, hours], subjects)
     } else {
-        placeData(userData.data(), false)
+        placeData(userData.data(), false, subjects)
     }
 }
 
 getData()
 
-async function placeData(data, dates) {
+async function placeData(data, dates, subjects) {
     data.birthday = data.birthday.toDate().toLocaleString('default', {
         month: 'long',
         day: 'numeric',
         year: 'numeric',
     })
+    if (data.role != 'student' && data['subjects'] == undefined) {
+        createBlock(
+            'Subjects',
+            [
+                'You must apply for a subject if you want to get students in Educationist.',
+            ],
+            'small'
+        )
+    }
     dataFields = []
     for (dataField of dataSet) {
         if (data[dataField] == undefined) {
@@ -85,7 +90,7 @@ async function placeData(data, dates) {
             'matching-request active'
     } else {
         document.querySelector('.matches').innerHTML = ''
-        await matchRequests()
+        await matchRequests(subjects)
     }
 
     if (dates) {
@@ -183,20 +188,25 @@ async function request() {
     document.getElementById('request-btn').disabled = false
 }
 
-async function matchRequests() {
+async function matchRequests(subjects) {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest()
         xhr.open('POST', '/match-requests', true)
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.send(
             JSON.stringify({
-                uid: localStorage.getItem('uid'),
+                subjects: subjects,
             })
         )
         xhr.onload = function () {
             if (this.response === 'false') {
                 logout()
                 return
+            } else if (this.response === 'error') {
+                token(
+                    'You must apply to teach subjects before signing up for a class. Please do so from the website!'
+                )
+                return resolve('Done')
             }
             const data = JSON.parse(this.response)
             if (data.length === 0) {

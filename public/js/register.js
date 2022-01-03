@@ -46,11 +46,6 @@ async function upload() {
         return
     }
 
-    if (!(await verify(document.getElementById('email').value))) {
-        document.getElementById('submit').disabled = false
-        return
-    }
-
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/register', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -72,33 +67,14 @@ async function upload() {
             setTimeout(() => {
                 window.location.replace('/login')
             }, 10000)
+        } else if (this.response === 'used') {
+            token('This email is already taken, please use another one!')
+            document.getElementById('submit').disabled = false
         } else {
             token('Something went wrong, please try again later!')
             document.getElementById('submit').disabled = true
         }
     }
-}
-
-function verify(email) {
-    return new Promise((resolve, reject) => {
-        var xhr = new XMLHttpRequest()
-        xhr.open('POST', '/verify', true)
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(
-            JSON.stringify({
-                email: email,
-            })
-        )
-        xhr.onload = function () {
-            var confirm = this.response
-            if (confirm == 'true') {
-                resolve(true)
-            } else {
-                token('This email is already taken, please use another one!')
-                resolve(false)
-            }
-        }
-    })
 }
 
 function validate(element) {
