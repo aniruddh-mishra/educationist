@@ -9,6 +9,7 @@ const { sendMail } = require(__dirname + '/emailer.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
 const algoliasearch = require('algoliasearch')
 const rateLimit = require('express-rate-limit')
+const { response } = require('express')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
@@ -180,6 +181,8 @@ app.post('/match-commit', async (request, response) => {
         tutor: tutor,
         tutorEmail: tutorData.email,
         subject: subject,
+        tutorName: tutorData.name,
+        studentName: studentData.name,
     })
     student = studentData
     tutor = tutorData
@@ -265,21 +268,6 @@ app.post('/create', async (request, response) => {
     db.collection('users').doc(uid).create(userInfo)
     db.collection('confirmations').doc(code).delete()
     return response.send('true')
-})
-
-app.post('/verify', async (request, response) => {
-    // Defines email
-    const email = request.body.email
-
-    // Finds users with the defined email
-    const users = db.collection('users')
-    const responses = await users.where('email', '==', email).get()
-
-    // Checks if there were users with the previous query
-    if (responses.empty) {
-        return response.send('true')
-    }
-    return response.send('false')
 })
 
 app.post('/login', async (request, response) => {
@@ -397,6 +385,93 @@ app.post('/ban', async (request, reponse) => {
                 Date.now() + 30 * 24 * 60 * 60 * 1000
             ),
         })
+})
+
+// Returns tutors and students classes they are a part of
+app.post('/classes', async (request, response) => {
+    const uid = request.body.uid
+    const student = request.body.student
+    var matchReturn = []
+    if (student === 'false') {
+        var matches = await db
+            .collection('matches')
+            .where('tutor', '==', uid)
+            .get()
+        matches.forEach((doc) => {
+            matchReturn.push({ data: doc.data(), id: doc.id })
+        })
+    }
+    matches = await db.collection('matches').where('student', '==', uid).get()
+    matches.forEach((doc) => {
+        matchReturn.push({ data: doc.data(), id: doc.id })
+    })
+    return response.send(matchReturn)
+})
+
+// Logs the volunteer hours
+app.post('/volunteer-log', async (request, response) => {
+    const studentEmail = request.body.studentEmail
+    const tutorEmail = request.body.tutorEmail
+    const entry = request.body.entry
+    const minutes = entry.minutes
+    var student = await db
+        .collection('users')
+        .where('email', '==', studentEmail)
+        .get()
+    if (student.empty) {
+        return response.send('false')
+    }
+    student = student.docs[0]
+    db.collection('users')
+        .doc(student.id)
+        .update({
+            'attendance-entries': firebase.firestore.FieldValue.arrayUnion({
+                date: firebase.firestore.Timestamp.fromMillis(
+                    new Date(entry.date).getTime()
+                ),
+                minutes: entry.minutes,
+                information: entry.information,
+            }),
+        })
+    var options = [
+        {
+            key: 'minutes1',
+            text: minutes,
+        },
+        {
+            key: 'role1',
+            text: 'tutoring',
+        },
+    ]
+    try {
+        await sendMail(
+            tutorEmail,
+            'Volunteer Log',
+            __dirname + '/public/emails/volunteer.html',
+            options
+        )
+        options = [
+            {
+                key: 'minutes1',
+                text: minutes,
+            },
+            {
+                key: 'role1',
+                text: 'attendance',
+            },
+        ]
+        await sendMail(
+            studentEmail,
+            'Attendance Log',
+            __dirname + '/public/emails/volunteer.html',
+            options
+        )
+        return response.send('Done!')
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+        return response.send('Failure')
+    }
 })
 
 // Starts express app

@@ -159,6 +159,10 @@ select:focus {
     display: block;
 }
 
+.error-decorator {
+    border-color: red;
+}
+
 #toaster.invisible {
     visibility: hidden;
 }
