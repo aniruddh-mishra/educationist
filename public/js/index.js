@@ -131,12 +131,12 @@ async function placeData(data, dates, subjects, attendance) {
     spacer.className = 'spacer'
     document.querySelector('.account').appendChild(spacer)
 
-    if (data.role === 'student') {
-        document.querySelector('.matching-request').className =
-            'matching-request active'
-    } else {
-        document.querySelector('.matches').innerHTML = ''
+    if (data.role != 'student') {
         await matchRequests(subjects)
+    }
+
+    if (document.querySelector('.matches').innerHTML === '') {
+        document.querySelector('.matches').remove()
     }
 
     await classes()
@@ -289,6 +289,7 @@ async function matchRequests(subjects) {
         xhr.send(
             JSON.stringify({
                 subjects: subjects,
+                eid: localStorage.getItem('eid'),
             })
         )
         xhr.onload = function () {
@@ -384,6 +385,7 @@ async function classes() {
     xhr.onload = function () {
         const data = JSON.parse(this.response)
         if (data.length === 0) {
+            document.querySelector('.classes').remove()
             token('You are not currently registered in any classes.')
             return
         }

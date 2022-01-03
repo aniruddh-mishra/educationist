@@ -145,12 +145,14 @@ app.get('/js/:filename', (request, response) => {
 // Commits a request for a class to database
 app.post('/match-requests', async (request, response) => {
     const subjects = request.body.subjects
+    const eid = request.body.eid
     if (subjects === undefined) {
         return response.send('error')
     }
     var requests = await db
         .collection('requests')
         .where('subject', 'in', subjects)
+        .where('eid', '!=', eid)
         .get()
     var responseObject = []
     requests.forEach((doc) => {
