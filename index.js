@@ -569,7 +569,7 @@ app.post('/new-content', async (request, response) => {
         age: request.body.age,
         author: name,
         date: firebase.firestore.Timestamp.fromMillis(Date.now()),
-        link: 'https://drive.google.com/open?id=' + request.body.id,
+        link: request.body.id,
         subject: request.body.subject,
         title: request.body.title,
         type: request.body.type,
