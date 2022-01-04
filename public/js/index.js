@@ -94,7 +94,7 @@ async function placeData(data, dates, subjects, attendance) {
         createBlock(
             'Subjects',
             [
-                'You must apply for a subject if you want to get students in Educationist.',
+                'You are not accepted in any subjects. If you believe you are, try to transfer your information first. If not, fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/1L0WRzXm20G5SmhCkv2y0ODKYTpUwGkGloOJsXgQFI0c/">this form!</a>',
             ],
             'small'
         )

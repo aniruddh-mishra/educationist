@@ -96,6 +96,12 @@ window.onclick = function (event) {
 }
 
 function token(message) {
+    if (!document.getElementById('toaster').classList.contains('invisible')) {
+        setTimeout(() => {
+            token(message)
+        }, 5000)
+        return
+    }
     document.getElementById('alert').innerHTML = message
     document.getElementById('toaster').classList.toggle('invisible')
     setTimeout(() => {
