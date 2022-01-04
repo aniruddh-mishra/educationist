@@ -180,6 +180,8 @@ app.post('/match-commit', async (request, response) => {
         request.body.subject.charAt(0).toLowerCase() +
         request.body.subject.slice(1)
 
+    console.log(tutor, student, transfer, subject)
+
     // Checks source of request
     if (transfer === 'true') {
         // Changes tutor to be the uid of the tutor
