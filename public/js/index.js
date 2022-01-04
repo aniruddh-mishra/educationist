@@ -393,8 +393,8 @@ async function classes() {
         information.innerText = 'Classes'
         document.querySelector('.class-instructions').appendChild(information)
         const instructions = document.createElement('p')
-        instructions.innerText =
-            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours.'
+        instructions.innerHTML =
+            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours. If you are a tutor, and you want to import an existing class, please fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/e/1FAIpQLSf0NZF69Xzn0EGKXeWDs8dG1a45iOS-ZDbxF9b8Mjjv49mdhQ/viewform">this form!</a>'
         document.querySelector('.class-instructions').appendChild(instructions)
         var counter = 1
         var active = false
