@@ -436,10 +436,10 @@ async function classes() {
         counter = 1
         for (classItem of inactiveClasses) {
             var options = []
-            options.push('Student: ' + data.studentName)
-            options.push('Tutor: ' + data.tutorName)
-            options.push('Student Email: ' + data.studentEmail)
-            options.push('Tutor Email: ' + data.tutorEmail)
+            options.push('Student: ' + classItem.data.studentName)
+            options.push('Tutor: ' + classItem.data.tutorName)
+            options.push('Student Email: ' + classItem.data.studentEmail)
+            options.push('Tutor Email: ' + classItem.data.tutorEmail)
             options.push(
                 'Subject: ' +
                     classItem.data.subject.charAt(0).toUpperCase() +
