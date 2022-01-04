@@ -142,40 +142,56 @@ app.get('/js/:filename', (request, response) => {
     response.status(500).send('Missing query!')
 })
 
-// Commits a request for a class to database
+// Returns matching requests to tutors
 app.post('/match-requests', async (request, response) => {
+    // Defines given variables
     const subjects = request.body.subjects
     const eid = request.body.eid
+
+    // If tutor has not been accepted in any subjects, an error is returned
     if (subjects === undefined) {
         return response.send('error')
     }
+
+    // Fetches all the requests the tutor can teach and ensures the tutor does not recieve their own requests
     var requests = await db
         .collection('requests')
         .where('subject', 'in', subjects)
         .where('eid', '!=', eid)
         .get()
+
+    // Configures data in a list to return
     var responseObject = []
     requests.forEach((doc) => {
         responseObject.push(doc.data())
     })
+
+    // Sends back a list of data
     return response.send(responseObject)
 })
 
 // Creates a match between tutor and student
 app.post('/match-commit', async (request, response) => {
+    // Defines given variables
     var tutor = request.body.tutor
     var student = request.body.student
     const subject =
         request.body.subject.charAt(0).toLowerCase() +
         request.body.subject.slice(1)
+
+    // Fetches information about the student
     student = await db
         .collection('users')
         .where('eid', '==', student)
         .limit(1)
         .get()
     student = student.docs[0]
+
+    // Fetches information about the tutor
     const tutorData = (await db.collection('users').doc(tutor).get()).data()
     const studentData = student.data()
+
+    // Ads the new details to a new class in firestore
     await db.collection('matches').add({
         creation: firebase.firestore.Timestamp.fromMillis(Date.now()),
         student: student.id,
@@ -186,8 +202,8 @@ app.post('/match-commit', async (request, response) => {
         tutorName: tutorData.name,
         studentName: studentData.name,
     })
-    student = studentData
-    tutor = tutorData
+
+    // Creates the email data to be sent to the student and tutor
     const options = [
         {
             key: 'subject1',
@@ -197,107 +213,59 @@ app.post('/match-commit', async (request, response) => {
             key: 'information1',
             text:
                 'Tutor: ' +
-                tutor.name +
+                tutorData.name +
                 '<br>Tutor Email: ' +
-                tutor.email +
+                tutorData.email +
                 '<br>Student: ' +
-                student.name +
+                studentData.name +
                 '<br>Student Email: ' +
-                student.email,
+                studentData.email,
         },
     ]
 
     try {
+        // Sends the email to the tutor and the student
         await sendMail(
-            [tutor.email, student.email],
+            [tutorData.email, studentData.email],
             'Educationist Tutoring Class Update',
             __dirname + '/public/emails/match.html',
             options
         )
+
+        // Fetches the request the student made for the class
         const snapshot = await db
             .collection('requests')
-            .where('eid', '==', student.eid)
+            .where('eid', '==', studentData.eid)
             .where('subject', '==', subject)
             .get()
         const document = snapshot.docs[0].id
+
+        // Deletes the request fetched above
         await db.collection('requests').doc(document).delete()
     } catch (err) {
         // Some sort of error for email not being sent
         console.log('Reset Email Error: ' + err)
+
         return response.send('false')
     }
-    response.send('true')
-})
 
-// Creates accounts
-app.post('/create', async (request, response) => {
-    const code = request.body.code
-    const password = request.body.password
-    const eid = request.body.eid
-    var data = await db.collection('confirmations').doc(code).get()
-    if (!data.exists) {
-        return response.send('error')
-    }
-    data = data.data().data
-    const timeStamp = new Date(data.timestamp)
-    const birthday = new Date(data.birthday)
-
-    const userInfo = {
-        registration: firebase.firestore.Timestamp.fromMillis(
-            timeStamp.getTime()
-        ),
-        email: data.email,
-        name: data.name,
-        eid: eid,
-        role: data.role,
-        birthday: firebase.firestore.Timestamp.fromMillis(birthday.getTime()),
-        timezone: data.timezone,
-    }
-
-    const users = db.collection('users')
-    const responses = await users.where('eid', '==', eid).get()
-
-    // Checks if there were users with the previous query
-    if (!responses.empty) {
-        return response.send('false')
-    }
-    const uid = (
-        await auth.createUser({
-            email: userInfo.email,
-            password: password,
-        })
-    ).uid
-    db.collection('users').doc(uid).create(userInfo)
-    db.collection('confirmations').doc(code).delete()
     return response.send('true')
 })
 
-app.post('/login', async (request, response) => {
-    // Finds the user
-    const users = db.collection('users')
-    const snapshot = await users.where('eid', '==', request.body.eid).get()
-
-    // Error if the username does not exist
-    if (snapshot.empty) {
-        response.send('false')
-        return
-    }
-
-    // Returns the emails
-    const email = snapshot.docs[0].data().email
-    response.send(email)
-})
-
+// Places registration information into confirmaiton code
 app.post('/register', async (request, response) => {
-    // Finds users with the defined email
-    const users = db.collection('users')
-    const responses = await users.where('email', '==', request.body.email).get()
+    // Fetches users with the defined email
+    const responses = await db
+        .collection('users')
+        .where('email', '==', request.body.email)
+        .get()
 
     // Checks if there were users with the previous query
     if (!responses.empty) {
         return response.send('used')
     }
 
+    // Adds the confirmation code to the database and saves document id
     const documentId = (
         await db.collection('confirmations').add({
             type: 'creation',
@@ -305,10 +273,12 @@ app.post('/register', async (request, response) => {
         })
     ).id
 
+    // Sets timeout to ensure that the confirmation code will self delete in 10 days
     setTimeout(() => {
         db.collection('confirmations').doc(documentId).delete()
     }, 1000 * 60 * 60 * 24 * 10)
 
+    // Creates email information to send to user that just registered
     const options = [
         {
             key: 'link1',
@@ -317,6 +287,7 @@ app.post('/register', async (request, response) => {
     ]
 
     try {
+        // Sends the email to the user
         await sendMail(
             request.body.email,
             'Welcome to Educationist Tutoring',
@@ -329,14 +300,94 @@ app.post('/register', async (request, response) => {
         return response.send('Failure')
     }
 
-    response.send('true')
+    return response.send('true')
 })
 
-app.post('/reset', async (request, response) => {
-    // Assigns email to variable
-    let { email } = request.body
+// Finally creates the account
+app.post('/create', async (request, response) => {
+    // Defines given variables
+    const code = request.body.code
+    const password = request.body.password
+    const eid = request.body.eid
 
-    // Creates settings for reset url
+    // Fetches data for the confirmation code given by frontend
+    var data = await db.collection('confirmations').doc(code).get()
+
+    // Checks whether the code is valid
+    if (!data.exists) {
+        return response.send('error')
+    }
+
+    // Returns data from confirmation code
+    data = data.data().data
+
+    // Defines the timestamp and birthday in terms of js data object
+    const timeStamp = new Date(data.timestamp)
+    const birthday = new Date(data.birthday)
+
+    // Defines user information based on previous information
+    const userInfo = {
+        registration: firebase.firestore.Timestamp.fromMillis(
+            timeStamp.getTime()
+        ),
+        email: data.email,
+        name: data.name,
+        eid: eid,
+        role: data.role,
+        birthday: firebase.firestore.Timestamp.fromMillis(birthday.getTime()),
+        timezone: data.timezone,
+    }
+
+    // Fetches the users with the same eid to confirm that the eid is unique
+    const responses = await db.collection('users').where('eid', '==', eid).get()
+
+    // Checks if there were users with the previous query
+    if (!responses.empty) {
+        return response.send('false')
+    }
+
+    // Creates firebase auth user, and returns uid of the user
+    const uid = (
+        await auth.createUser({
+            email: userInfo.email,
+            password: password,
+        })
+    ).uid
+
+    // Creates user with the uid and user information defined above
+    await db.collection('users').doc(uid).create(userInfo)
+
+    // Deletes the confirmation code that was just completed
+    await db.collection('confirmations').doc(code).delete()
+
+    return response.send('true')
+})
+
+// Validates login information
+app.post('/login', async (request, response) => {
+    // Fetches user information from eid
+    const snapshot = await db
+        .collection('users')
+        .where('eid', '==', request.body.eid)
+        .get()
+
+    // Error if the username does not exist
+    if (snapshot.empty) {
+        response.send('false')
+        return
+    }
+
+    // Returns the emails
+    const email = snapshot.docs[0].data().email
+    return response.send(email)
+})
+
+// Handles user reset password query
+app.post('/reset', async (request, response) => {
+    // Defines given variables
+    let email = request.body.email
+
+    // Creates redirect settings for reset url
     let actioncodesettings = {
         url: 'https://dashboard.educationisttutoring.org/login',
     }
@@ -345,7 +396,7 @@ app.post('/reset', async (request, response) => {
     getAuth()
         .generatePasswordResetLink(email, actioncodesettings)
         .then(async (link) => {
-            // Sends email
+            // Creates email information
             options = [
                 {
                     key: 'link1',
@@ -354,6 +405,7 @@ app.post('/reset', async (request, response) => {
             ]
 
             try {
+                // Sends the email
                 await sendMail(
                     email,
                     'Password Reset Educationist Tutoring',
@@ -366,7 +418,7 @@ app.post('/reset', async (request, response) => {
                 return response.send('Failure')
             }
 
-            response.send('Success')
+            return response.send('Success')
         })
         .catch((error) => {
             // Email was not recognized error
@@ -374,56 +426,66 @@ app.post('/reset', async (request, response) => {
                 return response.send('Not Exist')
             }
             console.log('Reset Error: ' + error)
-            response.send('Failure')
+            return response.send('Failure')
         })
 })
 
-app.post('/ban', async (request, reponse) => {
-    const uid = request.body.uid
-    db.collection('users')
-        .doc(uid)
-        .update({
-            banned: firebase.firestore.Timestamp.fromMillis(
-                Date.now() + 30 * 24 * 60 * 60 * 1000
-            ),
-        })
-})
-
-// Returns tutors and students classes they are a part of
+// Returns classes that a user is a part of
 app.post('/classes', async (request, response) => {
+    // Defines given variables
     const uid = request.body.uid
     const student = request.body.student
+
+    // Configures data to be returned in a list
     var matchReturn = []
+
+    // Data if user is a tutor
     if (student === 'false') {
+        // Fetches data if user is a tutor
         var matches = await db
             .collection('matches')
             .where('tutor', '==', uid)
             .get()
+
+        // Adds data to the return list
         matches.forEach((doc) => {
             matchReturn.push({ data: doc.data(), id: doc.id })
         })
     }
+
+    // Fetches all classes when user is a student
     matches = await db.collection('matches').where('student', '==', uid).get()
+
+    // Ads classes to list
     matches.forEach((doc) => {
         matchReturn.push({ data: doc.data(), id: doc.id })
     })
+
     return response.send(matchReturn)
 })
 
 // Logs the volunteer hours
 app.post('/volunteer-log', async (request, response) => {
+    // Defines given variables
     const studentEmail = request.body.studentEmail
     const tutorEmail = request.body.tutorEmail
     const entry = request.body.entry
     const minutes = entry.minutes
+
+    // Fetches student based on student email
     var student = await db
         .collection('users')
         .where('email', '==', studentEmail)
         .get()
+
+    // Returns error if student does not exist
     if (student.empty) {
         return response.send('false')
     }
+
     student = student.docs[0]
+
+    // Updates user information for student's attendance
     db.collection('users')
         .doc(student.id)
         .update({
@@ -435,6 +497,8 @@ app.post('/volunteer-log', async (request, response) => {
                 information: entry.information,
             }),
         })
+
+    // Configures email information
     var options = [
         {
             key: 'minutes1',
@@ -445,13 +509,17 @@ app.post('/volunteer-log', async (request, response) => {
             text: 'tutoring',
         },
     ]
+
     try {
+        // Sends email to tutor
         await sendMail(
             tutorEmail,
             'Volunteer Log',
             __dirname + '/public/emails/volunteer.html',
             options
         )
+
+        // Configures student email information
         options = [
             {
                 key: 'minutes1',
@@ -462,18 +530,37 @@ app.post('/volunteer-log', async (request, response) => {
                 text: 'attendance',
             },
         ]
+
+        // Sends email to student
         await sendMail(
             studentEmail,
             'Attendance Log',
             __dirname + '/public/emails/volunteer.html',
             options
         )
+
         return response.send('Done!')
     } catch (err) {
         // Some sort of error for email not being sent
         console.log('Reset Email Error: ' + err)
+
         return response.send('Failure')
     }
+})
+
+// Bans user based on request
+app.post('/ban', async (request, reponse) => {
+    // Defines given variables
+    const uid = request.body.uid
+
+    // Updates user information to have a banned value 30 days from now
+    db.collection('users')
+        .doc(uid)
+        .update({
+            banned: firebase.firestore.Timestamp.fromMillis(
+                Date.now() + 30 * 24 * 60 * 60 * 1000
+            ),
+        })
 })
 
 // Starts express app
