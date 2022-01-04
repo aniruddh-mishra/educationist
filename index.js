@@ -557,6 +557,7 @@ app.post('/new-content', async (request, response) => {
         .where('eid', '==', request.body.eid)
         .get()
     if (!user.exists) {
+        console.log(user.exists)
         return response.send('Done')
     }
     user = user.doc[0]
