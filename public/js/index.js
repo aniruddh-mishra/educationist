@@ -398,10 +398,14 @@ async function classes() {
         document.querySelector('.class-instructions').appendChild(instructions)
         var counter = 1
         var active = false
+        var inactiveClasses = []
         for (classItem of data) {
             const data = classItem.data
+            if (data.inactive) {
+                inactiveClasses.push(classItem)
+                continue
+            }
             var options = []
-            var title = ''
             options.push('Student: ' + data.studentName)
             options.push('Tutor: ' + data.tutorName)
             options.push('Student Email: ' + data.studentEmail)
@@ -411,27 +415,45 @@ async function classes() {
                     data.subject.charAt(0).toUpperCase() +
                     data.subject.slice(1)
             )
-            if (data.inactive) {
-                title = 'Inactive '
-            } else {
-                active = true
-                const button =
-                    '<button onclick="inactivate(this.parentNode)" class="end-class">Declare Inactive</button>'
-                options.push(button)
-                if (localStorage.getItem('role') != 'student') {
-                    const logger =
-                        '<div class="logger">Minutes: <input type="number"></div><div class="logger">Date: <input type="date"></div><button onclick="logHours(this)" class="log">Log Minutes</button>'
-                    options.push(logger)
-                }
+            active = true
+            const button =
+                '<button onclick="inactivate(this.parentNode)" class="end-class">Declare Inactive</button>'
+            options.push(button)
+            if (localStorage.getItem('role') != 'student') {
+                const logger =
+                    '<div class="logger">Minutes: <input type="number"></div><div class="logger">Date: <input type="date"></div><button onclick="logHours(this)" class="log">Log Minutes</button>'
+                options.push(logger)
             }
             createBlock(
-                title + 'Class #' + counter,
+                'Class #' + counter,
                 options,
                 'small class',
                 classItem.id
             )
             counter += 1
         }
+
+        counter = 1
+        for (classItem of inactiveClasses) {
+            var options = []
+            options.push('Student: ' + data.studentName)
+            options.push('Tutor: ' + data.tutorName)
+            options.push('Student Email: ' + data.studentEmail)
+            options.push('Tutor Email: ' + data.tutorEmail)
+            options.push(
+                'Subject: ' +
+                    classItem.data.subject.charAt(0).toUpperCase() +
+                    classItem.data.subject.slice(1)
+            )
+            createBlock(
+                'Inactive Class #' + counter,
+                options,
+                'small class',
+                classItem.id
+            )
+            counter += 1
+        }
+
         if (!active) {
             const blocks = document.querySelectorAll('.class')
             for (block of blocks) {
@@ -454,6 +476,7 @@ async function inactivate(e) {
     db.collection('matches').doc(match).update({
         inactive: true,
     })
+    token('Class is now declared inactive!')
 }
 
 async function logHours(e) {
