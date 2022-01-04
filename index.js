@@ -552,9 +552,14 @@ app.post('/volunteer-log', async (request, response) => {
 app.post('/new-content', async (request, response) => {
     // Defines name based on request of user
     var name = null
-    const user = (
-        await db.collection('users').where('eid', '==', request.body.eid).get()
-    ).docs[0]
+    var user = await db
+        .collection('users')
+        .where('eid', '==', request.body.eid)
+        .get()
+    if (!user.exists()) {
+        return response.send('Done')
+    }
+    user = user.doc[0]
     if (request.body.author === 'Yes') {
         name = user.data().name
     }
