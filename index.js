@@ -180,8 +180,6 @@ app.post('/match-commit', async (request, response) => {
         request.body.subject.charAt(0).toLowerCase() +
         request.body.subject.slice(1)
 
-    console.log(tutor, student, transfer, subject)
-
     // Checks source of request
     if (transfer === 'true') {
         // Changes tutor to be the uid of the tutor
@@ -193,10 +191,12 @@ app.post('/match-commit', async (request, response) => {
 
         // Confirms if eid is valid
         if (snapshot.empty) {
+            console.log(snapshot)
             return response.send('false')
         }
 
         tutor = snapshot.docs[0].id
+        var tutorData = snapshot.docs[0].data()
     }
 
     // Fetches information about the student
@@ -208,13 +208,16 @@ app.post('/match-commit', async (request, response) => {
 
     // Confirms if eid is valid
     if (student.empty) {
+        console.log('No student')
         return response.send('false')
     }
 
     student = student.docs[0]
 
     // Fetches information about the tutor
-    const tutorData = (await db.collection('users').doc(tutor).get()).data()
+    if (transfer != 'true') {
+        var tutorData = (await db.collection('users').doc(tutor).get()).data()
+    }
     const studentData = student.data()
 
     // Ads the new details to a new class in firestore
