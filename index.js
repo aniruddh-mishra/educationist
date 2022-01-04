@@ -24,7 +24,7 @@ var auth = getAuth()
 
 // // Initialize Algolia
 const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
-const index = client.initIndex('content_catalog')
+client.initIndex('content_catalog')
 
 // Ban function if user spams a page
 function ban() {
@@ -173,11 +173,29 @@ app.post('/match-requests', async (request, response) => {
 // Creates a match between tutor and student
 app.post('/match-commit', async (request, response) => {
     // Defines given variables
+    var transfer = request.body.transfer
     var tutor = request.body.tutor
     var student = request.body.student
     const subject =
         request.body.subject.charAt(0).toLowerCase() +
         request.body.subject.slice(1)
+
+    // Checks source of request
+    if (transfer === 'true') {
+        // Changes tutor to be the uid of the tutor
+        // Fetches tutor from eid
+        const snapshot = await db
+            .collection('users')
+            .where('eid', '==', tutor)
+            .get()
+
+        // Confirms if eid is valid
+        if (snapshot.empty) {
+            return response.send('false')
+        }
+
+        tutor = snapshot.docs[0].id
+    }
 
     // Fetches information about the student
     student = await db
@@ -185,6 +203,12 @@ app.post('/match-commit', async (request, response) => {
         .where('eid', '==', student)
         .limit(1)
         .get()
+
+    // Confirms if eid is valid
+    if (student.empty) {
+        return response.send('false')
+    }
+
     student = student.docs[0]
 
     // Fetches information about the tutor
