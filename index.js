@@ -556,7 +556,7 @@ app.post('/new-content', async (request, response) => {
         .collection('users')
         .where('eid', '==', request.body.eid)
         .get()
-    if (user.empty()) {
+    if (user.empty) {
         return response.send('Done')
     }
     user = user.doc[0]
