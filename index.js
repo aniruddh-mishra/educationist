@@ -548,8 +548,50 @@ app.post('/volunteer-log', async (request, response) => {
     }
 })
 
+// Manages new content curated
+app.post('/new-content', async (request, response) => {
+    request.body = JSON.parse(request.body)
+    const eid = request.body.eid
+    var name = null
+    if (request.body.author === 'Yes') {
+        const user = (
+            await db.collection('users').where('eid', '==', eid).get()
+        ).docs[0]
+        name = user.data().name
+    }
+    const information = {
+        age: request.body.age,
+        author: name,
+        date: firebase.firestore.Timestamp.fromMillis(Date.now()),
+        link: 'https://drive.google.com/open?id=' + request.body.id,
+        subject: request.body.subject,
+        title: request.body.title,
+        type: request.body.type,
+        upvotes: 0,
+    }
+    const contentId = await db.collection('content').add(information)
+    const entry = {
+        date: firebase.firestore.Timestamp.fromMillis(
+            new Date(Date.now()).getTime()
+        ),
+        minutes: parseInt(request.body.minutes),
+        information: {
+            type: 'content',
+            reference: contentId,
+        },
+    }
+    await db
+        .collection('users')
+        .doc(user.id)
+        .update({
+            'volunteer-entries':
+                firebase.firestore.FieldValue.arrayUnion(entry),
+        })
+    return response.send('Complete!')
+})
+
 // Bans user based on request
-app.post('/ban', async (request, reponse) => {
+app.post('/ban', async (request, response) => {
     // Defines given variables
     const uid = request.body.uid
 
