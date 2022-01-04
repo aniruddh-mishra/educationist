@@ -559,7 +559,7 @@ app.post('/new-content', async (request, response) => {
     if (user.empty) {
         return response.send('Done')
     }
-    user = user.doc[0]
+    user = user.docs[0]
     if (request.body.author === 'Yes') {
         name = user.data().name
     }
