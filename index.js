@@ -550,8 +550,10 @@ app.post('/volunteer-log', async (request, response) => {
 
 // Manages new content curated
 app.post('/new-content', async (request, response) => {
-    request.body = JSON.parse(request.body)
+    // Defines given variables
     const eid = request.body.eid
+
+    // Defines name based on request of user
     var name = null
     if (request.body.author === 'Yes') {
         const user = (
@@ -559,6 +561,8 @@ app.post('/new-content', async (request, response) => {
         ).docs[0]
         name = user.data().name
     }
+
+    // Defines the information for the content based on request.body
     const information = {
         age: request.body.age,
         author: name,
@@ -569,7 +573,11 @@ app.post('/new-content', async (request, response) => {
         type: request.body.type,
         upvotes: 0,
     }
+
+    // Adds content with information to firebase and recieves the contentId
     const contentId = await db.collection('content').add(information)
+
+    // Creates a volunteer hours entry with the content Id in it
     const entry = {
         date: firebase.firestore.Timestamp.fromMillis(
             new Date(Date.now()).getTime()
@@ -580,6 +588,8 @@ app.post('/new-content', async (request, response) => {
             reference: contentId,
         },
     }
+
+    // Updates user with volunteer hour entry defined above
     await db
         .collection('users')
         .doc(user.id)
@@ -587,6 +597,7 @@ app.post('/new-content', async (request, response) => {
             'volunteer-entries':
                 firebase.firestore.FieldValue.arrayUnion(entry),
         })
+
     return response.send('Complete!')
 })
 
