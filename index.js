@@ -550,16 +550,12 @@ app.post('/volunteer-log', async (request, response) => {
 
 // Manages new content curated
 app.post('/new-content', async (request, response) => {
-    console.log(request.body, request.body.age, request.body['age'])
     // Defines name based on request of user
     var name = null
+    const user = (
+        await db.collection('users').where('eid', '==', request.body.eid).get()
+    ).docs[0]
     if (request.body.author === 'Yes') {
-        const user = (
-            await db
-                .collection('users')
-                .where('eid', '==', request.body.eid)
-                .get()
-        ).docs[0]
         name = user.data().name
     }
 
