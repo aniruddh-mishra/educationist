@@ -305,7 +305,7 @@ app.post('/register', async (request, response) => {
     // Sets timeout to ensure that the confirmation code will self delete in 10 days
     setTimeout(() => {
         db.collection('confirmations').doc(documentId).delete()
-    }, 1000 * 60 * 60 * 24 * 10)
+    }, 1000 * 60 * 5)
 
     // Creates email information to send to user that just registered
     const options = [
