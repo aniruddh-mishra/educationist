@@ -550,6 +550,7 @@ app.post('/volunteer-log', async (request, response) => {
 
 // Manages new content curated
 app.post('/new-content', async (request, response) => {
+    console.log(request.body, request.body.age, request.body['age'])
     // Defines name based on request of user
     var name = null
     if (request.body.author === 'Yes') {
