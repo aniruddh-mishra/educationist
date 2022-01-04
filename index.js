@@ -191,7 +191,6 @@ app.post('/match-commit', async (request, response) => {
 
         // Confirms if eid is valid
         if (snapshot.empty) {
-            console.log(snapshot)
             return response.send('false')
         }
 
@@ -208,7 +207,6 @@ app.post('/match-commit', async (request, response) => {
 
     // Confirms if eid is valid
     if (student.empty) {
-        console.log('No student')
         return response.send('false')
     }
 
@@ -262,15 +260,17 @@ app.post('/match-commit', async (request, response) => {
         )
 
         // Fetches the request the student made for the class
-        const snapshot = await db
-            .collection('requests')
-            .where('eid', '==', studentData.eid)
-            .where('subject', '==', subject)
-            .get()
-        const document = snapshot.docs[0].id
+        if (transfer != 'true') {
+            const snapshot = await db
+                .collection('requests')
+                .where('eid', '==', studentData.eid)
+                .where('subject', '==', subject)
+                .get()
+            const document = snapshot.docs[0].id
 
-        // Deletes the request fetched above
-        await db.collection('requests').doc(document).delete()
+            // Deletes the request fetched above
+            await db.collection('requests').doc(document).delete()
+        }
     } catch (err) {
         // Some sort of error for email not being sent
         console.log('Reset Email Error: ' + err)
