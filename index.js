@@ -534,36 +534,24 @@ app.post('/volunteer-log', async (request, response) => {
             text: minutes,
         },
         {
-            key: 'role1',
-            text: 'tutoring',
+            key: 'email1',
+            text: tutorEmail,
+        },
+        {
+            key: 'name1',
+            text: entry.information.tutor,
+        },
+        {
+            key: 'subject1',
+            text: entry.information.subject,
         },
     ]
 
     try {
         // Sends email to tutor
         await sendMail(
-            tutorEmail,
+            [tutorEmail, studentEmail],
             'Volunteer Log',
-            __dirname + '/public/emails/volunteer.html',
-            options
-        )
-
-        // Configures student email information
-        options = [
-            {
-                key: 'minutes1',
-                text: minutes,
-            },
-            {
-                key: 'role1',
-                text: 'attendance',
-            },
-        ]
-
-        // Sends email to student
-        await sendMail(
-            studentEmail,
-            'Attendance Log',
             __dirname + '/public/emails/volunteer.html',
             options
         )
