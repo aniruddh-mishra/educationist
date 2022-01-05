@@ -632,6 +632,83 @@ app.post('/new-content', async (request, response) => {
     return response.send('Complete!')
 })
 
+// Transfer user information from old database
+app.post('/transfer-data', async (request, response) => {
+    const eid = request.body.eid
+    const username = request.body.username
+    const oldDb = JSON.parse(fs.readFileSync('old-database.json'))
+    const oldUsers = oldDb['Activated IDs']
+    const oldHours = oldDb['Volunteering Hours']
+    var subjects = []
+    if (oldUsers[eid] != undefined) {
+        const user = oldUsers[eid]
+        if (user.subjects != undefined) {
+            subjects = user.subjects
+        }
+    }
+    var totalHours = 0
+    if (oldHours[eid] != undefined) {
+        const userHours = oldHours[eid]
+        totalHours = userHours.Total['Total Time']
+    }
+
+    const snapshot = await db
+        .collection('users')
+        .where('eid', '==', username)
+        .get()
+
+    if (snapshot.empty) {
+        return response.send('Failure')
+    }
+
+    const userAccount = snapshot.docs[0]
+
+    const currentEntries = userAccount.data()['volunteer-entries']
+
+    if (currentEntries != undefined) {
+        for ([key, value] of Object.entries(currentEntries)) {
+            if (value.information.type === 'transfer') {
+                totalHours = 0
+                break
+            }
+        }
+    }
+
+    if (subject != [] && totalHours != 0) {
+        const entry = {
+            date: firebase.firestore.Timestamp.fromMillis(
+                new Date(Date.now()).getTime()
+            ),
+            minutes: parseInt(totalHours),
+            information: {
+                type: 'transfer',
+            },
+        }
+        db.collection('users')
+            .doc(userAccount.id)
+            .update(
+                {
+                    'volunteer-entries':
+                        firebase.firestore.FieldValue.arrayUnion(entry),
+                },
+                {
+                    subjects: subjects,
+                }
+            )
+    } else if (subject != []) {
+        db.collection('users').doc(userAccount.id).update({
+            subjects: subjects,
+        })
+    } else if (totalHours != 0) {
+        db.collection('users')
+            .doc(userAccount.id)
+            .update({
+                'volunteer-entries':
+                    firebase.firestore.FieldValue.arrayUnion(entry),
+            })
+    }
+})
+
 // Bans user based on request
 app.post('/ban', async (request, response) => {
     // Defines given variables
