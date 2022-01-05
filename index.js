@@ -659,7 +659,7 @@ app.get('/transfer-data', async (request, response) => {
 
         // Returns if user does not exist
         if (snapshotUser.empty) {
-            console.log(totalHours, subjects, snapshot, username)
+            console.log(totalHours, subjects, username)
             return response.send('Failure')
         }
 
