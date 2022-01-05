@@ -622,11 +622,16 @@ app.post('/new-content', async (request, response) => {
 
 // Transfer user information from old database
 app.post('/transfer-data', async (request, response) => {
+    // Defines given variables
     const eid = request.body.eid
     const username = request.body.username
+
+    // Initializes old database json file
     const oldDb = JSON.parse(fs.readFileSync('old-database.json'))
     const oldUsers = oldDb['Activated IDs']
     const oldHours = oldDb['Volunteering Hours']
+
+    // Checks for subjects the user may be accepted in
     var subjects = []
     if (oldUsers[eid] != undefined) {
         const user = oldUsers[eid]
@@ -634,23 +639,28 @@ app.post('/transfer-data', async (request, response) => {
             subjects = user.subjects
         }
     }
+
+    // Checks for old volunteer hours
     var totalHours = 0
     if (oldHours[eid] != undefined) {
         const userHours = oldHours[eid]
         totalHours = userHours.Total['Total Time']
     }
 
+    // Fetches user from new database
     const snapshot = await db
         .collection('users')
         .where('eid', '==', username)
         .get()
 
+    // Returns if user does not exist
     if (snapshot.empty) {
         return response.send('Failure')
     }
 
     const userAccount = snapshot.docs[0]
 
+    // Checks if hours have already been transferred
     const currentEntries = userAccount.data()['volunteer-entries']
 
     if (currentEntries != undefined) {
@@ -662,6 +672,7 @@ app.post('/transfer-data', async (request, response) => {
         }
     }
 
+    // Updates based on what information was found in old database
     if (subject != [] && totalHours != 0) {
         const entry = {
             date: firebase.firestore.Timestamp.fromMillis(
@@ -695,6 +706,8 @@ app.post('/transfer-data', async (request, response) => {
                     firebase.firestore.FieldValue.arrayUnion(entry),
             })
     }
+
+    return response.send('Success!')
 })
 
 // Bans user based on request
