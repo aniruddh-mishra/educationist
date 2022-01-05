@@ -17,10 +17,13 @@ require('dotenv').config({
 // Initialize Firestore
 admin.initializeApp({
     credential: admin.cert(JSON.parse(process.env.FIREBASE)),
+    databaseURL: 'https://educationist-42b45-default-rtdb.firebaseio.com/',
 })
 
 var db = getFirestore()
 var auth = getAuth()
+var rdb = firebase.database()
+var ref = rdb.ref('/')
 
 // // Initialize Algolia
 const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
@@ -627,87 +630,89 @@ app.post('/transfer-data', async (request, response) => {
     const username = request.body.username
 
     // Initializes old database json file
-    const oldDb = JSON.parse(fs.readFileSync('old-database.json'))
-    const oldUsers = oldDb['Activated IDs']
-    const oldHours = oldDb['Volunteering Hours']
+    ref.once('value').then(async (snapshot) => {
+        const oldDb = snapshot.val()
+        const oldUsers = oldDb['Activated IDs']
+        const oldHours = oldDb['Volunteering Hours']
 
-    // Checks for subjects the user may be accepted in
-    var subjects = []
-    if (oldUsers[eid] != undefined) {
-        const user = oldUsers[eid]
-        if (user.subjects != undefined) {
-            subjects = user.subjects
-        }
-    }
-
-    // Checks for old volunteer hours
-    var totalHours = 0
-    if (oldHours[eid] != undefined) {
-        const userHours = oldHours[eid]
-        totalHours = userHours.Total['Total Time']
-    }
-
-    // Fetches user from new database
-    const snapshot = await db
-        .collection('users')
-        .where('eid', '==', username)
-        .get()
-
-    // Returns if user does not exist
-    if (snapshot.empty) {
-        return response.send('Failure')
-    }
-
-    const userAccount = snapshot.docs[0]
-
-    // Checks if hours have already been transferred
-    const currentEntries = userAccount.data()['volunteer-entries']
-
-    if (currentEntries != undefined) {
-        for ([key, value] of Object.entries(currentEntries)) {
-            if (value.information.type === 'transfer') {
-                totalHours = 0
-                break
+        // Checks for subjects the user may be accepted in
+        var subjects = []
+        if (oldUsers[eid] != undefined) {
+            const user = oldUsers[eid]
+            if (user.subjects != undefined) {
+                subjects = user.subjects
             }
         }
-    }
 
-    // Updates based on what information was found in old database
-    if (subject != [] && totalHours != 0) {
-        const entry = {
-            date: firebase.firestore.Timestamp.fromMillis(
-                new Date(Date.now()).getTime()
-            ),
-            minutes: parseInt(totalHours),
-            information: {
-                type: 'transfer',
-            },
+        // Checks for old volunteer hours
+        var totalHours = 0
+        if (oldHours[eid] != undefined) {
+            const userHours = oldHours[eid]
+            totalHours = userHours.Total['Total Time']
         }
-        db.collection('users')
-            .doc(userAccount.id)
-            .update(
-                {
+
+        // Fetches user from new database
+        const snapshotUser = await db
+            .collection('users')
+            .where('eid', '==', username)
+            .get()
+
+        // Returns if user does not exist
+        if (snapshotUser.empty) {
+            return response.send('Failure')
+        }
+
+        const userAccount = snapshotUser.docs[0]
+
+        // Checks if hours have already been transferred
+        const currentEntries = userAccount.data()['volunteer-entries']
+
+        if (currentEntries != undefined) {
+            for ([key, value] of Object.entries(currentEntries)) {
+                if (value.information.type === 'transfer') {
+                    totalHours = 0
+                    break
+                }
+            }
+        }
+
+        // Updates based on what information was found in old database
+        if (subject != [] && totalHours != 0) {
+            const entry = {
+                date: firebase.firestore.Timestamp.fromMillis(
+                    new Date(Date.now()).getTime()
+                ),
+                minutes: parseInt(totalHours),
+                information: {
+                    type: 'transfer',
+                },
+            }
+            db.collection('users')
+                .doc(userAccount.id)
+                .update(
+                    {
+                        'volunteer-entries':
+                            firebase.firestore.FieldValue.arrayUnion(entry),
+                    },
+                    {
+                        subjects: subjects,
+                    }
+                )
+        } else if (subject != []) {
+            db.collection('users').doc(userAccount.id).update({
+                subjects: subjects,
+            })
+        } else if (totalHours != 0) {
+            db.collection('users')
+                .doc(userAccount.id)
+                .update({
                     'volunteer-entries':
                         firebase.firestore.FieldValue.arrayUnion(entry),
-                },
-                {
-                    subjects: subjects,
-                }
-            )
-    } else if (subject != []) {
-        db.collection('users').doc(userAccount.id).update({
-            subjects: subjects,
-        })
-    } else if (totalHours != 0) {
-        db.collection('users')
-            .doc(userAccount.id)
-            .update({
-                'volunteer-entries':
-                    firebase.firestore.FieldValue.arrayUnion(entry),
-            })
-    }
+                })
+        }
 
-    return response.send('Success!')
+        return response.send('Success!')
+    })
 })
 
 // Bans user based on request
