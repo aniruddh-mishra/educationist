@@ -682,15 +682,13 @@ app.post('/transfer-data', async (request, response) => {
         }
         db.collection('users')
             .doc(userAccount.id)
-            .update(
-                {
-                    'volunteer-entries':
-                        firebase.firestore.FieldValue.arrayUnion(entry),
-                },
-                {
-                    subjects: subjects,
-                }
-            )
+            .update({
+                'volunteer-entries':
+                    firebase.firestore.FieldValue.arrayUnion(entry),
+            })
+        db.collection('users').doc(userAccount.id).update({
+            subjects: subjects,
+        })
     } else if (subjects != []) {
         db.collection('users').doc(userAccount.id).update({
             subjects: subjects,
