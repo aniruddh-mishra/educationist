@@ -630,90 +630,85 @@ app.get('/transfer-data', async (request, response) => {
     const username = request.body.username
 
     // Initializes old database json file
-    ref.once('value').then(async (snapshot) => {
-        const oldDb = snapshot.val()
-        const oldUsers = oldDb['Activated IDs']
-        const oldHours = oldDb['Volunteering Hours']
+    const snapshot = await ref.once('value')
+    const oldDb = snapshot.val()
+    const oldUsers = oldDb['Activated IDs']
+    const oldHours = oldDb['Volunteering Hours']
 
-        // Checks for subjects the user may be accepted in
-        var subjects = []
-        if (oldUsers[eid] != undefined) {
-            const user = oldUsers[eid]
-            if (user.subjects != undefined) {
-                subjects = user.subjects
-            }
+    // Checks for subjects the user may be accepted in
+    var subjects = []
+    const user = oldUsers[eid]
+    if (user != undefined) {
+        if (user.subjects != undefined) {
+            subjects = user.subjects
         }
+    }
 
-        // Checks for old volunteer hours
-        var totalHours = 0
-        if (oldHours[eid] != undefined) {
-            const userHours = oldHours[eid]
-            totalHours = userHours.Total['Total Time']
+    // Checks for old volunteer hours
+    var totalHours = 0
+    const userHours = oldHours[eid]
+    if (userHours != undefined) {
+        totalHours = userHours.Total['Total Time']
+    }
+
+    // Fetches user from new database
+    const snapshotUser = await db
+        .collection('users')
+        .where('eid', '==', username)
+        .get()
+
+    console.log(totalHours, subjects, username)
+    // Returns if user does not exist
+    if (snapshotUser.empty) {
+        return response.send('Failure')
+    }
+
+    const userAccount = snapshotUser.docs[0]
+
+    // Updates based on what information was found in old database
+    if (subject != [] && totalHours != 0) {
+        const entry = {
+            date: firebase.firestore.Timestamp.fromMillis(
+                new Date(Date.now()).getTime()
+            ),
+            minutes: parseInt(totalHours),
+            information: {
+                type: 'transfer',
+            },
         }
-
-        // Fetches user from new database
-        const snapshotUser = await db
-            .collection('users')
-            .where('eid', '==', username)
-            .get()
-
-        // Returns if user does not exist
-        if (snapshotUser.empty) {
-            console.log(totalHours, subjects, username)
-            return response.send('Failure')
-        }
-
-        const userAccount = snapshotUser.docs[0]
-
-        // Checks if hours have already been transferred
-        const currentEntries = userAccount.data()['volunteer-entries']
-
-        if (currentEntries != undefined) {
-            for ([key, value] of Object.entries(currentEntries)) {
-                if (value.information.type === 'transfer') {
-                    totalHours = 0
-                    break
-                }
-            }
-        }
-
-        // Updates based on what information was found in old database
-        if (subject != [] && totalHours != 0) {
-            const entry = {
-                date: firebase.firestore.Timestamp.fromMillis(
-                    new Date(Date.now()).getTime()
-                ),
-                minutes: parseInt(totalHours),
-                information: {
-                    type: 'transfer',
-                },
-            }
-            db.collection('users')
-                .doc(userAccount.id)
-                .update(
-                    {
-                        'volunteer-entries':
-                            firebase.firestore.FieldValue.arrayUnion(entry),
-                    },
-                    {
-                        subjects: subjects,
-                    }
-                )
-        } else if (subject != []) {
-            db.collection('users').doc(userAccount.id).update({
-                subjects: subjects,
-            })
-        } else if (totalHours != 0) {
-            db.collection('users')
-                .doc(userAccount.id)
-                .update({
+        db.collection('users')
+            .doc(userAccount.id)
+            .update(
+                {
                     'volunteer-entries':
                         firebase.firestore.FieldValue.arrayUnion(entry),
-                })
-        }
+                },
+                {
+                    subjects: subjects,
+                }
+            )
+    } else if (subject != []) {
+        db.collection('users').doc(userAccount.id).update({
+            subjects: subjects,
+        })
+    } else if (totalHours != 0) {
+        db.collection('users')
+            .doc(userAccount.id)
+            .update({
+                'volunteer-entries':
+                    firebase.firestore.FieldValue.arrayUnion(entry),
+            })
+    }
 
-        return response.send('Success!')
-    })
+    // Saves volunteer hours to new child
+    const userRefNew = ref.child('Volunteering Hours Backup').child(eid)
+    userRefNew.set(userHours)
+
+    // Deletes Volunteer Hours of User to prevent multiple entries
+    const userRef = ref.child('Volunteering Hours').child(eid)
+    await userRef.set(null)
+
+    return response.send('Success!')
 })
 
 // Bans user based on request
