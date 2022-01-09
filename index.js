@@ -687,7 +687,7 @@ app.post('/transfer-data', async (request, response) => {
                     subjects: subjects,
                 }
             )
-    } else if (subject != []) {
+    } else if (subjects != []) {
         db.collection('users').doc(userAccount.id).update({
             subjects: subjects,
         })
