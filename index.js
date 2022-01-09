@@ -624,7 +624,7 @@ app.post('/new-content', async (request, response) => {
 })
 
 // Transfer user information from old database
-app.get('/transfer-data', async (request, response) => {
+app.post('/transfer-data', async (request, response) => {
     // Defines given variables
     const eid = request.body.eid
     const username = request.body.username
