@@ -639,8 +639,8 @@ app.post('/transfer-data', async (request, response) => {
     var subjects = []
     const user = oldUsers[eid]
     if (user != undefined) {
-        if (user.subjects != undefined) {
-            subjects = user.subjects
+        if (user.Subjects != undefined) {
+            subjects = user.Subjects
         }
     }
 
@@ -666,7 +666,7 @@ app.post('/transfer-data', async (request, response) => {
     const userAccount = snapshotUser.docs[0]
 
     // Updates based on what information was found in old database
-    if (subject != [] && totalHours != 0) {
+    if (subjects != [] && totalHours != 0) {
         const entry = {
             date: firebase.firestore.Timestamp.fromMillis(
                 new Date(Date.now()).getTime()
