@@ -643,7 +643,7 @@ app.post('/transfer-data', async (request, response) => {
             for (subject of user.Subjects) {
                 // Makes subject lower case
                 subjects.push(
-                    subject.charAt(0).toLowerCase() + subjects.slice(1)
+                    subject.charAt(0).toLowerCase() + subject.slice(1)
                 )
             }
         }
