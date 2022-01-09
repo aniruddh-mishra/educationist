@@ -640,7 +640,12 @@ app.post('/transfer-data', async (request, response) => {
     const user = oldUsers[eid]
     if (user != undefined) {
         if (user.Subjects != undefined) {
-            subjects = user.Subjects
+            for (subject of user.Subjects) {
+                // Makes subject lower case
+                subjects.push(
+                    subject.charAt(0).toLowerCase() + subjects.slice(1)
+                )
+            }
         }
     }
 
