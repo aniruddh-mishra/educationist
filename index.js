@@ -657,7 +657,6 @@ app.post('/transfer-data', async (request, response) => {
         .where('eid', '==', username)
         .get()
 
-    console.log(totalHours, subjects, username)
     // Returns if user does not exist
     if (snapshotUser.empty) {
         return response.send('Failure')
@@ -701,12 +700,14 @@ app.post('/transfer-data', async (request, response) => {
     }
 
     // Saves volunteer hours to new child
-    const userRefNew = ref.child('Volunteering Hours Backup').child(eid)
-    userRefNew.set(userHours)
+    if (userHours != undefined) {
+        const userRefNew = ref.child('Volunteering Hours Backup').child(eid)
+        userRefNew.set(userHours)
 
-    // Deletes Volunteer Hours of User to prevent multiple entries
-    const userRef = ref.child('Volunteering Hours').child(eid)
-    await userRef.set(null)
+        // Deletes Volunteer Hours of User to prevent multiple entries
+        const userRef = ref.child('Volunteering Hours').child(eid)
+        await userRef.set(null)
+    }
 
     return response.send('Success!')
 })
