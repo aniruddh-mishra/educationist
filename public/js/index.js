@@ -347,6 +347,13 @@ async function matchRequests(subjects) {
 }
 
 async function match() {
+    if (!this.classList.contains('selected')) {
+        this.classList.add('selected')
+        token(
+            'If you are sure you want to take a class with the selected student, click again.'
+        )
+        return
+    }
     this.removeEventListener('click', match)
     const requestBlock = this
     const eid = this.childNodes[1].innerText.slice(5)
@@ -420,7 +427,7 @@ async function classes() {
             const button =
                 '<button onclick="inactivate(this.parentNode)" class="end-class">Declare Inactive</button>'
             options.push(button)
-            if (localStorage.getItem('role') != 'student') {
+            if (data.tutor === localStorage.getItem('uid')) {
                 const logger =
                     '<div class="logger">Minutes: <input type="number"></div><div class="logger">Date: <input type="date"></div><button onclick="logHours(this)" class="log">Log Minutes</button>'
                 options.push(logger)
