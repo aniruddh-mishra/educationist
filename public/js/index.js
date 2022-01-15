@@ -389,12 +389,13 @@ async function classes() {
             token('You are not currently registered in any classes.')
             return
         }
+        document.querySelector('.class-instructions').innerHTML = ''
         const information = document.createElement('h3')
         information.innerText = 'Classes'
         document.querySelector('.class-instructions').appendChild(information)
         const instructions = document.createElement('p')
         instructions.innerHTML =
-            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours. If you are a tutor, and you want to import an existing class, please fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/e/1FAIpQLSf0NZF69Xzn0EGKXeWDs8dG1a45iOS-ZDbxF9b8Mjjv49mdhQ/viewform">this form!</a>'
+            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours. If you are a tutor, and you want to import an existing class or add a class manually, please fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/e/1FAIpQLSf0NZF69Xzn0EGKXeWDs8dG1a45iOS-ZDbxF9b8Mjjv49mdhQ/viewform">this form!</a>'
         document.querySelector('.class-instructions').appendChild(instructions)
         var counter = 1
         var active = false
