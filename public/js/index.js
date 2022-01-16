@@ -1,4 +1,5 @@
-dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
+var dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
+var classLinks = {}
 
 async function getData() {
     const uid = localStorage.getItem('uid')
@@ -402,7 +403,7 @@ async function classes() {
         document.querySelector('.class-instructions').appendChild(information)
         const instructions = document.createElement('p')
         instructions.innerHTML =
-            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours. If you are a tutor, and you want to import an existing class or add a class manually, please fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/e/1FAIpQLSf0NZF69Xzn0EGKXeWDs8dG1a45iOS-ZDbxF9b8Mjjv49mdhQ/viewform">this form!</a>'
+            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours. To add multiple students to a class please email Educationist Tutoring. If you are a tutor, and you want to import an existing class or add a class manually, please fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/e/1FAIpQLSf0NZF69Xzn0EGKXeWDs8dG1a45iOS-ZDbxF9b8Mjjv49mdhQ/viewform">this form!</a>'
         document.querySelector('.class-instructions').appendChild(instructions)
         var counter = 1
         var active = false
@@ -414,6 +415,17 @@ async function classes() {
                 continue
             }
             var options = []
+            if (
+                data.classLink != undefined &&
+                data.tutor === localStorage.getItem('uid')
+            ) {
+                if (classLinks[data.classLink] != undefined) {
+                    classLinks[data.classLink].push(classItem.id)
+                } else {
+                    classLinks[data.classLink] = [classItem.data.studentEmail]
+                }
+                continue
+            }
             options.push('Student: ' + data.studentName)
             options.push('Tutor: ' + data.tutorName)
             options.push('Student Email: ' + data.studentEmail)
@@ -560,6 +572,7 @@ async function logHours(e) {
                 e.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.innerText.slice(
                     15
                 ),
+            extras: classLinks[e.parentNode.parentNode.id],
         })
     )
     xhr.onload = function () {

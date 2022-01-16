@@ -503,7 +503,36 @@ app.post('/volunteer-log', async (request, response) => {
     const tutorEmail = request.body.tutorEmail
     const entry = request.body.entry
     const minutes = entry.minutes
+    const studentEmailExtras = request.body.extras
 
+    if (studentEmailExtras != undefined) {
+        for (student of studentEmailExtras) {
+            var studentData = await db
+                .collection('users')
+                .where('email', '==', student)
+                .get()
+
+            if (studentData.empty) {
+                continue
+            }
+
+            student = studentData.docs[0]
+
+            // Updates user information for student's attendance
+            db.collection('users')
+                .doc(student.id)
+                .update({
+                    'attendance-entries':
+                        firebase.firestore.FieldValue.arrayUnion({
+                            date: firebase.firestore.Timestamp.fromMillis(
+                                new Date(entry.date).getTime()
+                            ),
+                            minutes: entry.minutes,
+                            information: entry.information,
+                        }),
+                })
+        }
+    }
     // Fetches student based on student email
     var student = await db
         .collection('users')
@@ -551,10 +580,18 @@ app.post('/volunteer-log', async (request, response) => {
     ]
 
     try {
+        var recipients = [tutorEmail, studentEmail]
+
+        if (studentEmailExtras != undefined) {
+            for (email of studentEmailExtras) {
+                recipients.push(email)
+            }
+        }
+
         // Sends email to tutor
         await sendMail(
-            [tutorEmail, studentEmail],
-            'Volunteer Log',
+            recipients,
+            'Educationist Class Log',
             __dirname + '/public/emails/volunteer.html',
             options
         )
