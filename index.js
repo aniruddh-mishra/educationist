@@ -8,6 +8,7 @@ const { getAuth } = require('firebase-admin/auth')
 const { sendMail } = require(__dirname + '/emailer.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
 const rateLimit = require('express-rate-limit')
+const algoliasearch = require('algoliasearch')
 const { response } = require('express')
 require('dotenv').config({
     path: __dirname + '/.env',
@@ -23,6 +24,10 @@ var db = getFirestore()
 var auth = getAuth()
 var rdb = firebase.database()
 var ref = rdb.ref('/')
+
+// // Initialize Algolia
+const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
+const index = client.initIndex('content_catalog')
 
 // Ban function if user spams a page
 function ban() {
@@ -297,13 +302,11 @@ app.post('/register', async (request, response) => {
         await db.collection('confirmations').add({
             type: 'creation',
             data: request.body,
+            expire: firebase.firestore.Timestamp.fromMillis(
+                Date.now() + 300000
+            ),
         })
     ).id
-
-    // Sets timeout to ensure that the confirmation code will self delete in 10 days
-    setTimeout(() => {
-        db.collection('confirmations').doc(documentId).delete()
-    }, 1000 * 60)
 
     // Creates email information to send to user that just registered
     const options = [
@@ -342,6 +345,11 @@ app.post('/create', async (request, response) => {
 
     // Checks whether the code is valid
     if (!data.exists) {
+        return response.send('error')
+    }
+
+    if (data.data().expire.toDate() <= Date.now()) {
+        await db.collection('confirmations').doc(data.id).delete()
         return response.send('error')
     }
 
@@ -617,7 +625,7 @@ app.post('/new-content', async (request, response) => {
     }
 
     // Defines the information for the content based on request.body
-    const information = {
+    var information = {
         age: request.body.age,
         author: name,
         date: firebase.firestore.Timestamp.fromMillis(Date.now()),
@@ -630,6 +638,7 @@ app.post('/new-content', async (request, response) => {
 
     // Adds content with information to firebase and recieves the contentId
     const contentId = await db.collection('content').add(information)
+    information.objectID = contentId
 
     // Creates a volunteer hours entry with the content Id in it
     const entry = {
@@ -651,6 +660,9 @@ app.post('/new-content', async (request, response) => {
             'volunteer-entries':
                 firebase.firestore.FieldValue.arrayUnion(entry),
         })
+
+    // Adds content to algolia
+    await index.saveObject(information)
 
     return response.send('Complete!')
 })
