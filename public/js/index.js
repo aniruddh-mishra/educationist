@@ -132,6 +132,8 @@ async function placeData(data, dates, subjects, attendance) {
     spacer.className = 'spacer'
     document.querySelector('.account').appendChild(spacer)
 
+    await classes()
+
     if (data.role != 'student') {
         await matchRequests(subjects)
     }
@@ -139,8 +141,6 @@ async function placeData(data, dates, subjects, attendance) {
     if (document.querySelector('.matches').innerHTML === '') {
         document.querySelector('.matches').remove()
     }
-
-    await classes()
 
     if (dates) {
         createBlock(
