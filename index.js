@@ -7,7 +7,6 @@ const { getFirestore } = require('firebase-admin/firestore')
 const { getAuth } = require('firebase-admin/auth')
 const { sendMail } = require(__dirname + '/emailer.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
-const algoliasearch = require('algoliasearch')
 const rateLimit = require('express-rate-limit')
 const { response } = require('express')
 require('dotenv').config({
@@ -24,10 +23,6 @@ var db = getFirestore()
 var auth = getAuth()
 var rdb = firebase.database()
 var ref = rdb.ref('/')
-
-// // Initialize Algolia
-const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
-client.initIndex('content_catalog')
 
 // Ban function if user spams a page
 function ban() {
