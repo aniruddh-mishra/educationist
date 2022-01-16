@@ -638,7 +638,7 @@ app.post('/new-content', async (request, response) => {
 
     // Adds content with information to firebase and recieves the contentId
     const contentId = await db.collection('content').add(information)
-    information.objectID = contentId
+    information.objectID = contentId.id
 
     // Creates a volunteer hours entry with the content Id in it
     const entry = {
