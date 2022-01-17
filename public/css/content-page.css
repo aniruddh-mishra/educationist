@@ -71,15 +71,6 @@
     text-transform: uppercase;
     border: 3px solid var(--educationist-blue);
     padding: 0.2em;
-}
-
-#upvote-button {
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-}
-
-#expand {
     margin-left: 10px;
     padding-left: 0.6em;
     padding-right: 0.6em;
