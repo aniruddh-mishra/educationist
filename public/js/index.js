@@ -104,7 +104,9 @@ async function placeData(data, dates, subjects, attendance) {
             ],
             'small'
         )
-    } else {
+    }
+
+    if (data['subjects'] != undefined) {
         var subjectsPresent = ''
         for (subject of subjects) {
             subjectsPresent +=
