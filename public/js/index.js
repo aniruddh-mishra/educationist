@@ -20,8 +20,13 @@ async function getData() {
     var attendanceData = false
 
     if (volunteerHours != undefined) {
+        var minutes = 0
         const data = []
         for (entry of volunteerHours) {
+            if (entry.information.type === 'transfer') {
+                minutes = entry.minutes
+                continue
+            }
             data.push({
                 date: entry.date.toDate(),
                 minutes: entry.minutes,
@@ -34,8 +39,6 @@ async function getData() {
 
         const hours = []
         const dates = []
-
-        var minutes = 0
 
         data.forEach((doc) => {
             dates.push(
@@ -102,6 +105,14 @@ async function placeData(data, dates, subjects, attendance) {
             'small'
         )
     }
+
+    var subjectsPresent = ''
+    for (subject of subjects) {
+        subjectsPresent +=
+            subject.charAt(0).toUpperCase() + subject.slice(1) + ', '
+    }
+    data['subjects'] = subjectsPresent.trim().slice(0, -1)
+
     dataFields = []
     for (dataField of dataSet) {
         if (data[dataField] == undefined) {
@@ -424,15 +435,12 @@ async function classes() {
             const data = classItem.data
             classData[classItem.id] = classItem.data
 
-            if (data.inactive) {
-                inactiveClasses.push(classItem)
-                continue
-            }
-
             for (student of data.students) {
                 studentEmail += student.studentEmail + ', '
                 studentName += student.studentName + ', '
             }
+            studentEmail = studentEmail.trim().slice(0, -1)
+            studentName = studentName.trim().slice(0, -1)
 
             var options = []
             options.push('Student: ' + studentName)
@@ -444,6 +452,11 @@ async function classes() {
                     data.subject.charAt(0).toUpperCase() +
                     data.subject.slice(1)
             )
+
+            if (data.inactive) {
+                inactiveClasses.push([options, classItem.id])
+                continue
+            }
 
             active = true
             const button =
@@ -465,21 +478,11 @@ async function classes() {
 
         counter = 1
         for (classItem of inactiveClasses) {
-            var options = []
-            options.push('Student: ' + classItem.data.studentName)
-            options.push('Tutor: ' + classItem.data.tutorName)
-            options.push('Student Email: ' + classItem.data.studentEmail)
-            options.push('Tutor Email: ' + classItem.data.tutorEmail)
-            options.push(
-                'Subject: ' +
-                    classItem.data.subject.charAt(0).toUpperCase() +
-                    classItem.data.subject.slice(1)
-            )
             createBlock(
                 'Inactive Class #' + counter,
-                options,
+                classItem[0],
                 'small class',
-                classItem.id
+                classItem[1]
             )
             counter += 1
         }
@@ -489,7 +492,26 @@ async function classes() {
             for (block of blocks) {
                 block.style.height = '300px'
             }
+        } else {
+            const blocks = document.querySelectorAll('.class')
+            var change = false
+            for (block of blocks) {
+                var height = 0
+                block.childNodes.forEach((child) => {
+                    height += child.offsetHeight
+                })
+                if (height > 350) {
+                    change = height + 220 + 'px'
+                    break
+                }
+            }
+            if (change != false) {
+                for (block of blocks) {
+                    block.style.height = change
+                }
+            }
         }
+
         spacer = document.createElement('div')
         spacer.className = 'spacer'
         document.querySelector('.classes').appendChild(spacer)
@@ -512,6 +534,7 @@ async function inactivate(e) {
 
 async function logHours(e) {
     e.disabled = true
+    const classItem = classData[e.parentNode.parentNode.id]
     const date = e.previousSibling.lastChild
     const minutes = e.previousSibling.previousSibling.lastChild
     if (minutes >= 300) {
@@ -528,9 +551,7 @@ async function logHours(e) {
         )
         return
     }
-    var subject =
-        e.parentNode.previousSibling.previousSibling.innerText.slice(9)
-    subject = subject.charAt(0).toLowerCase() + subject.slice(1)
+    var subject = classItem.subject
     const entry = {
         date: firebase.firestore.Timestamp.fromMillis(
             new Date(date.value).getTime()
@@ -539,10 +560,7 @@ async function logHours(e) {
         information: {
             type: 'tutor',
             reference: {
-                student:
-                    e.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.previousSibling.previousSibling.innerText.slice(
-                        9
-                    ),
+                students: classItem.students,
                 subject: subject,
                 match: e.parentNode.parentNode.id,
             },
@@ -553,9 +571,7 @@ async function logHours(e) {
         date: date.value,
         minutes: parseInt(minutes.value),
         information: {
-            tutor: e.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.previousSibling.innerText.slice(
-                7
-            ),
+            tutor: classItem.tutorName,
             subject: subject,
             match: e.parentNode.parentNode.id,
         },
@@ -575,15 +591,8 @@ async function logHours(e) {
     xhr.send(
         JSON.stringify({
             entry: entryStudent,
-            tutorEmail:
-                e.parentNode.previousSibling.previousSibling.previousSibling.innerText.slice(
-                    13
-                ),
-            studentEmail:
-                e.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.innerText.slice(
-                    15
-                ),
-            extras: classLinks[e.parentNode.parentNode.id],
+            tutorEmail: classItem.tutorEmail,
+            students: classItem.students,
         })
     )
     xhr.onload = function () {
@@ -648,19 +657,17 @@ async function mergeClasses() {
         newStudents.push(newStudent)
     }
 
-    console.log(newStudents, linkedClasses)
-
     await db
         .collection('matches')
         .doc(classID1)
         .update({
-            students:
-                firebase.firestore.FieldValue.arrayUnion.apply(newStudents),
-            linkedClasses:
-                firebase.firestore.FieldValue.arrayUnion.apply(linkedClasses),
+            students: firebase.firestore.FieldValue.arrayUnion(...newStudents),
+            linkedClasses: firebase.firestore.FieldValue.arrayUnion(
+                ...linkedClasses
+            ),
         })
 
-    // await db.collection('matches').doc(classID2).delete()
+    await db.collection('matches').doc(classID2).delete()
     token('These two classes have been merged')
 }
 

@@ -519,65 +519,43 @@ app.post('/classes', async (request, response) => {
 // Logs the volunteer hours
 app.post('/volunteer-log', async (request, response) => {
     // Defines given variables
-    const studentEmail = request.body.studentEmail
+    const students = request.body.students
     const tutorEmail = request.body.tutorEmail
     const entry = request.body.entry
     const minutes = entry.minutes
-    const studentEmailExtras = request.body.extras
 
-    if (studentEmailExtras != undefined) {
-        for (student of studentEmailExtras) {
-            var studentData = await db
-                .collection('users')
-                .where('email', '==', student)
-                .get()
+    var studentEmails = []
+    for (student of students) {
+        studentEmails.push(student.studentEmail)
+    }
 
-            if (studentData.empty) {
-                continue
-            }
+    for (email of studentEmails) {
+        // Fetches student based on student email
+        var student = await db
+            .collection('users')
+            .where('email', '==', email)
+            .get()
 
-            student = studentData.docs[0]
-
-            // Updates user information for student's attendance
-            db.collection('users')
-                .doc(student.id)
-                .update({
-                    'attendance-entries':
-                        firebase.firestore.FieldValue.arrayUnion({
-                            date: firebase.firestore.Timestamp.fromMillis(
-                                new Date(entry.date).getTime()
-                            ),
-                            minutes: entry.minutes,
-                            information: entry.information,
-                        }),
-                })
+        // Returns error if student does not exist
+        if (student.empty) {
+            return response.send('false')
         }
+
+        student = student.docs[0]
+
+        // Updates user information for student's attendance
+        db.collection('users')
+            .doc(student.id)
+            .update({
+                'attendance-entries': firebase.firestore.FieldValue.arrayUnion({
+                    date: firebase.firestore.Timestamp.fromMillis(
+                        new Date(entry.date).getTime()
+                    ),
+                    minutes: entry.minutes,
+                    information: entry.information,
+                }),
+            })
     }
-    // Fetches student based on student email
-    var student = await db
-        .collection('users')
-        .where('email', '==', studentEmail)
-        .get()
-
-    // Returns error if student does not exist
-    if (student.empty) {
-        return response.send('false')
-    }
-
-    student = student.docs[0]
-
-    // Updates user information for student's attendance
-    db.collection('users')
-        .doc(student.id)
-        .update({
-            'attendance-entries': firebase.firestore.FieldValue.arrayUnion({
-                date: firebase.firestore.Timestamp.fromMillis(
-                    new Date(entry.date).getTime()
-                ),
-                minutes: entry.minutes,
-                information: entry.information,
-            }),
-        })
 
     // Configures email information
     var options = [
@@ -600,13 +578,8 @@ app.post('/volunteer-log', async (request, response) => {
     ]
 
     try {
-        var recipients = [tutorEmail, studentEmail]
-
-        if (studentEmailExtras != undefined) {
-            for (email of studentEmailExtras) {
-                recipients.push(email)
-            }
-        }
+        var recipients = studentEmails
+        recipients.push(tutorEmail)
 
         // Sends email to tutor
         await sendMail(
