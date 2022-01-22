@@ -521,7 +521,10 @@ async function classes() {
         for (block of blocks) {
             block.addEventListener('click', match)
         }
-        document.querySelector('.class-merge').classList.remove('temp')
+
+        if (localStorage.getItem('role') != 'student') {
+            document.querySelector('.class-merge').classList.remove('temp')
+        }
     }
 }
 
@@ -620,6 +623,15 @@ async function mergeClasses() {
             classID2 = classItem.id
         }
     })
+
+    if (
+        classData[classID1].tutor != localStorage.getItem('uid') ||
+        classData[classID2].tutor != localStorage.getItem('uid')
+    ) {
+        token('You must be a tutor in both classes to merge the classes!')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
 
     if (classID1 === '' || classID2 === '') {
         token('The class IDs must be valid numbers of your classes')
