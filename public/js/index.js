@@ -104,14 +104,14 @@ async function placeData(data, dates, subjects, attendance) {
             ],
             'small'
         )
+    } else {
+        var subjectsPresent = ''
+        for (subject of subjects) {
+            subjectsPresent +=
+                subject.charAt(0).toUpperCase() + subject.slice(1) + ', '
+        }
+        data['subjects'] = subjectsPresent.trim().slice(0, -1)
     }
-
-    var subjectsPresent = ''
-    for (subject of subjects) {
-        subjectsPresent +=
-            subject.charAt(0).toUpperCase() + subject.slice(1) + ', '
-    }
-    data['subjects'] = subjectsPresent.trim().slice(0, -1)
 
     dataFields = []
     for (dataField of dataSet) {
