@@ -1,11 +1,13 @@
 var dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
-var classLinks = {}
+var classData = {}
 
 async function getData() {
     const uid = localStorage.getItem('uid')
     const userData = await db.collection('users').doc(uid).get()
     localStorage.setItem('timezone', userData.data().timezone)
     localStorage.setItem('role', userData.data().role)
+    localStorage.setItem('name', userData.data().name)
+    localStorage.setItem('email', userData.data().email)
     const subjects = userData.data().subjects
     const age =
         new Date().getFullYear() -
@@ -386,11 +388,15 @@ async function classes() {
     xhr.send(
         JSON.stringify({
             uid: localStorage.getItem('uid'),
+            name: localStorage.getItem('name'),
+            email: localStorage.getItem('email'),
             student:
                 localStorage.getItem('role') === 'student' ? 'true' : 'false',
         })
     )
     xhr.onload = function () {
+        localStorage.removeItem('name')
+        localStorage.removeItem('email')
         const data = JSON.parse(this.response)
         if (data.length === 0) {
             document.querySelector('.class-merge').remove()
@@ -412,47 +418,32 @@ async function classes() {
         var counter = 1
         var active = false
         var inactiveClasses = []
-        var mergedClasses = []
         for (classItem of data) {
+            var studentEmail = ''
+            var studentName = ''
             const data = classItem.data
+            classData[classItem.id] = classItem.data
 
             if (data.inactive) {
                 inactiveClasses.push(classItem)
                 continue
             }
 
+            for (student of data.students) {
+                studentEmail += student.studentEmail + ', '
+                studentName += student.studentName + ', '
+            }
+
             var options = []
-            options.push('Student: ' + data.studentName)
+            options.push('Student: ' + studentName)
             options.push('Tutor: ' + data.tutorName)
-            options.push('Student Email: ' + data.studentEmail)
+            options.push('Student Email: ' + studentEmail)
             options.push('Tutor Email: ' + data.tutorEmail)
             options.push(
                 'Subject: ' +
                     data.subject.charAt(0).toUpperCase() +
                     data.subject.slice(1)
             )
-
-            if (
-                data.classLink != undefined &&
-                data.tutor === localStorage.getItem('uid')
-            ) {
-                if (classLinks[data.classLink] != undefined) {
-                    console.log()
-                    if (
-                        !classLinks[data.classLink].includes(
-                            classItem.data.studentEmail
-                        )
-                    ) {
-                        classLinks[data.classLink].push(
-                            classItem.data.studentEmail
-                        )
-                    }
-                } else {
-                    classLinks[data.classLink] = [classItem.data.studentEmail]
-                }
-                mergedClasses.push([options, classItem.id, data.classLink])
-                continue
-            }
 
             active = true
             const button =
@@ -470,53 +461,6 @@ async function classes() {
                 classItem.id
             )
             counter += 1
-        }
-
-        for (classItem of mergedClasses) {
-            var parentMerge = document.getElementById(classItem[2])
-            if (parentMerge === null) {
-                for (mergedItem of mergedClasses) {
-                    if (mergedItem[1] === classItem[2]) {
-                        parentMerge = document.getElementById(mergedItem[2])
-                    }
-                }
-            }
-            createBlock(
-                parentMerge.firstChild.innerText
-                    .replace('Merge', '')
-                    .replace(' ', '') + ' Merge',
-                classItem[0],
-                'small class merge ' + classItem[2],
-                classItem[1]
-            )
-        }
-
-        while (true) {
-            var check = false
-            for (classLink of Object.keys(classLinks)) {
-                if (
-                    document
-                        .getElementById(classLink)
-                        .classList.contains('merge')
-                ) {
-                    for (student of classLinks[classLink]) {
-                        if (
-                            !classLinks[
-                                document.getElementById(classLink).classList[4]
-                            ].includes(student)
-                        ) {
-                            classLinks[
-                                document.getElementById(classLink).classList[4]
-                            ].push(student)
-                        }
-                    }
-                    delete classLinks[classLink]
-                    check = true
-                }
-            }
-            if (!check) {
-                break
-            }
         }
 
         counter = 1
@@ -665,8 +609,15 @@ async function mergeClasses() {
             classID2 = classItem.id
         }
     })
+
     if (classID1 === '' || classID2 === '') {
         token('The class IDs must be valid numbers of your classes')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
+
+    if (classID1 === classID2) {
+        token('The classes must be different.')
         document.getElementById('merge-btn').disabled = false
         return
     }
@@ -680,16 +631,36 @@ async function mergeClasses() {
         return
     }
 
-    if (Object.keys(classLinks).includes(classID2)) {
-        await db
-            .collection('matches')
-            .doc(classID1)
-            .update({ classLink: classID2 })
-        token('These two classes have been merged')
-        return
+    const students = classData[classID2].students
+    var linkedClasses = classData[classID2].linkedClasses
+    if (linkedClasses === undefined) {
+        linkedClasses = []
+    }
+    linkedClasses.push(classID2)
+
+    var newStudents = []
+    for (student of students) {
+        const newStudent = {
+            student: student.student,
+            studentName: student.studentName,
+            studentEmail: student.studentEmail,
+        }
+        newStudents.push(newStudent)
     }
 
-    await db.collection('matches').doc(classID2).update({ classLink: classID1 })
+    console.log(newStudents, linkedClasses)
+
+    await db
+        .collection('matches')
+        .doc(classID1)
+        .update({
+            students:
+                firebase.firestore.FieldValue.arrayUnion.apply(newStudents),
+            linkedClasses:
+                firebase.firestore.FieldValue.arrayUnion.apply(linkedClasses),
+        })
+
+    // await db.collection('matches').doc(classID2).delete()
     token('These two classes have been merged')
 }
 

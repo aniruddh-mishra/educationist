@@ -228,13 +228,17 @@ app.post('/match-commit', async (request, response) => {
     // Ads the new details to a new class in firestore
     await db.collection('matches').add({
         creation: firebase.firestore.Timestamp.fromMillis(Date.now()),
-        student: student.id,
-        studentEmail: studentData.email,
+        students: [
+            {
+                student: student.id,
+                studentEmail: studentData.email,
+                studentName: studentData.name,
+            },
+        ],
         tutor: tutor,
         tutorEmail: tutorData.email,
         subject: subject,
         tutorName: tutorData.name,
-        studentName: studentData.name,
     })
 
     // Creates the email data to be sent to the student and tutor
@@ -474,6 +478,8 @@ app.post('/classes', async (request, response) => {
     // Defines given variables
     const uid = request.body.uid
     const student = request.body.student
+    const email = request.body.email
+    const name = request.body.name
 
     // Configures data to be returned in a list
     var matchReturn = []
@@ -493,7 +499,14 @@ app.post('/classes', async (request, response) => {
     }
 
     // Fetches all classes when user is a student
-    matches = await db.collection('matches').where('student', '==', uid).get()
+    matches = await db
+        .collection('matches')
+        .where('students', 'array-contains', {
+            student: uid,
+            studentName: name,
+            studentEmail: email,
+        })
+        .get()
 
     // Ads classes to list
     matches.forEach((doc) => {
