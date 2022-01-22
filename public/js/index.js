@@ -315,7 +315,7 @@ async function matchRequests(subjects) {
                 .appendChild(information)
             const instructions = document.createElement('p')
             instructions.innerText =
-                'Click the student boxes to start tutoring a student!'
+                'Click the student boxes to start tutoring a student! If you want to tutor multiple students at once, you may merge classes from the dashboard.'
             document
                 .querySelector('.match-instructions')
                 .appendChild(instructions)
