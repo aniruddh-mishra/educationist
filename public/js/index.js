@@ -133,15 +133,11 @@ async function placeData(data, dates, subjects, attendance) {
     document.querySelector('.account').appendChild(spacer)
 
     classes()
-    
+
     if (data.role != 'student') {
-        await matchRequests(subjects)
+        matchRequests(subjects)
     }
 
-    if (document.querySelector('.matches').innerHTML === '') {
-        document.querySelector('.matches').remove()
-    }
-    
     if (dates) {
         createBlock(
             'Volunteer Hours',
@@ -225,6 +221,8 @@ async function placeData(data, dates, subjects, attendance) {
             },
         })
     }
+
+    document.querySelector('.matching-request').classList.remove('temp')
 }
 
 function createBlock(title, fields, size, blockId) {
@@ -248,13 +246,13 @@ function createBlock(title, fields, size, blockId) {
         object = '.big-blocks'
     } else if (size === 'small request') {
         object = '.matches'
-    } else if (size === 'small class') {
+    } else if (size.includes('small class')) {
         object = '.classes'
     }
     document.querySelector(object).appendChild(block)
 }
 
-async function request() {
+async function requestClass() {
     document.getElementById('request-btn').disabled = true
     const subject = document.getElementById('subject').value
     if (subject === '') {
@@ -298,6 +296,7 @@ async function matchRequests(subjects) {
                 logout()
                 return
             } else if (this.response === 'error') {
+                document.querySelector('.matches').remove()
                 token(
                     'You must apply to teach subjects before signing up for a class. Please do so from the website!'
                 )
@@ -305,6 +304,7 @@ async function matchRequests(subjects) {
             }
             const data = JSON.parse(this.response)
             if (data.length === 0) {
+                document.querySelector('.matches').remove()
                 token('There are no student requests currently')
                 return resolve('Done')
             }
@@ -393,9 +393,13 @@ async function classes() {
     xhr.onload = function () {
         const data = JSON.parse(this.response)
         if (data.length === 0) {
+            document.querySelector('.class-merge').remove()
             document.querySelector('.classes').remove()
             token('You are not currently registered in any classes.')
             return
+        }
+        if (localStorage.getItem('role') === 'student') {
+            document.querySelector('.class-merge').remove()
         }
         document.querySelector('.class-instructions').innerHTML = ''
         const information = document.createElement('h3')
@@ -403,29 +407,21 @@ async function classes() {
         document.querySelector('.class-instructions').appendChild(information)
         const instructions = document.createElement('p')
         instructions.innerHTML =
-            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours. To add multiple students to a class please email Educationist Tutoring. If you are a tutor, and you want to import an existing class or add a class manually, please fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/e/1FAIpQLSf0NZF69Xzn0EGKXeWDs8dG1a45iOS-ZDbxF9b8Mjjv49mdhQ/viewform">this form!</a>'
+            'You can declare a class inactive by clicking the respective button. In addition, if you are a tutor for a class, type in the number of minutes you spent in a class in the input section to update your volunteer hours.'
         document.querySelector('.class-instructions').appendChild(instructions)
         var counter = 1
         var active = false
         var inactiveClasses = []
+        var mergedClasses = []
         for (classItem of data) {
             const data = classItem.data
+
             if (data.inactive) {
                 inactiveClasses.push(classItem)
                 continue
             }
+
             var options = []
-            if (
-                data.classLink != undefined &&
-                data.tutor === localStorage.getItem('uid')
-            ) {
-                if (classLinks[data.classLink] != undefined) {
-                    classLinks[data.classLink].push(classItem.id)
-                } else {
-                    classLinks[data.classLink] = [classItem.data.studentEmail]
-                }
-                continue
-            }
             options.push('Student: ' + data.studentName)
             options.push('Tutor: ' + data.tutorName)
             options.push('Student Email: ' + data.studentEmail)
@@ -435,6 +431,29 @@ async function classes() {
                     data.subject.charAt(0).toUpperCase() +
                     data.subject.slice(1)
             )
+
+            if (
+                data.classLink != undefined &&
+                data.tutor === localStorage.getItem('uid')
+            ) {
+                if (classLinks[data.classLink] != undefined) {
+                    console.log()
+                    if (
+                        !classLinks[data.classLink].includes(
+                            classItem.data.studentEmail
+                        )
+                    ) {
+                        classLinks[data.classLink].push(
+                            classItem.data.studentEmail
+                        )
+                    }
+                } else {
+                    classLinks[data.classLink] = [classItem.data.studentEmail]
+                }
+                mergedClasses.push([options, classItem.id, data.classLink])
+                continue
+            }
+
             active = true
             const button =
                 '<button onclick="inactivate(this.parentNode)" class="end-class">Declare Inactive</button>'
@@ -451,6 +470,53 @@ async function classes() {
                 classItem.id
             )
             counter += 1
+        }
+
+        for (classItem of mergedClasses) {
+            var parentMerge = document.getElementById(classItem[2])
+            if (parentMerge === null) {
+                for (mergedItem of mergedClasses) {
+                    if (mergedItem[1] === classItem[2]) {
+                        parentMerge = document.getElementById(mergedItem[2])
+                    }
+                }
+            }
+            createBlock(
+                parentMerge.firstChild.innerText
+                    .replace('Merge', '')
+                    .replace(' ', '') + ' Merge',
+                classItem[0],
+                'small class merge ' + classItem[2],
+                classItem[1]
+            )
+        }
+
+        while (true) {
+            var check = false
+            for (classLink of Object.keys(classLinks)) {
+                if (
+                    document
+                        .getElementById(classLink)
+                        .classList.contains('merge')
+                ) {
+                    for (student of classLinks[classLink]) {
+                        if (
+                            !classLinks[
+                                document.getElementById(classLink).classList[4]
+                            ].includes(student)
+                        ) {
+                            classLinks[
+                                document.getElementById(classLink).classList[4]
+                            ].push(student)
+                        }
+                    }
+                    delete classLinks[classLink]
+                    check = true
+                }
+            }
+            if (!check) {
+                break
+            }
         }
 
         counter = 1
@@ -487,6 +553,7 @@ async function classes() {
         for (block of blocks) {
             block.addEventListener('click', match)
         }
+        document.querySelector('.class-merge').classList.remove('temp')
     }
 }
 
@@ -583,6 +650,47 @@ async function logHours(e) {
         }
         token('This class has been logged!')
     }
+}
+
+async function mergeClasses() {
+    document.getElementById('merge-btn').disabled = true
+    const class1 = document.getElementById('class1').value.trim()
+    const class2 = document.getElementById('class2').value.trim()
+    var classID1 = ''
+    var classID2 = ''
+    document.querySelectorAll('.class').forEach((classItem) => {
+        if (classItem.firstChild.innerText === 'Class #' + class1) {
+            classID1 = classItem.id
+        } else if (classItem.firstChild.innerText === 'Class #' + class2) {
+            classID2 = classItem.id
+        }
+    })
+    if (classID1 === '' || classID2 === '') {
+        token('The class IDs must be valid numbers of your classes')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
+
+    if (!document.getElementById('merge-btn').classList.contains('selected')) {
+        token(
+            'If you want to merge these two classes please click the merge button again.'
+        )
+        document.getElementById('merge-btn').classList.add('selected')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
+
+    if (Object.keys(classLinks).includes(classID2)) {
+        await db
+            .collection('matches')
+            .doc(classID1)
+            .update({ classLink: classID2 })
+        token('These two classes have been merged')
+        return
+    }
+
+    await db.collection('matches').doc(classID2).update({ classLink: classID1 })
+    token('These two classes have been merged')
 }
 
 function validate(element) {

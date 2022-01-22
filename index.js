@@ -82,6 +82,10 @@ app.get('/create', async (request, response) => {
     response.sendFile('register-finish.html', pages)
 })
 
+app.get('/admin', async (request, response) => {
+    response.sendFile('admin.html', pages)
+})
+
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
