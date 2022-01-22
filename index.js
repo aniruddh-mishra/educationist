@@ -373,7 +373,7 @@ app.post('/create', async (request, response) => {
         registration: firebase.firestore.Timestamp.fromMillis(
             timeStamp.getTime()
         ),
-        email: data.email,
+        email: data.email.charAt(0).toLowerCase() + data.email.slice(1),
         name: data.name,
         eid: eid,
         role: data.role,
@@ -747,6 +747,44 @@ app.post('/transfer-data', async (request, response) => {
     }
 
     return response.send('Success!')
+})
+
+// Handles emailing for interview
+app.post('/accept', async (request, response) => {
+    const email = request.body.email
+    const uid = request.body.uid
+    const role = (await db.collection('users').doc(uid).get()).data().role
+    if (role != 'admin') {
+        response.send('You must be an admin to accept people into Educationist')
+        return
+    }
+    // Configures email information
+    var options = [
+        {
+            key: 'subject1',
+            text: request.body.subject,
+        },
+    ]
+
+    var emailPage = '/public/emails/reject.html'
+    var title = 'Educationist Interview Results'
+
+    if (request.body.accept) {
+        emailPage = '/public/emails/accept.html'
+        title = 'Educationist Acceptance!'
+    }
+
+    try {
+        // Sends email to tutor
+        await sendMail(email, title, __dirname + emailPage, options)
+
+        return response.send('Done!')
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+
+        return response.send('Failure')
+    }
 })
 
 // Bans user based on request

@@ -16,7 +16,7 @@ firebase.initializeApp(firebaseConfig)
 
 var db = firebase.firestore()
 
-firebase.auth().onAuthStateChanged((user) => {
+firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
         if (localStorage.getItem('uid') === null) {
             logout()
@@ -28,6 +28,13 @@ firebase.auth().onAuthStateChanged((user) => {
                 return
             }
             window.location.replace('/')
+        } else if (window.location.pathname === '/admin') {
+            const role = (
+                await db.collection('users').doc(user.uid).get()
+            ).data().role
+            if (role != 'admin') {
+                logout()
+            }
         }
     } else {
         if (window.location.pathname !== '/login') {

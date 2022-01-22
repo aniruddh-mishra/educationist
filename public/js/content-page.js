@@ -35,6 +35,7 @@ async function report() {
     }
     document.getElementById('submit-report').toggleAttribute('disabled')
     await db.collection('reports').add({
+        complete: false,
         text: problem,
         date: firebase.firestore.Timestamp.now(),
         user: localStorage.getItem('uid'),

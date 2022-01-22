@@ -22,7 +22,7 @@ async function upload() {
         return
     }
 
-    username = document.getElementById('username').value
+    username = document.getElementById('username').value.trim()
     password = document.getElementById('password').value
     confirmPassword = document.getElementById('password-confirm').value
 

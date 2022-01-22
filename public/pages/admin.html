@@ -50,46 +50,74 @@
             <script src="../js/root.js"></script>
             <div class="main-body">
                 <h1>Admin Dashboard</h1>
-                <div class="section">
-                    <div class="accept">
-                        <form id="accept-form">
-                            <input type="text" id="eid" />
-                            <select id="subject">
-                                <option disabled selected value="">
-                                    -- Select Option
-                                </option>
-                                <option value="science">Science</option>
-                                <option value="math">Math</option>
-                                <option value="english">English</option>
-                                <option value="python">Python</option>
-                                <option value="web-development">
-                                    Web Development
-                                </option>
-                                <option value="chess">Chess</option>
-                                <option value="scratch">Scratch</option>
-                            </select>
-                            <button onclick="accept()" id="accept-btn">
-                                Accept
-                            </button>
-                            <button id="reject-btn" onclick="reject()">
-                                Reject
-                            </button>
-                        </form>
-                    </div>
-                    <div class="forget">
-                        <form id="forget-form">
-                            <input type="text" id="email" />
-                            <button id="search-btn" onclick="search()">
-                                Search
-                            </button>
-                        </form>
+                <div class="reports">
+                    <h3 style="margin-bottom: 3vh">
+                        Please look through these reports!
+                    </h3>
+                    <div class="report-blocks"></div>
+                </div>
+                <div class="accept">
+                    <h3>Interview</h3>
+                    <p>
+                        Please go through this
+                        <a
+                            href="https://docs.google.com/spreadsheets/d/1FNkZcdDzNxCdhu4QM6lnDEBlfYAnZk1DehALlBhGVUk/edit#gid=643551875"
+                            style="text-decoration: underline"
+                            >google sheet</a
+                        >
+                        full of interviews.
+                    </p>
+                    <div id="accept-form">
+                        <input type="text" id="eid" placeholder="Username" />
+                        <select id="subject">
+                            <option disabled selected value="">
+                                -- Select Option
+                            </option>
+                            <option value="science">Science</option>
+                            <option value="math">Math</option>
+                            <option value="english">English</option>
+                            <option value="python">Python</option>
+                            <option value="web-development">
+                                Web Development
+                            </option>
+                            <option value="chess">Chess</option>
+                            <option value="scratch">Scratch</option>
+                        </select>
+                        <button onclick="interview(true)" id="accept-btn">
+                            Accept
+                        </button>
+                        <button id="reject-btn" onclick="interview(false)">
+                            Reject
+                        </button>
                     </div>
                 </div>
-                <div class="section">
-                    <div class="data"></div>
-                    <div class="certificate"></div>
-                    <div class="reports"></div>
+                <div class="data">
+                    <h3>Information About User</h3>
+                    <p>Type in the username for information on the user.</p>
+                    <input
+                        type="text"
+                        style="margin-bottom: 0"
+                        id="username"
+                        placeholder="Username"
+                    />
+                    <button id="data-btn" onclick="search(this)">
+                        Retrieve
+                    </button>
                 </div>
+                <div class="forget">
+                    <h3>Search for EID</h3>
+                    <p>Type the email for the account you are looking for.</p>
+                    <input
+                        style="margin-bottom: 0"
+                        type="text"
+                        id="email"
+                        placeholder="Email"
+                    />
+                    <button id="search-btn" onclick="search(this)">
+                        Search
+                    </button>
+                </div>
+                <div style="margin-top: 3vh" class="user-data"></div>
             </div>
             <div id="toaster" class="invisible">
                 <span id="alert"></span>

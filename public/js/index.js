@@ -115,7 +115,6 @@ async function placeData(data, dates, subjects, attendance) {
         data['subjects'] = subjectsPresent.trim().slice(0, -1)
     }
 
-    dataFields = []
     for (dataField of dataSet) {
         if (data[dataField] == undefined) {
             continue
