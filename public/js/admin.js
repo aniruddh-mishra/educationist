@@ -177,7 +177,7 @@ async function search(e) {
         for (entry of attendance) {
             minutes += entry.minutes
         }
-        user.attendance = minutes = ' Minutes'
+        user.attendance = minutes + ' Minutes'
     }
 
     user.birthday = user.birthday.toDate().getFullYear()
