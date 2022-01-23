@@ -769,10 +769,14 @@ app.post('/accept', async (request, response) => {
     var emailPage = '/public/emails/accept.html'
     var title = 'Educationist Acceptance!'
 
+    console.log(emailPage, title)
+
     if (!request.body.accept) {
         emailPage = '/public/emails/reject.html'
         title = 'Educationist Interview Results'
     }
+
+    console.log(emailPage, title)
 
     try {
         // Sends email to tutor
