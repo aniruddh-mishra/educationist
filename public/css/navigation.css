@@ -267,3 +267,16 @@ select:focus {
         }
     }
 }
+
+@media (max-width: 400px) {
+    #toaster {
+        top: 50vh;
+        bottom: 50vh;
+    }
+
+    #toaster span {
+        border-radius: 10px 10px 10px 10px;
+        background-color: rgb(160, 39, 39);
+        height: fit-content;
+    }
+}

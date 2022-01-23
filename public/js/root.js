@@ -113,12 +113,12 @@ function token(message) {
     if (!document.getElementById('toaster').classList.contains('invisible')) {
         setTimeout(() => {
             token(message)
-        }, 5000)
+        }, 100)
         return
     }
     document.getElementById('alert').innerHTML = message
     document.getElementById('toaster').classList.toggle('invisible')
     setTimeout(() => {
         document.getElementById('toaster').classList.toggle('invisible')
-    }, 5000)
+    }, 3000)
 }
