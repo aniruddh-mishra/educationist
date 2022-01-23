@@ -766,21 +766,23 @@ app.post('/accept', async (request, response) => {
         },
     ]
 
-    var emailPage = '/public/emails/accept.html'
-    var title = 'Educationist Acceptance!'
-
-    console.log(emailPage, title)
-
-    if (!request.body.accept) {
-        emailPage = '/public/emails/reject.html'
-        title = 'Educationist Interview Results'
-    }
-
-    console.log(emailPage, title)
-
     try {
         // Sends email to tutor
-        await sendMail(email, title, __dirname + emailPage, options)
+        if (!request.body.accept) {
+            await sendMail(
+                email,
+                'Educationist Interview Results',
+                __dirname + '/public/emails/reject.html',
+                options
+            )
+        } else {
+            await sendMail(
+                email,
+                'Educationist Acceptance!',
+                __dirname + '/public/emails/accept.html',
+                options
+            )
+        }
 
         return response.send('Done!')
     } catch (err) {
