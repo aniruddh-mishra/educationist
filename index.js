@@ -766,12 +766,12 @@ app.post('/accept', async (request, response) => {
         },
     ]
 
-    var emailPage = '/public/emails/reject.html'
-    var title = 'Educationist Interview Results'
+    var emailPage = '/public/emails/accept.html'
+    var title = 'Educationist Acceptance!'
 
-    if (request.body.accept) {
-        emailPage = '/public/emails/accept.html'
-        title = 'Educationist Acceptance!'
+    if (!request.body.accept) {
+        emailPage = '/public/emails/reject.html'
+        title = 'Educationist Interview Results'
     }
 
     try {
