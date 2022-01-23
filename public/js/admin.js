@@ -1,4 +1,4 @@
-var dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
+var dataSet = ['eid', 'name', 'birthday', 'email', 'timezone', 'subjects']
 async function setUp() {
     const reports = await db
         .collection('reports')
