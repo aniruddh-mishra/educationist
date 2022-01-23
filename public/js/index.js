@@ -42,11 +42,11 @@ async function getData() {
 
         data.forEach((doc) => {
             dates.push(
-                doc.date.toLocaleString('default', {
-                    month: 'long',
-                    day: 'numeric',
-                    year: 'numeric',
-                })
+                doc.date.toLocaleString('default', { month: 'long' }) +
+                    ' ' +
+                    doc.date.getUTCDate() +
+                    ', ' +
+                    doc.date.getUTCFullYear()
             )
             minutes += doc.minutes
             hours.push(Number((doc.minutes / 60).toFixed(1)))
@@ -91,11 +91,13 @@ async function getData() {
 getData()
 
 async function placeData(data, dates, subjects, attendance) {
-    data.birthday = data.birthday.toDate().toLocaleString('default', {
-        month: 'long',
-        day: 'numeric',
-        year: 'numeric',
-    })
+    data.birthday = data.birthday.toDate()
+    data.birthday =
+        data.birthday.toLocaleString('default', { month: 'long' }) +
+        ' ' +
+        data.birthday.getUTCDate() +
+        ', ' +
+        data.birthday.getUTCFullYear()
     if (data.role != 'student' && data['subjects'] == undefined) {
         createBlock(
             'Subjects',
