@@ -1,4 +1,13 @@
-var dataSet = ['eid', 'name', 'birthday', 'email', 'timezone', 'subjects']
+var dataSet = [
+    'volunteer Hours',
+    'attendance',
+    'eid',
+    'name',
+    'birthday',
+    'email',
+    'timezone',
+    'subjects',
+]
 async function setUp() {
     const reports = await db
         .collection('reports')
@@ -152,8 +161,26 @@ async function search(e) {
         return
     }
     var user = snapshot.docs[0].data()
+    const volunteerHours = user['volunteer-entries']
+    const attendance = user['attendance-entries']
+
+    if (volunteerHours != undefined) {
+        var minutes = 0
+        for (entry of volunteerHours) {
+            minutes += entry.minutes
+        }
+        user['volunteer Hours'] = minutes + ' Minutes'
+    }
+
+    if (attendance != undefined) {
+        var minutes = 0
+        for (entry of attendance) {
+            minutes += entry.minutes
+        }
+        user.attendance = minutes = ' Minutes'
+    }
+
     user.birthday = user.birthday.toDate().getFullYear()
-    console.log(dataSet, user)
     for (key of dataSet) {
         if (user[key] == undefined) {
             continue
