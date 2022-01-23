@@ -102,7 +102,7 @@ async function placeData(data, dates, subjects, attendance) {
         createBlock(
             'Subjects',
             [
-                'You are not accepted in any subjects. If you believe you are, try to transfer your information first. If not, fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/1L0WRzXm20G5SmhCkv2y0ODKYTpUwGkGloOJsXgQFI0c/">this form!</a>',
+                'You are not accepted in any subjects. If you believe you are, try to transfer your information first. If not, fill out <a style="text-decoration: underline" href="https://docs.google.com/forms/d/1L0WRzXm20G5SmhCkv2y0ODKYTpUwGkGloOJsXgQFI0c/" target="_blank" rel="noopener noreferrer">this form!</a>',
             ],
             'small'
         )

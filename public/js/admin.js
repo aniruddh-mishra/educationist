@@ -22,7 +22,7 @@ async function setUp() {
         const link =
             'Content: <a href="/content/document?id=' +
             data.document +
-            '">Link to Document</a>'
+            '" target="_blank" rel="noopener noreferrer">Link to Document</a>'
         const text = 'Report: ' + data.text
         const button =
             '<button onclick="complete(this.parentNode)" class="end-report">Declare Complete</button>'
