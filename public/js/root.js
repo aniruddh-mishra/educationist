@@ -20,7 +20,6 @@ var db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-        document.querySelector('body').classList.add('invisible')
         if (localStorage.getItem('uid') === null) {
             logout()
         }
@@ -32,15 +31,19 @@ firebase.auth().onAuthStateChanged(async (user) => {
             }
             window.location.replace('/')
         }
-        const role = (await db.collection('users').doc(user.uid).get()).data()
-            .role
+
+        var role = localStorage.getItem('role')
+        if (role == undefined) {
+            role = (await db.collection('users').doc(user.uid).get()).data()
+                .role
+            localStorage.setItem('role', role)
+        }
+
         if (role != 'admin') {
             document.getElementById('admin-link').remove()
         }
-        if (window.location.pathname != '/admin') {
-            if (role != 'admin') {
-                logout()
-            }
+        if (window.location.pathname === '/admin' && role != 'admin') {
+            logout()
         }
         document.querySelector('body').classList.remove('invisible')
     } else {
