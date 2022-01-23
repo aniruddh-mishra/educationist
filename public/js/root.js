@@ -1,5 +1,7 @@
 var navigation = document.getElementById('navigation')
 
+document.querySelector('body').classList.add('invisible')
+
 if (navigation) {
     var header = document.createElement('header')
     header.innerHTML = `NAVIGATION`
@@ -18,6 +20,7 @@ var db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
+        document.querySelector('body').classList.add('invisible')
         if (localStorage.getItem('uid') === null) {
             logout()
         }
@@ -28,22 +31,23 @@ firebase.auth().onAuthStateChanged(async (user) => {
                 return
             }
             window.location.replace('/')
-        } else if (window.location.pathname === '/admin') {
-            const role = (
-                await db.collection('users').doc(user.uid).get()
-            ).data().role
+        }
+        const role = (await db.collection('users').doc(user.uid).get()).data()
+            .role
+        if (role != 'admin') {
+            document.getElementById('admin-link').remove()
+        }
+        if (window.location.pathname != '/admin') {
             if (role != 'admin') {
                 logout()
             }
         }
+        document.querySelector('body').classList.remove('invisible')
     } else {
+        document.querySelector('.dropdown').remove()
+        document.querySelector('.navbar').style.width = '23em'
+        document.querySelector('body').classList.remove('invisible')
         if (window.location.pathname !== '/login') {
-            if (window.location.pathname === '/donate') {
-                alert(
-                    'You are not signed in! Any donations made will not be attached to your Educationist account.'
-                )
-                return
-            }
             if (
                 window.location.pathname === '/reset' ||
                 window.location.pathname === '/register' ||
