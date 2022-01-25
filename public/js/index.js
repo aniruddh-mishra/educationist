@@ -273,6 +273,17 @@ async function requestClass() {
     const subject = document.getElementById('subject').value
     if (subject === '') {
         document.getElementById('request-btn').disabled = false
+        token('You need to select a subject.')
+        return
+    }
+    if (!document.getElementById('request-btn').classList.contains('confirm')) {
+        document.getElementById('request-btn').classList.add('confirm')
+        document.getElementById('request-btn').disabled = false
+        token(
+            'If you want to request a tutor in ' +
+                subject +
+                ', click the request button again.'
+        )
         return
     }
     const snapshot = await db
@@ -524,6 +535,17 @@ async function classes() {
         }
 
         if (localStorage.getItem('role') != 'student') {
+            console.log(data.length)
+            for (let i = 1; i <= data.length; i++) {
+                const option = document.createElement('option')
+                option.value = i
+                option.innerHTML = 'Class #' + i
+                document.getElementById('class1').appendChild(option)
+                const option2 = document.createElement('option')
+                option2.value = i
+                option2.innerHTML = 'Class #' + i
+                document.getElementById('class2').appendChild(option2)
+            }
             document.querySelector('.class-merge').classList.remove('temp')
         }
     }
@@ -615,6 +637,11 @@ async function mergeClasses() {
     document.getElementById('merge-btn').disabled = true
     const class1 = document.getElementById('class1').value.trim()
     const class2 = document.getElementById('class2').value.trim()
+    if (class1 === '' || class2 === '') {
+        document.getElementById('merge-btn').disabled = false
+        token('You must choose two classes to combine.')
+        return
+    }
     var classID1 = ''
     var classID2 = ''
     document.querySelectorAll('.class').forEach((classItem) => {

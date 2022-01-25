@@ -75,13 +75,16 @@
                     <h2>Combine Classes</h2>
                     <p>
                         If you have multiple students in a class, add them to
-                        the same class here. The class id is just the number of
-                        the class displayed above.
+                        the same class here.
                     </p>
                     <h3>First Class #</h3>
-                    <input id="class1" style="margin-bottom: 0" type="text" />
+                    <select id="class1">
+                        <option value="">-- Select Class</option>
+                    </select>
                     <h3>Second Class #</h3>
-                    <input id="class2" style="margin-bottom: 0" type="text" />
+                    <select id="class2">
+                        <option value="">-- Select Class</option>
+                    </select>
                     <button
                         style="margin-bottom: 5vh"
                         id="merge-btn"
@@ -107,7 +110,7 @@
                         <option value="english">English</option>
                         <option value="python">Python</option>
                         <option value="web-development">Web Development</option>
-                        <option value="chess">Chess</option>
+                        <!-- <option value="chess">Chess</option> -->
                         <option value="scratch">Scratch</option>
                     </select>
                     <button id="request-btn" onclick="requestClass()">
