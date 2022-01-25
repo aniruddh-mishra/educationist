@@ -3,6 +3,7 @@
 :root {
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
+    --navbar-width: 35em;
 }
 
 html,
@@ -110,7 +111,7 @@ select:focus {
 .navbar {
     float: right;
     padding: 0;
-    width: 35em;
+    width: var(--navbar-width);
     list-style-type: none;
 }
 
