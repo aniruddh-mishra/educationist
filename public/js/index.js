@@ -490,6 +490,8 @@ async function classes() {
             counter += 1
         }
 
+        const maxActiveClasses = counter - 1
+
         counter = 1
         for (classItem of inactiveClasses) {
             createBlock(
@@ -535,8 +537,7 @@ async function classes() {
         }
 
         if (localStorage.getItem('role') != 'student') {
-            console.log(data.length)
-            for (let i = 1; i <= data.length; i++) {
+            for (let i = 1; i <= maxActiveClasses; i++) {
                 const option = document.createElement('option')
                 option.value = i
                 option.innerHTML = 'Class #' + i
