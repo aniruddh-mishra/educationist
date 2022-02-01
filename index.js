@@ -86,6 +86,19 @@ app.get('/admin', async (request, response) => {
     response.sendFile('admin.html', pages)
 })
 
+app.get('/newsletter/:issue', (request, response) => {
+    const issue = request.params.issue
+    return response.sendFile(issue + '.html', {
+        root: __dirname + '/public/newsletters/html',
+    })
+})
+
+app.get('/assets/:issue', (request, response) => {
+    return response.sendFile(request.params.issue, {
+        root: __dirname + '/public/newsletters/assets',
+    })
+})
+
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
