@@ -89,13 +89,7 @@ app.get('/admin', async (request, response) => {
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
     return response.sendFile(issue + '.html', {
-        root: __dirname + '/public/newsletters/html',
-    })
-})
-
-app.get('/assets/:issue', (request, response) => {
-    return response.sendFile(request.params.issue, {
-        root: __dirname + '/public/newsletters/assets',
+        root: __dirname + '/public/newsletters',
     })
 })
 
