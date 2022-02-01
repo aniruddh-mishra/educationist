@@ -88,9 +88,9 @@ app.get('/admin', async (request, response) => {
 
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
-    return response.sendFile(issue + '.html', {
-        root: __dirname + '/public/newsletters',
-    })
+    var data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')
+    data = data.replace(new RegExp('issue', 'g'), issue)
+    return response.send(data)
 })
 
 app.get('/css/:filename', (request, response) => {
