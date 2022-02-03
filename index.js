@@ -93,6 +93,10 @@ app.get('/newsletter/:issue', (request, response) => {
     return response.send(data)
 })
 
+app.get('/certificate', async (request, response) => {
+    return response.sendFile('certificate.html', pages)
+})
+
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')

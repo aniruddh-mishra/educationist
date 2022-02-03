@@ -20,7 +20,10 @@ var db = firebase.firestore()
 
 firebase.auth().onAuthStateChanged(async (user) => {
     if (user) {
-        if (localStorage.getItem('uid') === null) {
+        if (
+            localStorage.getItem('uid') === null ||
+            localStorage.getItem('uid') != user.uid
+        ) {
             logout()
         }
         if (window.location.pathname === '/login') {
@@ -34,9 +37,12 @@ firebase.auth().onAuthStateChanged(async (user) => {
 
         var role = localStorage.getItem('role')
         if (role == undefined) {
-            role = (await db.collection('users').doc(user.uid).get()).data()
-                .role
-            localStorage.setItem('role', role)
+            data = (await db.collection('users').doc(user.uid).get()).data()
+            localStorage.setItem('role', data.role)
+            localStorage.setItem('eid', data.eid)
+        } else if (localStorage.getItem('eid') == undefined) {
+            data = (await db.collection('users').doc(user.uid).get()).data()
+            localStorage.setItem('eid', data.eid)
         }
 
         if (role != 'admin') {

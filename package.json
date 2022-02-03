@@ -25,6 +25,7 @@
     "express-rate-limit": "^5.5.1",
     "firebase-admin": "^10.0.1",
     "nodemailer": "^6.7.0",
-    "nodemon": "^2.0.14"
+    "nodemon": "^2.0.14",
+    "prompt-sync": "^4.2.0"
   }
 }

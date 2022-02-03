@@ -1,5 +1,22 @@
 var dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
 var classData = {}
+const storage = firebase.app().storage('gs://educationist-42b45.appspot.com/')
+const storageRef = storage.ref()
+const uid = localStorage.getItem('uid')
+const month = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+]
 
 async function getData() {
     const uid = localStorage.getItem('uid')
@@ -42,7 +59,7 @@ async function getData() {
 
         data.forEach((doc) => {
             dates.push(
-                doc.date.toLocaleString('default', { month: 'long' }) +
+                month[doc.date.getUTCMonth()] +
                     ' ' +
                     doc.date.getUTCDate() +
                     ', ' +
@@ -93,7 +110,7 @@ getData()
 async function placeData(data, dates, subjects, attendance) {
     data.birthday = data.birthday.toDate()
     data.birthday =
-        data.birthday.toLocaleString('default', { month: 'long' }) +
+        month[data.birthday.getUTCMonth()] +
         ' ' +
         data.birthday.getUTCDate() +
         ', ' +
@@ -194,6 +211,9 @@ async function placeData(data, dates, subjects, attendance) {
                 },
             },
         })
+        document.getElementById('request-certificate').classList.remove('temp')
+    } else {
+        document.getElementById('request-certificate').remove()
     }
 
     if (attendance) {
@@ -726,4 +746,80 @@ function validate(element) {
     }
     element.classList.remove('error-decorator')
     return true
+}
+
+function upload() {
+    if (
+        document.getElementById('start-date').value === '' ||
+        document.getElementById('end-date').value === ''
+    ) {
+        token('You need to state what dates you want a certificate in')
+        return
+    } else if (
+        document.getElementById('start-date').value >
+        document.getElementById('end-date').value
+    ) {
+        token('The end date needs to be after the start date.')
+        return
+    }
+    document.getElementById('file').click()
+}
+
+async function uploadFile() {
+    document.getElementById('file-btn').disabled = true
+    document.querySelector('progress').classList.remove('temp')
+    const fileBtn = document.getElementById('file')
+    const file = fileBtn.files[0]
+    const size = file.size
+    if (size > 5 * 1024 * 1024) {
+        token('This file is too large to upload')
+        document.getElementById('file-btn').disabled = false
+        fileBtn.value = ''
+    }
+    if (!file.name.includes('pdf')) {
+        token('The upload must be a pdf')
+        document.getElementById('file-btn').disabled = false
+        document.querySelector('progress').classList.add('temp')
+        return
+    }
+    const uid = localStorage.getItem('uid')
+    const requestId = (
+        await db.collection('certificates').add({
+            uid: uid,
+            start: new Date(
+                document.getElementById('start-date').value
+            ).getTime(),
+            end: new Date(document.getElementById('end-date').value).getTime(),
+        })
+    ).id
+    const ref = storageRef.child(
+        '/certificates/' + uid + '/' + requestId + '/' + file.name
+    )
+    var upload = ref.put(file)
+    upload.on('state_change', (snapshot) => {
+        const percentage =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        document.querySelector('progress').value = percentage
+    })
+}
+
+function certificate() {
+    if (
+        document.getElementById('start-date').value === '' ||
+        document.getElementById('end-date').value === ''
+    ) {
+        token('You need to state what dates you want a certificate in')
+        return
+    } else if (
+        document.getElementById('start-date').value >
+        document.getElementById('end-date').value
+    ) {
+        token('The end date needs to be after the start date.')
+        return
+    }
+    const start = new Date(document.getElementById('start-date').value)
+    const end = new Date(document.getElementById('end-date').value)
+    window.open(
+        '/certificate' + '/?start=' + start.getTime() + '&&end=' + end.getTime()
+    )
 }

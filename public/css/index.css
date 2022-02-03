@@ -167,3 +167,29 @@
 .temp {
     display: none;
 }
+
+#file-btn,
+#certificate-btn {
+    cursor: pointer;
+    text-align: center;
+    color: white;
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+    padding: 5px 15px 5px 15px;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 1.1em;
+    border-radius: 0.25em;
+    margin-top: 3%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100%;
+    max-width: 200px;
+}
+
+.upload {
+    text-align: center;
+    margin-top: 10vh;
+    margin-bottom: 5vh;
+}
