@@ -5,6 +5,7 @@ const admin = require('firebase-admin/app')
 const firebase = require('firebase-admin')
 const { getFirestore } = require('firebase-admin/firestore')
 const { getAuth } = require('firebase-admin/auth')
+const { getStorage } = require('firebase-admin/storage')
 const { sendMail } = require(__dirname + '/emailer.js')
 const { secretKeys, processURL } = require(__dirname + '/setup.js')
 const rateLimit = require('express-rate-limit')
@@ -18,10 +19,12 @@ require('dotenv').config({
 admin.initializeApp({
     credential: admin.cert(JSON.parse(process.env.FIREBASE)),
     databaseURL: 'https://educationist-42b45-default-rtdb.firebaseio.com/',
+    storageBucket: 'educationist-42b45.appspot.com',
 })
 
 var db = getFirestore()
 var auth = getAuth()
+var storageRef = getStorage().bucket()
 var rdb = firebase.database()
 var ref = rdb.ref('/')
 
@@ -790,6 +793,34 @@ app.post('/accept', async (request, response) => {
                 options
             )
         }
+
+        return response.send('Done!')
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+
+        return response.send('Failure')
+    }
+})
+
+// Send certificates
+app.post('/certificate', async (request, response) => {
+    const uid = request.body.uid
+    const requestId = request.body.request
+    const user = (await db.collection('users').doc(uid).get()).data()
+    const email = user.email
+    const data = await storageRef.file('send/' + requestId + '.pdf').download()
+    const files = [{ filename: 'Certificate.pdf', content: data[0] }]
+    try {
+        const options = [{ key: 'name1', text: user.name }]
+        // Sends email to tutor
+        await sendMail(
+            email,
+            'Educationist Volunteering Certificate',
+            __dirname + '/public/emails/certificate.html',
+            options,
+            files
+        )
 
         return response.send('Done!')
     } catch (err) {

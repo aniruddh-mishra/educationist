@@ -781,23 +781,25 @@ async function uploadFile() {
         document.getElementById('file-btn').disabled = false
         return
     }
-    addCertificateRequest(file, file.name)
+    addCertificateRequest(file)
 }
 
-async function addCertificateRequest(file, name) {
+async function addCertificateRequest(file) {
     document.querySelector('progress').classList.remove('temp')
     const uid = localStorage.getItem('uid')
     const requestId = (
         await db.collection('certificates').add({
             uid: uid,
-            start: new Date(
-                document.getElementById('start-date').value
-            ).getTime(),
-            end: new Date(document.getElementById('end-date').value).getTime(),
+            start: firebase.firestore.Timestamp.fromMillis(
+                new Date(document.getElementById('start-date').value).getTime()
+            ),
+            end: firebase.firestore.Timestamp.fromMillis(
+                new Date(document.getElementById('end-date').value).getTime()
+            ),
         })
     ).id
     const ref = storageRef.child(
-        '/certificates/' + uid + '/' + requestId + '/' + name
+        '/certificates/' + uid + '/' + requestId + '/certificate.pdf'
     )
     var upload = ref.put(file, {
         contentType: 'application/pdf',
@@ -828,7 +830,7 @@ async function certificate() {
     const start = new Date(document.getElementById('start-date').value)
     const end = new Date(document.getElementById('end-date').value)
     const pdfBytes = await createPdf(start, end)
-    addCertificateRequest(pdfBytes, 'certificate.pdf')
+    addCertificateRequest(pdfBytes)
 }
 
 async function createPdf(start, end) {

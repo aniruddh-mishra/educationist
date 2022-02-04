@@ -25,7 +25,8 @@ h3 {
 }
 
 .report-blocks,
-.user-data {
+.user-data,
+.certificates {
     margin-bottom: 5vh;
     display: grid;
     grid-gap: 3vw;
@@ -38,7 +39,8 @@ h3 {
 #accept-btn,
 #search-btn,
 #data-btn,
-.end-report {
+.end-report,
+.certificate-btn {
     color: white;
     padding: 5px 15px 5px 15px;
     font-family: Poppins;
@@ -100,7 +102,12 @@ h3 {
 
 #accept-btn,
 #search-btn,
-#data-btn {
+#data-btn,
+.certificate-btn {
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
+}
+
+.certificates-container {
+    text-align: center;
 }

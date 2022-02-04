@@ -8,6 +8,9 @@ var dataSet = [
     'timezone',
     'subjects',
 ]
+const storage = firebase.app().storage('gs://educationist-42b45.appspot.com/')
+const storageRef = storage.ref()
+
 async function setUp() {
     const reports = await db
         .collection('reports')
@@ -48,6 +51,7 @@ async function setUp() {
 }
 
 setUp()
+certificates()
 
 async function interview(accept) {
     this.disabled = true
@@ -213,4 +217,111 @@ async function complete(e) {
     }
     await db.collection('reports').doc(reportId).update({ complete: true })
     token('Task marked as complete!')
+}
+
+async function certificates() {
+    const certificates = await db.collection('certificates').get()
+    if (certificates.empty) {
+        token('No certificate requests right now!')
+        document.querySelector('.certificates-container').remove()
+        return
+    }
+    certificates.forEach(async (doc) => {
+        var block = document.createElement('div')
+        block.className = 'block'
+        block.classList.add('certificate-block')
+        block.id = doc.id
+        var titleBlock = document.createElement('h3')
+        titleBlock.innerHTML = 'Certificate Request'
+        block.append(titleBlock)
+        const data = doc.data()
+        const minutes = await minutesGet(
+            data.uid,
+            data.start.toDate(),
+            data.end.toDate()
+        )
+        const minutesInfo = 'Minutes: ' + minutes
+        var ref = storageRef
+            .child('certificates')
+            .child(data.uid)
+            .child(doc.id)
+            .child('certificate.pdf')
+        const url = await ref.getDownloadURL()
+        const button =
+            '<button onclick="downloadCertificate(\'' +
+            url +
+            '\')" class="certificate-btn">Download Certificate</button>'
+        const button2 =
+            '<button onclick="uploadCertificate(this.parentNode.parentNode, \'' +
+            data.uid +
+            '\')" class="certificate-btn">Upload Signed</button>'
+        fields = [minutesInfo, button, button2]
+        for (field of fields) {
+            var fieldBlock = document.createElement('p')
+            fieldBlock.className = 'block-field'
+            fieldBlock.innerHTML = field
+            block.append(fieldBlock)
+        }
+        document.querySelector('.certificates').appendChild(block)
+    })
+}
+
+async function minutesGet(uid, start, end) {
+    const user = (await db.collection('users').doc(uid).get()).data()
+    const entries = user['volunteer-entries']
+    var minutes = 0
+    for (entry of entries) {
+        const date = entry.date.toDate()
+        if (date >= start && date <= end) {
+            minutes += entry.minutes
+        }
+    }
+    return minutes
+}
+
+function downloadCertificate(url) {
+    window.open(url)
+}
+
+async function uploadCertificate(e, uid) {
+    const input = document.getElementById('file')
+    input.value = ''
+    input.setAttribute(
+        'onchange',
+        'uploadCertificateFinish("' + e.id + '", "' + uid + '")'
+    )
+    input.click()
+}
+
+async function uploadCertificateFinish(request, uid) {
+    document.getElementById(request).remove()
+    const file = document.getElementById('file').files[0]
+    const ref = storageRef.child('send').child(request + '.pdf')
+    ref.put(file, { contentType: 'application/pdf' })
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/certificate', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    setTimeout(() => {
+        xhr.send(
+            JSON.stringify({
+                uid: uid,
+                request: request,
+            })
+        )
+    }, 1000)
+    xhr.onload = async function () {
+        if (this.response === 'Failure') {
+            token('Something went wrong, please try again later')
+            return
+        }
+        await db.collection('certificates').doc(request).delete()
+        await ref.delete()
+        await storageRef
+            .child('certificates')
+            .child(uid)
+            .child(request)
+            .child('certificate.pdf')
+            .delete()
+        token(this.response)
+    }
 }

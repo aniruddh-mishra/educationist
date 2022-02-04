@@ -15,7 +15,7 @@ var transporter = nodemailer.createTransport({
 })
 
 // Sends the main with transporter
-function sendMail(recipient, subject, fileName, options) {
+function sendMail(recipient, subject, fileName, options, files) {
     // Reads the html file for requested email
     var data = fs.readFileSync(fileName, 'utf8')
 
@@ -32,6 +32,10 @@ function sendMail(recipient, subject, fileName, options) {
         to: recipient,
         subject: subject,
         html: data,
+    }
+
+    if (files != undefined) {
+        mailOptions.attachments = files
     }
 
     // Returns promise of transport.sendmail
