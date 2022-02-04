@@ -1,3 +1,4 @@
+const { degrees, PDFDocument, StandardFonts, rgb } = PDFLib
 var dataSet = ['name', 'birthday', 'email', 'timezone', 'subjects']
 var classData = {}
 const storage = firebase.app().storage('gs://educationist-42b45.appspot.com/')
@@ -767,7 +768,6 @@ function upload() {
 
 async function uploadFile() {
     document.getElementById('file-btn').disabled = true
-    document.querySelector('progress').classList.remove('temp')
     const fileBtn = document.getElementById('file')
     const file = fileBtn.files[0]
     const size = file.size
@@ -779,9 +779,13 @@ async function uploadFile() {
     if (!file.name.includes('pdf')) {
         token('The upload must be a pdf')
         document.getElementById('file-btn').disabled = false
-        document.querySelector('progress').classList.add('temp')
         return
     }
+    addCertificateRequest(file, file.name)
+}
+
+async function addCertificateRequest(file, name) {
+    document.querySelector('progress').classList.remove('temp')
     const uid = localStorage.getItem('uid')
     const requestId = (
         await db.collection('certificates').add({
@@ -793,17 +797,20 @@ async function uploadFile() {
         })
     ).id
     const ref = storageRef.child(
-        '/certificates/' + uid + '/' + requestId + '/' + file.name
+        '/certificates/' + uid + '/' + requestId + '/' + name
     )
-    var upload = ref.put(file)
+    var upload = ref.put(file, {
+        contentType: 'application/pdf',
+    })
     upload.on('state_change', (snapshot) => {
         const percentage =
             (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         document.querySelector('progress').value = percentage
     })
+    token('We will get back to you with a signed certificate!')
 }
 
-function certificate() {
+async function certificate() {
     if (
         document.getElementById('start-date').value === '' ||
         document.getElementById('end-date').value === ''
@@ -817,9 +824,99 @@ function certificate() {
         token('The end date needs to be after the start date.')
         return
     }
+    document.getElementById('certificate-btn').disabled = true
     const start = new Date(document.getElementById('start-date').value)
     const end = new Date(document.getElementById('end-date').value)
-    window.open(
-        '/certificate' + '/?start=' + start.getTime() + '&&end=' + end.getTime()
-    )
+    const pdfBytes = await createPdf(start, end)
+    addCertificateRequest(pdfBytes, 'certificate.pdf')
+}
+
+async function createPdf(start, end) {
+    const user = (
+        await db.collection('users').doc(localStorage.getItem('uid')).get()
+    ).data()
+    const entries = user['volunteer-entries']
+    var minutes = 0
+    for (entry of entries) {
+        const date = entry.date.toDate()
+        if (date >= start && date <= end) {
+            minutes += entry.minutes
+        }
+    }
+    const url = 'https://cdn.educationisttutoring.org/images/certificate.pdf'
+    const existingPdfBytes = await fetch(url).then((res) => res.arrayBuffer())
+    const pdfDoc = await PDFDocument.load(existingPdfBytes)
+    const font = await pdfDoc.embedFont(StandardFonts.Helvetica)
+
+    const pages = pdfDoc.getPages()
+    const firstPage = pages[0]
+    const { width, height } = firstPage.getSize()
+    const name = user.name
+    firstPage.drawText(name, {
+        x: width / 2 - name.length * 10,
+        y: height / 2 + 17,
+        size: 40,
+        font: font,
+        color: rgb(0, 0, 0),
+    })
+
+    minutes = minutes.toFixed(0).toString()
+    firstPage.drawText(minutes, {
+        x: width / 2 - minutes.length * 7,
+        y: height / 2 - 30,
+        size: 20,
+        font: font,
+        color: rgb(0, 0, 0),
+    })
+
+    const month = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ]
+
+    const range =
+        month[start.getUTCMonth()] +
+        ' ' +
+        start.getUTCDate() +
+        ', ' +
+        start.getUTCFullYear() +
+        ' and ' +
+        month[end.getUTCMonth()] +
+        ' ' +
+        end.getUTCDate() +
+        ', ' +
+        end.getUTCFullYear()
+    firstPage.drawText(range, {
+        x: width / 2 - range.length * 5,
+        y: height / 2 - 80,
+        size: 20,
+        font: font,
+        color: rgb(0, 0, 0),
+    })
+
+    const date = new Date().toLocaleString('default', {
+        month: 'long',
+        year: 'numeric',
+        day: '2-digit',
+    })
+    firstPage.drawText(date, {
+        x: width / 2 - date.length * 5,
+        y: height / 2 - 130,
+        size: 20,
+        font: font,
+        color: rgb(0, 0, 0),
+    })
+
+    const pdfBytes = await pdfDoc.save()
+    return pdfBytes
 }
