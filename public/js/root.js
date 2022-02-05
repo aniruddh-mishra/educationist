@@ -179,6 +179,7 @@ function lightmode() {
 window.addEventListener('load', () => {
     const mode = localStorage.getItem('lightmode')
     if (mode === 'true') {
+        document.getElementById('lightmode-btn').innerHTML = 'Dark Mode'
         var cssRoot = document.querySelector(':root')
         const lightMode = {
             '--background': 'white',
@@ -189,16 +190,14 @@ window.addEventListener('load', () => {
             '--background-block-hover': '#509e86',
         }
 
-        if (lightMode) {
-            document
-                .getElementById('logo-img')
-                .setAttribute(
-                    'src',
-                    'https://cdn.educationisttutoring.org/images/dark-logos/educationist.png'
-                )
-            for (key of Object.keys(lightMode)) {
-                cssRoot.style.setProperty(key, lightMode[key])
-            }
+        document
+            .getElementById('logo-img')
+            .setAttribute(
+                'src',
+                'https://cdn.educationisttutoring.org/images/dark-logos/educationist.png'
+            )
+        for (key of Object.keys(lightMode)) {
+            cssRoot.style.setProperty(key, lightMode[key])
         }
     }
 })
