@@ -164,10 +164,6 @@
     max-width: 400px;
 }
 
-.temp {
-    display: none;
-}
-
 #file-btn,
 #certificate-btn {
     cursor: pointer;

@@ -195,6 +195,10 @@ select:focus {
     color: var(--invert);
 }
 
+.temp {
+    display: none;
+}
+
 @media (max-width: 950px) {
     .dropdown {
         text-align: center;
