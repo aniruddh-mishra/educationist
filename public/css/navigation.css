@@ -3,26 +3,35 @@
 :root {
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
+    --basic-font: var(--educationist-green);
     --navbar-width: 35em;
+    --background: rgb(17, 19, 18);
+    --background-standout: rgb(37, 41, 39);
+    --background-block: rgb(30, 34, 32);
+    --background-block-hover: var(--background-standout);
+    --invert: white;
+    --border: rgb(66, 71, 66);
+    --extreme: black;
+    --educationist-green-variation: #38b18b9d;
 }
 
 html,
 body {
     font-family: Poppins, sans-serif;
-    color: var(--educationist-green);
+    color: var(--basic-font);
     margin: 0;
     padding: 0;
-    background-color: rgb(17, 19, 18);
+    background-color: var(--background);
 }
 
 a {
     text-decoration: none;
     font-size: 1em;
-    color: var(--educationist-green);
+    color: var(--basic-font);
 }
 
 a:hover {
-    color: white;
+    color: var(--invert);
 }
 
 button {
@@ -48,12 +57,12 @@ textarea {
     outline: none;
     background: none;
     box-sizing: border-box;
-    border: 1px solid rgb(66, 71, 66);
+    border: 1px solid var(--border);
     border-radius: 0.5em;
     padding: 0.55em 0.75em 0.55em 0.75em;
     font-weight: 200;
     font-size: 0.9em;
-    color: #ffffff;
+    color: var(--invert);
     font-weight: 400;
     margin-bottom: 5%;
     width: 100%;
@@ -76,7 +85,7 @@ select {
     border-radius: 0.5rem;
     font-size: 0.9em;
     padding: 0.55em 0.75em 0.55em 0.75em;
-    color: #ffffff;
+    color: var(--invert);
     width: 100%;
     max-width: 400px;
     font-size: 0.9rem;
@@ -118,14 +127,14 @@ select:focus {
 .navbarBtn {
     font-size: 1em;
     font-family: Poppins;
-    color: var(--educationist-green);
+    color: var(--basic-font);
     padding-bottom: 1em;
 }
 
 .dropdown-content button,
 .dropdown-content a {
     font-size: 1em;
-    color: black;
+    color: var(--extreme);
     padding: 12px 16px;
     text-decoration: none;
     display: block;
@@ -133,19 +142,18 @@ select:focus {
 
 .dropdown-content button:hover,
 .dropdown-content a:hover {
-    color: white;
+    color: var(--invert);
 }
 
 .dropdown-content {
-    display: none;
     position: absolute;
-    background-color: #38b18b9d;
+    background-color: var(--educationist-green-variation);
     min-width: 160px;
     z-index: 1;
 }
 
 .navbarBtn:hover {
-    color: white;
+    color: var(--invert);
 }
 
 .hamburger-container {
@@ -183,8 +191,8 @@ select:focus {
     border-radius: 0px 0px 10px 10px;
     font-size: 0.8rem;
     padding: 5px;
-    background-color: rgb(107, 106, 106);
-    color: white;
+    background-color: var(--border);
+    color: var(--invert);
 }
 
 @media (max-width: 950px) {
@@ -193,9 +201,16 @@ select:focus {
     }
 
     .dropdown-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         margin-top: 1em;
         position: inherit;
         width: 100%;
+    }
+
+    .dropdown-content button {
+        text-align: center;
     }
 
     .navbar {
@@ -221,7 +236,7 @@ select:focus {
         margin-top: 6px;
         width: 35px;
         height: 5px;
-        background-color: white;
+        background-color: var(--invert);
         margin-top: 6px;
         transition: 0.4s;
     }
@@ -245,7 +260,7 @@ select:focus {
     .navbar-vertical {
         padding-top: 7vh;
         overflow: hidden;
-        background-color: rgb(37, 41, 39);
+        background-color: var(--background-standout);
         height: fit-content;
         max-height: 0;
         width: 100%;

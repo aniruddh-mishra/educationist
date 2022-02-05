@@ -25,8 +25,11 @@
     <li>
         <div class="dropdown">
             <button onclick="dropdown()" class="navbarBtn">Account</button>
-            <div id="myDropdown" class="dropdown-content">
+            <div id="myDropdown" class="dropdown-content temp">
                 <button onclick="logout()">Logout</button>
+                <button id="lightmode-btn" onclick="lightmode()">
+                    Light Mode
+                </button>
                 <a id="admin-link" href="/admin">Admin</a>
             </div>
         </div>

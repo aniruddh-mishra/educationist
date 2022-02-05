@@ -43,7 +43,7 @@
 
 .end-class,
 .log {
-    color: white;
+    color: var(--invert);
     padding: 5px 15px 5px 15px;
     font-family: Poppins;
     font-weight: 400;
@@ -84,7 +84,7 @@
 }
 
 .block:hover {
-    background-color: rgb(48, 56, 52);
+    background-color: var(--background-block-hover);
 }
 
 .block {
@@ -94,7 +94,7 @@
     display: flex;
     flex-direction: column;
     height: fit-content;
-    background-color: rgb(30, 34, 32);
+    background-color: var(--background-block);
     border-radius: 2.5rem;
     padding: 30px 30px;
     margin: 0 2vw;
@@ -142,7 +142,7 @@
 
 .matching-request button,
 .class-merge button {
-    color: white;
+    color: var(--invert);
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
     padding: 5px 15px 5px 15px;
@@ -172,7 +172,7 @@
 #certificate-btn {
     cursor: pointer;
     text-align: center;
-    color: white;
+    color: var(--invert);
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
     padding: 5px 15px 5px 15px;
