@@ -89,6 +89,14 @@ app.get('/admin', async (request, response) => {
     response.sendFile('admin.html', pages)
 })
 
+app.get('/classes', async (request, response) => {
+    response.sendFile('classes.html', pages)
+})
+
+app.get('/class/:classId', async (request, response) => {
+    response.sendFile('class.html', pages)
+})
+
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
     var data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')

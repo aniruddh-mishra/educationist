@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Educationist Tutoring</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="../css/navigation.css" />
+        <link rel="stylesheet" type="text/css" href="../css/index.css" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png"
+        />
+        <link
+            rel="manifest"
+            href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest"
+        />
+        <script
+            data-host="https://microanalytics.io"
+            data-dnt="false"
+            src="https://microanalytics.io/js/script.js"
+            id="ZwSg9rf6GA"
+            async
+            defer
+        ></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+    </head>
+    <body>
+        <div id="loader-container" class="loader-none">
+            <div id="loader" class="loader"></div>
+        </div>
+        <div id="container" class="container">
+            <div id="navigation"></div>
+            <script src="../js/root.js"></script>
+            <div class="main-body">
+                <h1>Classes</h1>
+                <p>
+                    If you need to transfer information from an older account
+                    from before 2022, please fill out
+                    <a
+                        style="text-decoration: underline"
+                        href="https://docs.google.com/forms/d/1stwvh9_-rB4YNDXlPQrIj7GlePx0XNFaXvmxm2_idYA/edit"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        >this form</a
+                    >!
+                </p>
+                <div class="account"></div>
+                <div class="class-instructions">
+                    <h3>Classes</h3>
+                    <p>
+                        You currently have no classes. If you are a tutor, and
+                        have an existing class, please email Educationist
+                        Tutoring.
+                    </p>
+                </div>
+                <div class="classes"></div>
+                <div class="class-merge temp">
+                    <h2>Combine Classes</h2>
+                    <p>
+                        If you have multiple students in a class, add them to
+                        the same class here.
+                    </p>
+                    <h3>First Class #</h3>
+                    <select id="class1">
+                        <option value="">-- Select Class</option>
+                    </select>
+                    <h3>Second Class #</h3>
+                    <select id="class2">
+                        <option value="">-- Select Class</option>
+                    </select>
+                    <button
+                        style="margin-bottom: 5vh"
+                        id="merge-btn"
+                        onclick="mergeClasses()"
+                    >
+                        Merge Classes
+                    </button>
+                </div>
+                <div id="request-certificate" class="upload temp">
+                    <h3>Request Certificate</h3>
+                    <p>
+                        If you have an existing form you would like us to sign,
+                        upload it below. We also have certificates that we can
+                        send you if you do not upload a file. Choose what dates
+                        you want us to record in your certificate. If you want
+                        your certificate signed, get a template with the button
+                        below, and upload it to get signed.
+                    </p>
+                    <p>Starting Date</p>
+                    <input
+                        id="start-date"
+                        style="margin-bottom: 2vh"
+                        type="date"
+                    />
+                    <p>Ending Date</p>
+                    <input
+                        id="end-date"
+                        style="margin-bottom: 2vh"
+                        type="date"
+                    />
+                    <input
+                        onchange="uploadFile()"
+                        type="file"
+                        id="file"
+                        style="display: none"
+                    />
+                    <button onclick="certificate()" id="certificate-btn">
+                        Certificate
+                    </button>
+                    <button onclick="upload()" id="file-btn">
+                        Upload File
+                    </button>
+                    <progress
+                        class="temp"
+                        style="margin-top: 5vh"
+                        value="0"
+                        max="100"
+                        id="progress"
+                    ></progress>
+                </div>
+                <div class="big-blocks"></div>
+            </div>
+            <div id="toaster" class="invisible">
+                <span id="alert"></span>
+            </div>
+        </div>
+        <script src="../js/classes.js"></script>
+    </body>
+</html>

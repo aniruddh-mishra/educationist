@@ -58,7 +58,7 @@ firebase.auth().onAuthStateChanged(async (user) => {
     } else {
         document.querySelector('.dropdown').remove()
         const r = document.querySelector(':root')
-        r.style.setProperty('--navbar-width', '23em')
+        r.style.setProperty('--navbar-width', '25em')
         document.querySelector('body').classList.remove('invisible')
         if (window.location.pathname !== '/login') {
             if (

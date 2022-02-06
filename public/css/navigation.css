@@ -4,7 +4,7 @@
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
     --basic-font: var(--educationist-green);
-    --navbar-width: 35em;
+    --navbar-width: 37em;
     --background: rgb(17, 19, 18);
     --background-standout: rgb(37, 41, 39);
     --background-block: rgb(30, 34, 32);
@@ -41,6 +41,10 @@ button {
     border: none;
     background: none;
     cursor: pointer;
+}
+
+.main-body button:hover {
+    opacity: 80%;
 }
 
 img {
@@ -152,6 +156,11 @@ select:focus {
     z-index: 1;
 }
 
+.dropdown-content a,
+.dropdown-content button {
+    text-decoration: none;
+}
+
 .navbarBtn:hover {
     color: var(--invert);
 }
@@ -211,6 +220,10 @@ select:focus {
         margin-top: 1em;
         position: inherit;
         width: 100%;
+    }
+
+    .temp {
+        display: none;
     }
 
     .dropdown-content button {
