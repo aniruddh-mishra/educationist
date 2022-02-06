@@ -40,6 +40,7 @@ firebase.auth().onAuthStateChanged(async (user) => {
             data = (await db.collection('users').doc(user.uid).get()).data()
             localStorage.setItem('role', data.role)
             localStorage.setItem('eid', data.eid)
+            role = data.role
         } else if (localStorage.getItem('eid') == undefined) {
             data = (await db.collection('users').doc(user.uid).get()).data()
             localStorage.setItem('eid', data.eid)

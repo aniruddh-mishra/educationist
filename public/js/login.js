@@ -44,23 +44,33 @@ function login() {
             eid: eid,
         })
     )
-    xhr.onload = function () {
+    xhr.onload = async function () {
         // Receives email from server based on eid
         var email = this.response
 
         // If eid was invalid
         if (email == 'false') {
-            // Removes loading configurations
-            document.getElementById('container').classList.remove('blur')
-            document
-                .getElementById('loader-container')
-                .classList.replace('loader-container', 'loader-none')
+            firebase
+                .auth()
+                .signInWithEmailAndPassword(eid, password)
+                .then((user) => {
+                    var uid = user.user.uid
+                    localStorage.setItem('uid', uid)
+                })
+                .catch((error) => {
+                    // Removes loading configurations
+                    document
+                        .getElementById('container')
+                        .classList.remove('blur')
+                    document
+                        .getElementById('loader-container')
+                        .classList.replace('loader-container', 'loader-none')
 
-            // Adds error messages
-            document.getElementById('error').classList.add('error')
-            document.getElementById('error').innerHTML =
-                'Wrong username or password'
-
+                    // Adds error messages
+                    document.getElementById('error').classList.add('error')
+                    document.getElementById('error').innerHTML =
+                        'Wrong username or password'
+                })
             return
         }
 
