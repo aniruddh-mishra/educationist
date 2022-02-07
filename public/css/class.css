@@ -12,12 +12,12 @@
     display: block;
     width: 100%;
     max-width: 200px;
+    color: var(--invert);
 }
 
 #email-tutor,
 #log-hours,
 #activate-btn {
-    color: var(--invert);
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
 }
