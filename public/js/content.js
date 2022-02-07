@@ -18,14 +18,40 @@ const subjects = [
 var upvoted
 var counter = 0
 var limit = true
+var bookmarks = []
+var checked = false
 
-async function getContent() {
+async function getContent(data) {
     try {
-        const snapshot = await db
-            .collection('content')
-            .orderBy('upvotes', 'desc')
-            .limit(40)
-            .get()
+        if (!checked) {
+            const user = await db
+                .collection('users')
+                .doc(localStorage.getItem('uid'))
+                .get()
+            bookmarks = user.data().bookmarks
+            checked = true
+        }
+        if (data != undefined) {
+            if (bookmarks.length === 0) {
+                holder.innerHTML = 'You do not have any bookmarked items'
+                return
+            }
+            var snapshot = await db
+                .collection('content')
+                .where('__name__', 'in', bookmarks)
+                .get()
+        } else {
+            var snapshot = await db
+                .collection('content')
+                .orderBy('upvotes', 'desc')
+                .limit(40)
+                .get()
+        }
+        holder.innerHTML = ''
+        if (snapshot.empty) {
+            holder.innerHTML = 'You do not have any bookmarked items'
+        }
+
         snapshot.forEach((doc) => {
             const data = doc.data()
             createCard(
@@ -75,12 +101,24 @@ function createCard(id, link, title, subject, author, tags) {
         card.getElementById('tags').appendChild(a)
     }
     b = document.createElement('button')
-    b.innerHTML = '+'
-    card.getElementById('tags').appendChild(b)
-    card.querySelector('button').setAttribute(
-        'onclick',
-        'upvote("' + id + '", this)'
-    )
+    if (bookmarks != undefined && bookmarks.includes(id)) {
+        b.innerHTML =
+            '<img src="https://cdn.educationisttutoring.org/images/bookmark-filled.svg" alt="bookmark" />'
+        card.getElementById('tags').appendChild(b)
+        card.querySelector('button').setAttribute(
+            'onclick',
+            'unBookmark("' + id + '", this)'
+        )
+    } else {
+        b.innerHTML =
+            '<img src="https://cdn.educationisttutoring.org/images/bookmark.svg" alt="bookmark" />'
+        card.getElementById('tags').appendChild(b)
+        card.querySelector('button').setAttribute(
+            'onclick',
+            'bookmark("' + id + '", this)'
+        )
+    }
+
     holder.appendChild(card)
 }
 
@@ -92,7 +130,7 @@ async function search() {
     const index = client.initIndex('content_catalog')
     var results = await index.search(query)
     holder.innerHTML = ''
-    if (results.hits == []) {
+    if (results.hits.length === 0) {
         holder.innerHTML = 'No results for your query'
     }
     for (result of results.hits) {
@@ -111,28 +149,45 @@ function openLink(link) {
     window.open(link, '_blank').focus()
 }
 
-async function upvote(id, button) {
-    try {
-        await db
-            .collection('content')
-            .doc(id)
-            .update({ upvotes: firebase.firestore.FieldValue.increment(1) })
-    } catch {
-        button.disabled = true
-        token('You can only upvote once!')
-        return
-    }
-    const doc = await db
+async function bookmark(id, button) {
+    button.disabled = true
+    await db
         .collection('users')
         .doc(localStorage.getItem('uid'))
-        .get()
-
-    db.collection('users')
-        .doc(doc.id)
         .update({
-            upvotes: firebase.firestore.FieldValue.arrayUnion(id),
+            bookmarks: firebase.firestore.FieldValue.arrayUnion(id),
         })
+    bookmarks.push(id)
+    button.setAttribute('onclick', 'unBookmark("' + id + '", this)')
+    button.innerHTML =
+        '<img src="https://cdn.educationisttutoring.org/images/bookmark-filled.svg" alt="bookmarked" />'
+    button.disabled = false
+    token('Bookmarked this item!')
+}
 
+async function unBookmark(id, button) {
     button.disabled = true
-    token('You have successfully upvoted this item!')
+    await db
+        .collection('users')
+        .doc(localStorage.getItem('uid'))
+        .update({
+            bookmarks: firebase.firestore.FieldValue.arrayRemove(id),
+        })
+    const index = bookmarks.indexOf(id)
+    bookmarks.splice(index, 1)
+    button.setAttribute('onclick', 'bookmark("' + id + '", this)')
+    button.innerHTML =
+        '<img src="https://cdn.educationisttutoring.org/images/bookmark.svg" alt="bookmark" />'
+    button.disabled = false
+    token('Removed this item from bookmark collection!')
+}
+
+async function bookmarkContent() {
+    const selector = document.getElementById('bookmark-filter').value
+    document.querySelector('.filter').classList.toggle('temp')
+    if (selector === 'true') {
+        getContent(bookmarks)
+    } else {
+        getContent()
+    }
 }

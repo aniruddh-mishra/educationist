@@ -58,19 +58,32 @@
                         href="https://docs.google.com/forms/u/0/d/e/1FAIpQLScv3-K_KRZWMwO_0DgHAyDVYgIkhcFnsa97WTwxB2WnheM_iA/formResponse"
                         >this form!</a
                     >
+                    To bookmark content you can simply click the bookmark
+                    button.
                 </p>
-                <div class="filter">
-                    <input
-                        onchange="search()"
-                        id="search"
-                        placeholder="Search (separate queries with commas)"
-                        type="text"
-                    />
-                    <img
-                        id="refresh"
-                        src="https://cdn.educationisttutoring.org/images/search.svg"
-                        alt="Refresh"
-                    />
+                <div class="controls">
+                    <div class="filter">
+                        <input
+                            onchange="search()"
+                            id="search"
+                            placeholder="Search (separate queries with commas)"
+                            type="text"
+                        />
+                        <img
+                            id="refresh"
+                            src="https://cdn.educationisttutoring.org/images/search.svg"
+                            alt="Refresh"
+                        />
+                    </div>
+                    <div class="bookmarks">
+                        <select
+                            onchange="bookmarkContent()"
+                            id="bookmark-filter"
+                        >
+                            <option value="true">Bookmarked Content</option>
+                            <option selected value="false">All Content</option>
+                        </select>
+                    </div>
                 </div>
                 <template id="card-template">
                     <article class="card">

@@ -1,12 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
 
-:root {
-    --educationist-green: #38b18a;
-    --educationist-blue: #16a9b6;
-}
-
 .main-body {
     margin-top: 5vh;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+}
+
+.bookmarks {
+    min-width: 300px;
 }
 
 .filter {
@@ -14,11 +18,11 @@
     justify-content: center;
     display: flex;
     flex-direction: row;
-    min-width: 300px;
     margin-right: 4vw;
 }
 
 #search {
+    min-width: 300px;
     margin-bottom: 4vh;
 }
 
@@ -31,7 +35,7 @@
     border-radius: 0.25em;
     width: 25px;
     height: 25px;
-    margin-left: 4vh;
+    margin-left: 20px;
 }
 
 #cards {
@@ -97,28 +101,43 @@
 #tags a,
 #tags button {
     font-weight: 700;
-    color: #7a7a8c;
+    color: var(--basic-font);
     text-transform: uppercase;
     font-size: 0.7rem;
     border: 3px solid var(--educationist-blue);
     border-radius: 2rem;
     padding: 0.2rem 0.65rem;
+    background-color: var(--invert);
 }
 
 #tags a:hover,
 #tags button:hover {
-    background: linear-gradient(
-        90deg,
-        var(--educationist-blue),
-        var(--educationist-green)
-    );
+    background: var(--educationist-green);
     color: white;
     border-color: white;
 }
 
+#tags img {
+    color: white;
+    width: 0.8rem;
+}
+
+.temp {
+    display: none;
+}
+
 @media (max-width: 950px) {
-    .filter {
+    .controls {
+        display: block;
+        text-align: center;
+    }
+
+    #search {
         min-width: 200px;
+    }
+
+    .bookmarks {
+        min-width: 245px;
     }
 
     .invisible {

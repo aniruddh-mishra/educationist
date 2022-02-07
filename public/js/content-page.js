@@ -1,8 +1,20 @@
 const params = new URLSearchParams(window.location.search)
 var documentID = params.get('id')
+var bookmarks = []
 
 async function getData() {
     const content = await db.collection('content').doc(documentID).get()
+    const user = await db
+        .collection('users')
+        .doc(localStorage.getItem('uid'))
+        .get()
+    bookmarks = user.data().bookmarks
+    if (bookmarks != undefined && bookmarks.includes(documentID)) {
+        document.getElementById('bookmark-button').innerHTML = 'Unbookmark'
+        document
+            .getElementById('bookmark-button')
+            .setAttribute('onclick', 'unBookmark(this)')
+    }
     const data = content.data()
     document.getElementById('preview').setAttribute('src', data.link)
     document.getElementById('expand').setAttribute(
@@ -76,3 +88,31 @@ function handleForm(event) {
     event.preventDefault()
 }
 form.addEventListener('submit', handleForm)
+
+async function bookmark(button) {
+    button.disabled = true
+    await db
+        .collection('users')
+        .doc(localStorage.getItem('uid'))
+        .update({
+            bookmarks: firebase.firestore.FieldValue.arrayUnion(documentID),
+        })
+    button.setAttribute('onclick', 'unBookmark(this)')
+    button.innerHTML = 'UnBookmark'
+    button.disabled = false
+    token('Bookmarked this item!')
+}
+
+async function unBookmark(button) {
+    button.disabled = true
+    await db
+        .collection('users')
+        .doc(localStorage.getItem('uid'))
+        .update({
+            bookmarks: firebase.firestore.FieldValue.arrayRemove(documentID),
+        })
+    button.setAttribute('onclick', 'bookmark(this)')
+    button.innerHTML = 'Bookmark'
+    button.disabled = false
+    token('Removed this item from bookmark collection!')
+}
