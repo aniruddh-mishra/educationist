@@ -136,7 +136,7 @@ async function placeData(data, dates, subjects, attendance) {
     if (dates) {
         createBlock(
             'Volunteer Hours',
-            [Number((dates[2] / 60).toFixed(1)) + ' Hours', 'More information can be found in the classes tab.'],
+            [Number((dates[2] / 60).toFixed(1)) + ' Hours', '<a style="text-decoration: underline" src="/classes">More information</a>'],
             'small'
         )
     }
