@@ -8,7 +8,8 @@
 
 .account,
 .matches,
-.classes {
+.classes,
+.my-requests {
     margin-bottom: 5vh;
     display: grid;
     grid-gap: 3vw;
@@ -42,7 +43,8 @@
 }
 
 .end-class,
-.log {
+.log,
+.delete-request-btn {
     color: var(--invert);
     padding: 5px 15px 5px 15px;
     font-family: Poppins;
@@ -62,7 +64,8 @@
     box-shadow: 0 0 10px orange;
 }
 
-.log {
+.log,
+.delete-request-btn {
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
 }

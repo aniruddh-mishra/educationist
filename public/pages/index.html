@@ -66,48 +66,8 @@
                 <div class="account"></div>
                 <div class="match-instructions"></div>
                 <div class="matches"></div>
-                <div id="request-certificate" class="upload temp">
-                    <h3>Request Certificate</h3>
-                    <p>
-                        If you have an existing form you would like us to sign,
-                        upload it below. We also have certificates that we can
-                        send you if you do not upload a file. Choose what dates
-                        you want us to record in your certificate. If you want
-                        your certificate signed, get a template with the button
-                        below, and upload it to get signed.
-                    </p>
-                    <p>Starting Date</p>
-                    <input
-                        id="start-date"
-                        style="margin-bottom: 2vh"
-                        type="date"
-                    />
-                    <p>Ending Date</p>
-                    <input
-                        id="end-date"
-                        style="margin-bottom: 2vh"
-                        type="date"
-                    />
-                    <input
-                        onchange="uploadFile()"
-                        type="file"
-                        id="file"
-                        style="display: none"
-                    />
-                    <button onclick="certificate()" id="certificate-btn">
-                        Certificate
-                    </button>
-                    <button onclick="upload()" id="file-btn">
-                        Upload File
-                    </button>
-                    <progress
-                        class="temp"
-                        style="margin-top: 5vh"
-                        value="0"
-                        max="100"
-                        id="progress"
-                    ></progress>
-                </div>
+                <div class="my-instructions"></div>
+                <div class="my-requests"></div>
                 <div class="matching-request temp">
                     <h2>Request a Tutor</h2>
                     <p>

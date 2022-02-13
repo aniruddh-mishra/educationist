@@ -170,6 +170,7 @@ async function placeData(data, dates, subjects, attendance) {
     if (data.role != 'student') {
         matchRequests(subjects)
     }
+    myRequests()
 
     document.querySelector('.matching-request').classList.remove('temp')
 }
@@ -195,6 +196,8 @@ function createBlock(title, fields, size, blockId) {
         object = '.big-blocks'
     } else if (size === 'small request') {
         object = '.matches'
+    } else if (size === 'small myRequest') {
+        object = '.my-requests'
     } else if (size.includes('small class')) {
         object = '.classes'
     }
@@ -337,6 +340,59 @@ async function match() {
         token('Student matched. Check your email!')
         requestBlock.remove()
     }
+}
+
+async function myRequests() {
+    return new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', '/my-requests', true)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.send(
+            JSON.stringify({
+                eid: localStorage.getItem('eid'),
+            })
+        )
+        xhr.onload = function () {
+            const data = JSON.parse(this.response)
+            if (data.length === 0) {
+                document.querySelector('.my-requests').remove()
+                document.querySelector('.my-instructions').remove()
+                return resolve('Done')
+            }
+            const information = document.createElement('h3')
+            information.innerText = 'Requested Classes'
+            document.querySelector('.my-instructions').appendChild(information)
+            const instructions = document.createElement('p')
+            instructions.innerText =
+                'These are classes you have already requested. You can delete requests by clicking the delete button.'
+            document.querySelector('.my-instructions').appendChild(instructions)
+            var counter = 1
+            for (request of data) {
+                createBlock(
+                    'Request #' + counter,
+                    [
+                        'Subject: ' +
+                            request[0].subject.charAt(0).toUpperCase() +
+                            request[0].subject.slice(1),
+                        '<button class="delete-request-btn" onclick="deleteRequest(this.parentNode.parentNode)"> Delete Request </button>',
+                    ],
+                    'small myRequest',
+                    request[1]
+                )
+                counter += 1
+            }
+            spacer = document.createElement('div')
+            spacer.className = 'spacer'
+            document.querySelector('.my-requests').appendChild(spacer)
+            resolve('Done')
+        }
+    })
+}
+
+async function deleteRequest(e) {
+    e.remove()
+    await db.collection('requests').doc(e.id).delete()
+    token('Deleted Request')
 }
 
 function validate(element) {

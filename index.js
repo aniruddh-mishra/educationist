@@ -195,6 +195,24 @@ app.post('/match-requests', async (request, response) => {
     return response.send(responseObject)
 })
 
+// Returns matching requests to tutors
+app.post('/my-requests', async (request, response) => {
+    // Defines given variables
+    const eid = request.body.eid
+
+    // Fetches all the requests the tutor can teach and ensures the tutor does not recieve their own requests
+    var requests = await db.collection('requests').where('eid', '==', eid).get()
+
+    // Configures data in a list to return
+    var responseObject = []
+    requests.forEach((doc) => {
+        responseObject.push([doc.data(), doc.id])
+    })
+
+    // Sends back a list of data
+    return response.send(responseObject)
+})
+
 // Creates a match between tutor and student
 app.post('/match-commit', async (request, response) => {
     // Defines given variables
