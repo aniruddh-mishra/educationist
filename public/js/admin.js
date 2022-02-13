@@ -235,12 +235,14 @@ async function certificates() {
         titleBlock.innerHTML = 'Certificate Request'
         block.append(titleBlock)
         const data = doc.data()
-        const minutes = await minutesGet(
+        const [minutes, email, eid] = await minutesGet(
             data.uid,
             data.start.toDate(),
             data.end.toDate()
         )
         const minutesInfo = 'Minutes: ' + minutes
+        const emailInfo = 'Email: ' + email
+        const eidInfo = 'Username: ' + eid
         var ref = storageRef
             .child('certificates')
             .child(data.uid)
@@ -255,7 +257,9 @@ async function certificates() {
             '<button onclick="uploadCertificate(this.parentNode.parentNode, \'' +
             data.uid +
             '\')" class="certificate-btn">Upload Signed</button>'
-        fields = [minutesInfo, button, button2]
+        const button3 =
+            '<button onclick="deleteCertificate(this.parentNode.parentNode)" class="certificate-btn">Delete Certificate</button>'
+        fields = [minutesInfo, emailInfo, eidInfo, button, button2, button3]
         for (field of fields) {
             var fieldBlock = document.createElement('p')
             fieldBlock.className = 'block-field'
@@ -276,11 +280,17 @@ async function minutesGet(uid, start, end) {
             minutes += entry.minutes
         }
     }
-    return minutes
+    return [minutes, user.email, user.eid]
 }
 
 function downloadCertificate(url) {
     window.open(url)
+}
+
+async function deleteCertificate(e) {
+    e.remove()
+    await db.collection('certificates').doc(e.id).delete()
+    token('Removed this certificate request!')
 }
 
 async function uploadCertificate(e, uid) {
