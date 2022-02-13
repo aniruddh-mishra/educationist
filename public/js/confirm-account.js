@@ -54,10 +54,17 @@ async function upload() {
             token('This confirm token was already used to create an account.')
             setTimeout(() => {
                 window.location.replace('/')
-            }, 1000)
-        } else {
+            }, 5000)
+        } else if (confirm == 'false') {
             token('This username is already used!')
             document.getElementById('submit').disabled = false
+        } else if (confirm == 'expire') {
+            token('This token expired. Please try to create an account again!')
+            setTimeout(() => {
+                window.location.replace('/register')
+            }, 5000)
+        } else {
+            token('Something went wrong: ', confirm)
         }
     }
 }

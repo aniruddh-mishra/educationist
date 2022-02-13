@@ -376,7 +376,7 @@ app.post('/create', async (request, response) => {
 
     if (data.data().expire.toDate() <= Date.now()) {
         await db.collection('confirmations').doc(data.id).delete()
-        return response.send('error')
+        return response.send('expired')
     }
 
     // Returns data from confirmation code
