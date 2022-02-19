@@ -4,6 +4,19 @@ var bookmarks = []
 
 async function getData() {
     const content = await db.collection('content').doc(documentID).get()
+    if (content.data() === undefined) {
+        document.querySelector('.main-body').innerHTML = ''
+        const h1 = document.createElement('h1')
+        h1.innerHTML = 'There is no content with the id given...'
+        const information = document.createElement('p')
+        information.innerHTML = 'Make sure you are at the correct URL.'
+        document.querySelector('.main-body').appendChild(h1)
+        document.querySelector('.main-body').appendChild(information)
+
+        document.querySelector('.main-body').style.display = 'block'
+        document.querySelector('.main-body').style.textAlign = 'center'
+        return
+    }
     const user = await db
         .collection('users')
         .doc(localStorage.getItem('uid'))

@@ -710,43 +710,47 @@ async function exportData() {
             }
         }
     }
+    exports = []
     if (tutorLogs.length > 1) {
-        downloadCSV(tutorLogs, 'Tutor Logs.csv')
+        exports.push(downloadCSV(tutorLogs, 'Tutor Logs.csv'))
     }
     if (adminLogs.length > 1) {
-        setTimeout(() => {
-            downloadCSV(adminLogs, 'Admin Logs.csv')
-        }, 1000)
+        exports.push(downloadCSV(adminLogs, 'Admin Logs.csv'))
     }
     if (contentLogs.length > 1) {
-        setTimeout(() => {
-            downloadCSV(contentLogs, 'Content Curation Logs.csv')
-        }, 2000)
+        exports.push(downloadCSV(contentLogs, 'Content Curation Logs.csv'))
     }
+    zipExports(exports)
 }
 
 function downloadCSV(logs, title) {
-    console.log(logs)
-    var csv =
-        'data:text/csv;charset=utf-8,' +
-        logs
-            .map((e) => {
-                console.log(e)
-                if (logs.indexOf(e) > 0) {
-                    return logs.indexOf(e) + ',' + e.join(',')
-                } else {
-                    return e.join(',')
-                }
-            })
-            .join('\n')
-    var encodedUri = encodeURI(csv)
-    var link = document.createElement('a')
-    link.style.display = 'none'
-    link.setAttribute('href', encodedUri)
-    link.setAttribute('download', title)
-    document.body.appendChild(link)
-    link.click()
-    link.remove()
+    var csv = logs
+        .map((e) => {
+            if (logs.indexOf(e) > 0) {
+                return logs.indexOf(e) + ',' + e.join(',')
+            } else {
+                return e.join(',')
+            }
+        })
+        .join('\n')
+    return [title, csv]
+}
+
+function zipExports(exports) {
+    var zip = new JSZip()
+    zip = zip.folder('Volunteer Logs')
+    for (e of exports) {
+        zip.file(e[0], e[1])
+    }
+    zip.generateAsync({ type: 'base64' }).then(function (base64) {
+        var link = document.createElement('a')
+        link.style.display = 'none'
+        link.setAttribute('href', 'data:application/zip;base64,' + base64)
+        link.setAttribute('download', 'Volunteer Logs')
+        document.body.appendChild(link)
+        link.click()
+        link.remove()
+    })
 }
 
 getData()
