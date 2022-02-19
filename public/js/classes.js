@@ -663,6 +663,9 @@ async function exportData() {
     var tutorLogs = [['Entry #', 'Date', 'Minutes', 'Subject', 'Student(s)']]
     var adminLogs = [['Entry #', 'Date', 'Minutes']]
     var contentLogs = [['Entry #', 'Date', 'Minutes', 'Link to Content']]
+    var tutorMinutes = 0
+    var adminMinutes = 0
+    var contentMinutes = 0
     for (entry of entries) {
         const date = entry.date.toDate()
         if (date >= start && date <= end) {
@@ -679,6 +682,7 @@ async function exportData() {
                 if (entry.information.reference.subject === 'admin') {
                     const log = [date, entry.minutes]
                     adminLogs.push(log)
+                    adminMinutes += entry.minutes
                     continue
                 }
                 const students = entry.information.reference.students
@@ -695,10 +699,14 @@ async function exportData() {
                 const log = [
                     date,
                     entry.minutes,
-                    entry.information.reference.subject,
+                    entry.information.reference.subject
+                        .charAt(0)
+                        .toUpperCase() +
+                        entry.information.reference.subject.slice(1),
                     studentInformation,
                 ]
                 tutorLogs.push(log)
+                tutorMinutes += entry.minutes
             } else if (entry.information.type === 'content') {
                 const log = [
                     date,
@@ -707,17 +715,21 @@ async function exportData() {
                         entry.information.reference.id,
                 ]
                 contentLogs.push(log)
+                contentMinutes += entry.minutes
             }
         }
     }
     exports = []
     if (tutorLogs.length > 1) {
+        tutorLogs.push(['', tutorMinutes])
         exports.push(downloadCSV(tutorLogs, 'Tutor Logs.csv'))
     }
     if (adminLogs.length > 1) {
+        adminLogs.push(['', adminMinutes])
         exports.push(downloadCSV(adminLogs, 'Admin Logs.csv'))
     }
     if (contentLogs.length > 1) {
+        contentLogs.push(['', contentMinutes])
         exports.push(downloadCSV(contentLogs, 'Content Curation Logs.csv'))
     }
     zipExports(exports)
@@ -726,7 +738,9 @@ async function exportData() {
 function downloadCSV(logs, title) {
     var csv = logs
         .map((e) => {
-            if (logs.indexOf(e) > 0) {
+            if (logs.indexOf(e) === logs.length - 1) {
+                return 'Total, ' + e.join(',')
+            } else if (logs.indexOf(e) > 0) {
                 return logs.indexOf(e) + ',' + e.join(',')
             } else {
                 return e.join(',')
