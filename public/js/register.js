@@ -63,10 +63,14 @@ async function upload() {
     xhr.onload = function () {
         var confirm = this.response
         if (confirm == 'true') {
-            token('Please check your email to confirm this account!')
-            setTimeout(() => {
-                window.location.replace('/login')
-            }, 10000)
+            document.querySelector('.main-body').innerHTML = ''
+            const title = document.createElement('h1')
+            title.innerHTML = 'Please confirm your account to log in...'
+            const information = document.createElement('p')
+            information.innerHTML =
+                'You should have gotten an email to confirm your account. You will not be able to log in without this.'
+            document.querySelector('.main-body').appendChild(title)
+            document.querySelector('.main-body').appendChild(information)
         } else if (this.response === 'used') {
             token('This email is already taken, please use another one!')
             document.getElementById('submit').disabled = false
