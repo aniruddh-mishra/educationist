@@ -123,7 +123,7 @@ async function logClass() {
     const date = document.getElementById('date-class')
     const minutes = document.getElementById('minutes-class')
     if (minutes.value >= 300) {
-        token('You may only log 300 minutes at a time')
+        token('You may only log less than 300 minutes at a time')
         e.disabled = false
         return
     }
