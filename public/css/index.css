@@ -168,7 +168,8 @@
 }
 
 #file-btn,
-#certificate-btn {
+#certificate-btn,
+#export-btn {
     cursor: pointer;
     text-align: center;
     color: var(--invert);

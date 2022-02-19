@@ -639,4 +639,100 @@ async function createPdf(start, end) {
     return pdfBytes
 }
 
+async function exportData() {
+    const start = new Date(document.getElementById('start-date').value)
+    const end = new Date(document.getElementById('end-date').value)
+    const user = (
+        await db.collection('users').doc(localStorage.getItem('uid')).get()
+    ).data()
+    const entries = user['volunteer-entries']
+    var tutorLogs = [['Entry #', 'Date', 'Minutes', 'Subject', 'Student(s)']]
+    var adminLogs = [['Entry #', 'Date', 'Minutes']]
+    var contentLogs = [['Entry #', 'Date', 'Minutes', 'Link to Content']]
+    for (entry of entries) {
+        const date = entry.date.toDate()
+        if (date >= start && date <= end) {
+            entry.date = entry.date.toDate()
+            const date =
+                '"' +
+                month[entry.date.getUTCMonth()] +
+                ' ' +
+                entry.date.getUTCDate() +
+                ', ' +
+                entry.date.getUTCFullYear() +
+                '"'
+            if (entry.information.type === 'tutor') {
+                if (entry.information.reference.subject === 'admin') {
+                    const log = [date, entry.minutes]
+                    adminLogs.push(log)
+                    continue
+                }
+                const students = entry.information.reference.students
+                if (students != undefined) {
+                    var studentInformation = '"'
+                    for (student of students) {
+                        studentInformation += student.studentName + ', '
+                    }
+                    studentInformation = studentInformation.slice(0, -2)
+                    studentInformation += '"'
+                } else {
+                    var studentInformation = entry.information.reference.student
+                }
+                const log = [
+                    date,
+                    entry.minutes,
+                    entry.information.reference.subject,
+                    studentInformation,
+                ]
+                tutorLogs.push(log)
+            } else if (entry.information.type === 'content') {
+                const log = [
+                    date,
+                    entry.minutes,
+                    'https://dashboard.educationisttutoring.org/content/document?id=' +
+                        entry.information.reference.id,
+                ]
+                contentLogs.push(log)
+            }
+        }
+    }
+    if (tutorLogs.length > 1) {
+        downloadCSV(tutorLogs, 'Tutor Logs.csv')
+    }
+    if (adminLogs.length > 1) {
+        setTimeout(() => {
+            downloadCSV(adminLogs, 'Admin Logs.csv')
+        }, 1000)
+    }
+    if (contentLogs.length > 1) {
+        setTimeout(() => {
+            downloadCSV(contentLogs, 'Content Curation Logs.csv')
+        }, 2000)
+    }
+}
+
+function downloadCSV(logs, title) {
+    console.log(logs)
+    var csv =
+        'data:text/csv;charset=utf-8,' +
+        logs
+            .map((e) => {
+                console.log(e)
+                if (logs.indexOf(e) > 0) {
+                    return logs.indexOf(e) + ',' + e.join(',')
+                } else {
+                    return e.join(',')
+                }
+            })
+            .join('\n')
+    var encodedUri = encodeURI(csv)
+    var link = document.createElement('a')
+    link.style.display = 'none'
+    link.setAttribute('href', encodedUri)
+    link.setAttribute('download', title)
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+}
+
 getData()
