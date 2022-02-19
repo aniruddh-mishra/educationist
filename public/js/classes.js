@@ -640,6 +640,20 @@ async function createPdf(start, end) {
 }
 
 async function exportData() {
+    if (
+        document.getElementById('start-date').value === '' ||
+        document.getElementById('end-date').value === ''
+    ) {
+        token('You need to state what dates you want a certificate in')
+        return
+    } else if (
+        document.getElementById('start-date').value >
+        document.getElementById('end-date').value
+    ) {
+        token('The end date needs to be after the start date.')
+        return
+    }
+    document.getElementById('export-btn').disabled = true
     const start = new Date(document.getElementById('start-date').value)
     const end = new Date(document.getElementById('end-date').value)
     const user = (
