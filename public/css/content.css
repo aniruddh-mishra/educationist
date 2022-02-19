@@ -109,9 +109,8 @@
     background-color: var(--invert);
 }
 
-#tags a:hover,
 #tags button:hover {
-    background: var(--educationist-green);
+    opacity: 80%;
     color: white;
     border-color: white;
 }
