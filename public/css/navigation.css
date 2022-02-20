@@ -101,6 +101,10 @@ select:focus {
     border: 1px solid var(--educationist-green);
 }
 
+select option {
+    background-color: white;
+}
+
 .invisible {
     visibility: hidden;
 }
