@@ -134,4 +134,10 @@
         width: 40vw;
         height: 20vh;
     }
+
+    #bookmark-button {
+        display: block;
+        margin-left: 0;
+        margin-top: 2vh;
+    }
 }
