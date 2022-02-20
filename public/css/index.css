@@ -170,7 +170,8 @@
 
 #file-btn,
 #certificate-btn,
-#export-btn {
+#export-btn,
+#easter-egg1 {
     cursor: pointer;
     text-align: center;
     color: var(--invert);
@@ -187,6 +188,11 @@
     display: block;
     width: 100%;
     max-width: 200px;
+}
+
+#easter-egg1 {
+    margin-top: 2%;
+    margin-bottom: 2%;
 }
 
 .upload {

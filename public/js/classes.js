@@ -767,4 +767,15 @@ function zipExports(exports) {
     })
 }
 
+function allTime() {
+    var date = new Date()
+    var start = new Date(2020, 05, 01)
+    document.getElementById('start-date').value = start
+        .toISOString()
+        .substring(0, 10)
+    document.getElementById('end-date').value = date
+        .toISOString()
+        .substring(0, 10)
+}
+
 getData()
