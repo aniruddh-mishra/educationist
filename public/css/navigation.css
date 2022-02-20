@@ -102,7 +102,7 @@ select:focus {
 }
 
 select option {
-    background-color: black;
+    color: black;
 }
 
 .invisible {
