@@ -26,6 +26,7 @@ async function classInfo() {
     }
     if (tutor === localStorage.getItem('uid')) {
         if (active) {
+            document.getElementById('tutor-how-to').classList.remove('temp')
             document.getElementById('instructions').innerHTML =
                 'Since you are the tutor of this class, you can click on students you want to remove from the class. You can also log your hours with the menu below. Click on students that attended the class to log hours.'
         }
@@ -107,9 +108,11 @@ async function selectPerson(studentId) {
     }
     if (selectedStudents.length > 0) {
         document.getElementById('action-selected').classList.remove('temp')
+        document.getElementById('tutor-how-to').classList.add('temp')
         document.getElementById('tutor-action').classList.remove('temp')
     } else {
         document.getElementById('action-selected').classList.add('temp')
+        document.getElementById('tutor-how-to').classList.remove('temp')
         document.getElementById('tutor-action').classList.add('temp')
     }
 }
