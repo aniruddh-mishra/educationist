@@ -916,7 +916,7 @@ app.post('/announce', async (request, response) => {
             __dirname + '/public/emails/update.html',
             options
         )
-        await fetch(process.env['DISCORD_BOT'] + 'announce/', {
+        fetch(process.env['DISCORD_BOT'] + 'announce/', {
             method: 'POST',
             body: JSON.stringify({
                 requestId: docId,
@@ -980,7 +980,7 @@ app.post('/announce', async (request, response) => {
                 __dirname + '/public/emails/update.html',
                 options
             )
-            await fetch(process.env['DISCORD_BOT'] + 'announce/', {
+            fetch(process.env['DISCORD_BOT'] + 'announce/', {
                 method: 'POST',
                 body: JSON.stringify({
                     requestId: docId,
