@@ -11,6 +11,7 @@ const { secretKeys, processURL } = require(__dirname + '/setup.js')
 const rateLimit = require('express-rate-limit')
 const algoliasearch = require('algoliasearch')
 const { response } = require('express')
+const fetch = require('node-fetch')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
@@ -878,13 +879,13 @@ app.post('/announce', async (request, response) => {
     const docId = request.body.id
 
     // Retrieves doc
-    const message = (
-        await db.collection('announcements').doc(docId).get()
-    ).data().message
+    var message = (await db.collection('announcements').doc(docId).get()).data()
 
     if (message === undefined) {
         return response.send('false')
     }
+
+    message = message.message
 
     // Retrieves Users to Send Email to
     if (role === 'all') {
@@ -915,6 +916,14 @@ app.post('/announce', async (request, response) => {
             __dirname + '/public/emails/update.html',
             options
         )
+        fetch(process.env['DISCORD_BOT'] + 'announce/', {
+            method: 'POST',
+            body: JSON.stringify({
+                requestId: docId,
+                audience: role,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+        })
         return
     } else if (users.empty) {
         return response.send('false')
@@ -971,6 +980,14 @@ app.post('/announce', async (request, response) => {
                 __dirname + '/public/emails/update.html',
                 options
             )
+            fetch(process.env['DISCORD_BOT'] + 'announce/', {
+                method: 'POST',
+                body: JSON.stringify({
+                    requestId: docId,
+                    audience: role,
+                }),
+                headers: { 'Content-Type': 'application/json' },
+            })
         } catch (err) {
             // Some sort of error for email not being sent
             console.log('Reset Email Error: ' + err)
