@@ -889,12 +889,37 @@ app.post('/announce', async (request, response) => {
     // Retrieves Users to Send Email to
     if (role === 'all') {
         var users = await db.collection('users').get()
+    } else if (role === 'test') {
+        var users = 'test'
     } else {
         var users = await db.collection('users').where('role', '==', role).get()
     }
-    if (users.empty) {
+
+    if (users === 'test') {
+        // Configures email
+        const options = [
+            {
+                key: 'message1',
+                text:
+                    message +
+                    ' If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
+                    docId +
+                    '"> click here.</a>',
+            },
+        ]
+
+        // Sends the email
+        await sendMail(
+            'educationist@educationisttutoring.org',
+            'Educationist Announcement',
+            __dirname + '/public/emails/update.html',
+            options
+        )
+        return
+    } else if (users.empty) {
         return response.send('false')
     }
+
     var emails = []
     users.forEach((doc) => {
         if (!emails.includes(doc.data().email)) {
