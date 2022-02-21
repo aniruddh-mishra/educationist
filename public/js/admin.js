@@ -50,6 +50,7 @@ async function setUp() {
     })
 }
 
+document.querySelector('body').style.display = 'block'
 setUp()
 certificates()
 

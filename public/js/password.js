@@ -39,6 +39,7 @@ function check(password, redirect) {
             }
             return
         }
+        document.querySelector('body').style.display = 'none'
         document.querySelector('body').innerHTML = this.response
         var s = document.createElement('script')
         s.setAttribute('src', '../js/root.js')
