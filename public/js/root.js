@@ -94,6 +94,7 @@ function accountPage() {
 
 function logout() {
     localStorage.clear()
+    document.cookie = 'admin=; path=/;'
     firebase.auth().signOut()
 }
 
