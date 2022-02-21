@@ -955,6 +955,15 @@ app.post('/announce', async (request, response) => {
     }
 })
 
+// Returns admin page based on password check
+app.post('/admin', (request, response) => {
+    const password = request.body.password
+    if (password === process.env['ADMIN_PASSWORD']) {
+        return response.sendFile('admin-file.html', pages)
+    }
+    return response.send('false')
+})
+
 // Bans user based on request
 app.post('/ban', async (request, response) => {
     // Defines given variables
