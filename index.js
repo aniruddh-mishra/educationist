@@ -104,6 +104,18 @@ app.get('/newsletter/:issue', (request, response) => {
     return response.send(data)
 })
 
+app.get('/announcements/:issue', async (request, response) => {
+    const issue = request.params.issue
+    var data = fs.readFileSync('public/emails/update.html', 'utf-8')
+    var message = (await db.collection('announcements').doc(issue).get()).data()
+    if (message === undefined) {
+        return response.send('We could not find that page')
+    }
+    message = message.message
+    data = data.replace(new RegExp('message1', 'g'), message)
+    return response.send(data)
+})
+
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
@@ -874,8 +886,6 @@ app.post('/announce', async (request, response) => {
         return response.send('false')
     }
 
-    console.log(message)
-
     // Retrieves Users to Send Email to
     if (role === 'all') {
         var users = await db.collection('users').get()
@@ -919,7 +929,11 @@ app.post('/announce', async (request, response) => {
     const options = [
         {
             key: 'message1',
-            text: message,
+            text:
+                message +
+                ' If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
+                docId +
+                '"> click here.</a>',
         },
     ]
 
