@@ -19,6 +19,10 @@
     scrollbar-width: none;
 }
 
+.account::-webkit-scrollbar {
+    display: none;
+}
+
 .class-merge {
     display: flex;
     flex-direction: column;
