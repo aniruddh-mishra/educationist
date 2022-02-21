@@ -335,3 +335,36 @@ async function uploadCertificateFinish(request, uid) {
         token(this.response)
     }
 }
+
+async function announce() {
+    const message = document.getElementById('email-send').value
+    const recipients = document.getElementById('recipients').value
+    if (recipients === 'none') {
+        token(
+            'Make sure to change the recipients to whom you want to send this announcement.'
+        )
+        return
+    }
+    var id = await db.collection('announcements').add({
+        timestamp: firebase.firestore.Timestamp.fromMillis(Date.now()),
+        message: message,
+        eid: localStorage.getItem('eid'),
+    })
+    id = id.id
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/announce', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+        JSON.stringify({
+            role: recipients,
+            id: id,
+        })
+    )
+    xhr.onload = function () {
+        if (this.response === 'false') {
+            token('Something went wrong, might need to check your outbox')
+            return
+        }
+        token('Emails sent!')
+    }
+}

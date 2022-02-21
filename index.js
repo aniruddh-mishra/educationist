@@ -848,12 +848,96 @@ app.post('/certificate', async (request, response) => {
             files
         )
 
+        await db.collection('certificates').doc(requestId).delete()
+
         return response.send('Done!')
     } catch (err) {
         // Some sort of error for email not being sent
         console.log('Reset Email Error: ' + err)
 
         return response.send('Failure')
+    }
+})
+
+// Announces Message Using Template
+app.post('/announce', async (request, response) => {
+    //Defines given variables
+    const role = request.body.role
+    const docId = request.body.id
+
+    // Retrieves doc
+    const message = (
+        await db.collection('announcements').doc(docId).get()
+    ).data().message
+
+    if (message === undefined) {
+        return response.send('false')
+    }
+
+    console.log(message)
+
+    // Retrieves Users to Send Email to
+    if (role === 'all') {
+        var users = await db.collection('users').get()
+    } else {
+        var users = await db.collection('users').where('role', '==', role).get()
+    }
+    if (users.empty) {
+        return response.send('false')
+    }
+    var emails = []
+    users.forEach((doc) => {
+        if (!emails.includes(doc.data().email)) {
+            emails.push(doc.data().email)
+        }
+    })
+
+    // Groups users to batch them into bcc emails
+    var final = []
+    var temp = []
+    for (i = 0; i < emails.length; i++) {
+        if (i === emails.length - 1) {
+            if (temp.length >= 100) {
+                final.push(temp)
+                final.push([emails[i]])
+            } else {
+                temp.push(emails[i])
+                final.push(temp)
+            }
+            break
+        }
+        if (temp.length < 100) {
+            temp.push(emails[i])
+            continue
+        }
+        final.push(temp)
+        temp = []
+        temp.push(emails[i])
+    }
+
+    // Configures email
+    const options = [
+        {
+            key: 'message1',
+            text: message,
+        },
+    ]
+
+    for (batch of final) {
+        try {
+            // Sends the email
+            await sendMail(
+                batch,
+                'Educationist Announcement',
+                __dirname + '/public/emails/update.html',
+                options
+            )
+        } catch (err) {
+            // Some sort of error for email not being sent
+            console.log('Reset Email Error: ' + err)
+
+            return response.send('false')
+        }
     }
 })
 

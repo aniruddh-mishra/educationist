@@ -29,7 +29,7 @@ function sendMail(recipient, subject, fileName, options, files) {
     // Changes sender info
     var mailOptions = {
         from: 'Educationist Tutoring <educationist@educationisttutoring.org>',
-        to: recipient,
+        bcc: recipient,
         subject: subject,
         html: data,
     }
