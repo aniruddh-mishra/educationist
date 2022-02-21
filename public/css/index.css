@@ -16,11 +16,6 @@
     padding-top: 10px;
     grid-auto-flow: column;
     overflow-x: auto;
-    scrollbar-width: none;
-}
-
-.account::-webkit-scrollbar {
-    display: none;
 }
 
 .class-merge {
