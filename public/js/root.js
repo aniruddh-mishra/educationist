@@ -69,7 +69,11 @@ firebase.auth().onAuthStateChanged(async (user) => {
             ) {
                 return
             }
-            window.location.replace('/login?path=' + window.location.pathname)
+            window.location.replace(
+                '/login?path=' +
+                    window.location.pathname +
+                    window.location.search
+            )
             return
         }
     }
