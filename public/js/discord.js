@@ -21,10 +21,8 @@ if (!code) {
         if (this.response === 'false') {
             document.querySelector('.main-body').innerHTML =
                 'Something went wrong, please try again later... Redirecting'
-            setTimeout(() => {
-                window.location.replace('/')
-            }, 5000)
+        } else {
+            window.location.replace('/')
         }
-        window.location.replace('/')
     }
 }
