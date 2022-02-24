@@ -1013,6 +1013,7 @@ app.post('/announce', async (request, response) => {
             return response.send('false')
         }
     }
+    return response.send('true')
 })
 
 // Returns admin page based on password check
