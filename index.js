@@ -983,7 +983,7 @@ app.post('/announce', async (request, response) => {
             key: 'message1',
             text:
                 message +
-                ' If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
+                '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
                 docId +
                 '"> click here.</a>',
         },
