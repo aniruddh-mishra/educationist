@@ -1036,7 +1036,7 @@ app.post('/discord/auth', async (request, response) => {
         },
         body: JSON.stringify({ code: code, uid: uid }),
     })
-    response2 = response2.text()
+    response2 = await response2.text()
     console.log(response2)
     if (response2 != 'false') return response.send('false')
     return response.send('true')
