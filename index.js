@@ -117,6 +117,24 @@ app.get('/announcements/:issue', async (request, response) => {
     return response.send(data)
 })
 
+app.get('/discord', (request, response) => {
+    const url =
+        'https://discord.com/api/oauth2/authorize?client_id=' +
+        process.env['CLIENT_ID'] +
+        '&scope=identify%20guilds.join&response_type=code&redirect_uri=' +
+        encodeURIComponent(processURL + '/discord/auth')
+    response.redirect(url)
+})
+
+// MAKE IT A POST REQUEST TO GET THIS STUFF, SEND CODE TO CLIENT
+app.get('/discord/auth', async (request, response) => {
+    return response.sendFile('discord.html', pages)
+})
+
+app.get('/discord/token', async (request, response) => {
+    return response.send('hi')
+})
+
 app.get('/css/:filename', (request, response) => {
     // Sets headers
     response.setHeader('Cache-Control', 'public, max-age=1')
@@ -1004,6 +1022,25 @@ app.post('/admin', (request, response) => {
         return response.sendFile('admin-file.html', pages)
     }
     return response.send('false')
+})
+
+// Discord Auth from Code
+app.post('/discord/auth', async (request, response) => {
+    const code = request.body.code
+    const uid = request.body.uid
+    if (!code || !uid) return response.send('false')
+    try {
+        await fetch(process.env['DISCORD_BOT'] + 'join', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ code: code, uid: uid }),
+        })
+    } catch {
+        return response.send('false')
+    }
+    return response.send('true')
 })
 
 // Bans user based on request

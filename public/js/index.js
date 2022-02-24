@@ -20,6 +20,15 @@ const month = [
 async function getData() {
     const uid = localStorage.getItem('uid')
     const userData = await db.collection('users').doc(uid).get()
+    if (userData.data().discord === undefined) {
+        const button = document.createElement('button')
+        button.innerHTML = 'Join Our Discord!'
+        button.id = 'discord-btn'
+        button.setAttribute('onclick', 'discord()')
+        document.getElementById('discord-container').appendChild(button)
+    } else {
+        document.getElementById('discord-container').remove()
+    }
     localStorage.setItem('timezone', userData.data().timezone)
     localStorage.setItem('role', userData.data().role)
     localStorage.setItem('name', userData.data().name)
@@ -393,6 +402,10 @@ async function deleteRequest(e) {
     e.remove()
     await db.collection('requests').doc(e.id).delete()
     token('Deleted Request')
+}
+
+function discord() {
+    window.location.replace('/discord')
 }
 
 function validate(element) {

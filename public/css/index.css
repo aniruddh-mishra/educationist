@@ -170,7 +170,8 @@
 #file-btn,
 #certificate-btn,
 #export-btn,
-#easter-egg1 {
+#easter-egg1,
+#discord-btn {
     cursor: pointer;
     text-align: center;
     color: var(--invert);
