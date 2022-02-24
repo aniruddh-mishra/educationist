@@ -1029,18 +1029,15 @@ app.post('/discord/auth', async (request, response) => {
     const code = request.body.code
     const uid = request.body.uid
     if (!code || !uid) return response.send('false')
-    try {
-        const response2 = await fetch(process.env['DISCORD_BOT'] + 'join', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code: code, uid: uid }),
-        })
-        if (response2 === 'false') return response.send('false')
-    } catch {
-        return response.send('false')
-    }
+    const response2 = await fetch(process.env['DISCORD_BOT'] + 'join', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code: code, uid: uid }),
+    })
+    console.log(response2)
+    if (response2 != 'false') return response.send('false')
     return response.send('true')
 })
 
