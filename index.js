@@ -996,12 +996,12 @@ app.post('/announce', async (request, response) => {
     for (batch of final) {
         try {
             // Sends the email
-            await sendMail(
-                batch,
-                'Educationist Announcement',
-                __dirname + '/public/emails/update.html',
-                options
-            )
+            // await sendMail(
+            //     batch,
+            //     'Educationist Announcement',
+            //     __dirname + '/public/emails/update.html',
+            //     options
+            // )
         } catch (err) {
             // Some sort of error for email not being sent
             console.log('Reset Email Error: ' + err)
