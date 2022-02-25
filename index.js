@@ -98,6 +98,10 @@ app.get('/class/:classId', async (request, response) => {
     response.sendFile('class.html', pages)
 })
 
+app.get('/unsubscribe', async (request, response) => {
+    response.sendFile('unsubscribe.html', pages)
+})
+
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
     var data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')
