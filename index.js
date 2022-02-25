@@ -925,7 +925,7 @@ app.post('/announce', async (request, response) => {
                 key: 'message1',
                 text:
                     message +
-                    ' If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
+                    '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
                     docId +
                     '"> click here.</a>',
             },
@@ -996,12 +996,12 @@ app.post('/announce', async (request, response) => {
     for (batch of final) {
         try {
             // Sends the email
-            // await sendMail(
-            //     batch,
-            //     'Educationist Announcement',
-            //     __dirname + '/public/emails/update.html',
-            //     options
-            // )
+            await sendMail(
+                batch,
+                'Educationist Announcement',
+                __dirname + '/public/emails/update.html',
+                options
+            )
         } catch (err) {
             // Some sort of error for email not being sent
             console.log('Reset Email Error: ' + err)
