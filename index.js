@@ -938,7 +938,7 @@ app.post('/announce', async (request, response) => {
             __dirname + '/public/emails/update.html',
             options
         )
-        fetch(process.env['DISCORD_BOT'] + 'announce/', {
+        await fetch(process.env['DISCORD_BOT'] + 'announce/', {
             method: 'POST',
             body: JSON.stringify({
                 requestId: docId,
@@ -1002,14 +1002,6 @@ app.post('/announce', async (request, response) => {
                 __dirname + '/public/emails/update.html',
                 options
             )
-            fetch(process.env['DISCORD_BOT'] + 'announce/', {
-                method: 'POST',
-                body: JSON.stringify({
-                    requestId: docId,
-                    audience: role,
-                }),
-                headers: { 'Content-Type': 'application/json' },
-            })
         } catch (err) {
             // Some sort of error for email not being sent
             console.log('Reset Email Error: ' + err)
@@ -1017,6 +1009,14 @@ app.post('/announce', async (request, response) => {
             return response.send('false')
         }
     }
+    await fetch(process.env['DISCORD_BOT'] + 'announce/', {
+        method: 'POST',
+        body: JSON.stringify({
+            requestId: docId,
+            audience: role,
+        }),
+        headers: { 'Content-Type': 'application/json' },
+    })
     return response.send('true')
 })
 
