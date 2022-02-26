@@ -63,7 +63,11 @@ async function interview(accept) {
     }
     var snapshot = await db
         .collection('users')
-        .where('eid', '==', document.getElementById('eid').value.trim())
+        .where(
+            'eid',
+            '==',
+            lowerCase(document.getElementById('eid').value.trim())
+        )
         .get()
     if (snapshot.empty) {
         token('That username does not seem to exist.')
@@ -147,14 +151,15 @@ async function search(e) {
     e.disabled = true
     document.querySelector('.user-data').innerHTML = ''
     if (e.id === 'search-btn') {
-        var email = document.getElementById('email').value
-        email = email.charAt(0).toLowerCase() + email.slice(1)
+        var email = lowerCase(document.getElementById('email').value.trim())
         var snapshot = await db
             .collection('users')
             .where('email', '==', email)
             .get()
     } else {
-        var username = document.getElementById('username').value.trim()
+        var username = lowerCase(
+            document.getElementById('username').value.trim()
+        )
         var snapshot = await db
             .collection('users')
             .where('eid', '==', username)

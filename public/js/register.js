@@ -13,7 +13,7 @@ async function upload() {
 
     name = document.getElementById('name').value
     birthday = new Date(document.getElementById('birthday').value)
-    email = document.getElementById('email').value
+    email = lowerCase(document.getElementById('email').value.trim())
     role = document.getElementById('role').value
     timezone = document.getElementById('timezone').value
 

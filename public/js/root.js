@@ -182,6 +182,14 @@ function lightmode() {
     }
 }
 
+function lowerCase(string) {
+    var newString = ''
+    for (character of string) {
+        newString += character.toLowerCase()
+    }
+    return newString
+}
+
 window.addEventListener('load', () => {
     const mode = localStorage.getItem('lightmode')
     if (mode === 'true') {

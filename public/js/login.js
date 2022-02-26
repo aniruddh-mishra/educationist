@@ -7,7 +7,7 @@ function login() {
         .classList.replace('loader-none', 'loader-container')
 
     // Gets the values of eid and password
-    var eid = document.getElementById('eid').value
+    var eid = lowerCase(document.getElementById('eid').value.trim())
     var password = document.getElementById('password').value
 
     // Ensures fields are filled in

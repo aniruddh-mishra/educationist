@@ -337,8 +337,8 @@ async function match() {
     xhr.send(
         JSON.stringify({
             tutor: localStorage.getItem('uid'),
-            subject: subject,
-            student: eid,
+            subject: lowercase(subject),
+            student: lowerCase(eid),
         })
     )
     xhr.onload = function () {
