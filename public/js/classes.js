@@ -557,6 +557,12 @@ async function createPdf(start, end) {
     var minutes = 0
     for (entry of entries) {
         const date = entry.date.toDate()
+        if (
+            entry.information.type === 'transfer' &&
+            start >= new Date(2022, 0, 0, 0, 0, 0, 0)
+        ) {
+            continue
+        }
         if (date >= start && date <= end) {
             minutes += entry.minutes
         }
