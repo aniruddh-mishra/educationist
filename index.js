@@ -672,11 +672,12 @@ app.post('/volunteer-log', async (request, response) => {
 // Manages new content curated
 app.post('/new-content', async (request, response) => {
     // Defines name based on request of user
+    var eid = ''
+    for (letter of request.body.eid) {
+        eid += letter.toLowerCase()
+    }
     var name = null
-    var user = await db
-        .collection('users')
-        .where('eid', '==', request.body.eid)
-        .get()
+    var user = await db.collection('users').where('eid', '==', eid).get()
     if (user.empty) {
         return response.send('Done')
     }
