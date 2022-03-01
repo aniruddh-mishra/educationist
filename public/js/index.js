@@ -337,7 +337,7 @@ async function match() {
     xhr.send(
         JSON.stringify({
             tutor: localStorage.getItem('uid'),
-            subject: lowercase(subject),
+            subject: lowerCase(subject),
             student: lowerCase(eid),
         })
     )
