@@ -1054,7 +1054,7 @@ app.post('/scheduler', async (request, response) => {
         return response.send('Incorrect Key')
     }
     const today = new Date()
-    if (today.getDay() != 0 || today.getHours() != 0) {
+    if (today.getUTCDay() != 0 || today.getUTCHours() != 0) {
         return response.send('False')
     }
     const snapshot = await db.collection('confirmations').get()
