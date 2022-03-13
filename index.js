@@ -1048,7 +1048,7 @@ app.post('/discord/auth', async (request, response) => {
     return response.send('false')
 })
 
-app.get('/scheduler', async (request, response) => {
+app.post('/scheduler', async (request, response) => {
     const key = request.body.key
     if (key != process.env.SCHEDULER_KEY) {
         return response.send('Incorrect Key')
@@ -1067,6 +1067,13 @@ app.get('/scheduler', async (request, response) => {
         if (expire < today) {
             await db.collection('confirmations').doc(doc.id).delete()
         }
+    })
+    await fetch(process.env['DISCORD_BOT'] + 'schedule', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ key: key }),
     })
     return response.send('Done!')
 })
