@@ -1054,13 +1054,9 @@ app.post('/scheduler', async (request, response) => {
         return response.send('Incorrect Key')
     }
     const today = new Date()
-    // if (
-    //     today.getDay() != 0 ||
-    //     today.getHours() != 0 ||
-    //     today.getMinutes() != 0
-    // ) {
-    //     return response.send('False')
-    // }
+    if (today.getDay() != 0 || today.getHours() != 0) {
+        return response.send('False')
+    }
     const snapshot = await db.collection('confirmations').get()
     snapshot.forEach(async (doc) => {
         const expire = doc.data().expire.toDate()
@@ -1076,7 +1072,6 @@ app.post('/scheduler', async (request, response) => {
         body: JSON.stringify({ key: key }),
     })
     response2 = await response2.text()
-    console.log(response2)
     return response.send('Done!')
 })
 
