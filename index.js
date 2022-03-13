@@ -1047,6 +1047,11 @@ app.post('/discord/auth', async (request, response) => {
     return response.send('false')
 })
 
+app.post('/scheduler', async (request, response) => {
+    console.log(request.body.key, process.env.SCHEDULER_KEY)
+    return request.body.key
+})
+
 // Bans user based on request
 app.post('/ban', async (request, response) => {
     // Defines given variables
