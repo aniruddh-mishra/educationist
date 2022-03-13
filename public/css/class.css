@@ -76,7 +76,7 @@
 }
 
 .selected-person {
-    background-color: green;
+    background-color: var(--educationist-blue);
 }
 
 #action-selected {
