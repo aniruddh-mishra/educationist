@@ -1049,7 +1049,7 @@ app.post('/discord/auth', async (request, response) => {
 
 app.post('/scheduler', async (request, response) => {
     console.log(request.body, process.env.SCHEDULER_KEY)
-    return request.body
+    return response.send(request.body)
 })
 
 // Bans user based on request
