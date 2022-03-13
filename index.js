@@ -1048,7 +1048,7 @@ app.post('/discord/auth', async (request, response) => {
 })
 
 app.post('/scheduler', async (request, response) => {
-    console.log(request.body.key, process.env.SCHEDULER_KEY)
+    console.log(request.body, process.env.SCHEDULER_KEY)
     return request.body.key
 })
 
