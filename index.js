@@ -12,6 +12,7 @@ const rateLimit = require('express-rate-limit')
 const algoliasearch = require('algoliasearch')
 const { response } = require('express')
 const fetch = require('node-fetch')
+const exp = require('constants')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
@@ -1047,9 +1048,27 @@ app.post('/discord/auth', async (request, response) => {
     return response.send('false')
 })
 
-app.post('/scheduler', async (request, response) => {
-    console.log(request.body, process.env.SCHEDULER_KEY)
-    return response.send(request.body.key)
+app.get('/scheduler', async (request, response) => {
+    const key = request.body.key
+    if (key != process.env.SCHEDULER_KEY) {
+        return response.send('Incorrect Key')
+    }
+    const today = new Date()
+    if (
+        today.getDay() != 0 ||
+        today.getHours() != 0 ||
+        today.getMinutes() != 0
+    ) {
+        return response.send('False')
+    }
+    const snapshot = await db.collection('confirmations').get()
+    snapshot.forEach(async (doc) => {
+        const expire = doc.data().expire.toDate()
+        if (expire < today) {
+            await db.collection('confirmations').doc(doc.id).delete()
+        }
+    })
+    return response.send('Done!')
 })
 
 // Bans user based on request
