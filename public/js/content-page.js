@@ -42,6 +42,10 @@ async function getData() {
         `openLink("${data.link}"
         )`
     )
+    if (data.author === null) {
+        data.author = 'Anonymous'
+    }
+    document.getElementById('author').innerHTML = `Author: ${data.author}`
     document.getElementById('upvotes').innerHTML = `Upvotes: ${data.upvotes}`
     document.getElementById('age').innerHTML = `Age: ${data.age}`
     document.getElementById('subject').innerHTML = `Subject: ${capitalize(
