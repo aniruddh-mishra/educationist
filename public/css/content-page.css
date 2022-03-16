@@ -51,7 +51,8 @@
     margin-top: 3vw;
 }
 
-#submit-report {
+#submit-report,
+.red-btn {
     color: white;
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
@@ -62,6 +63,12 @@
     border-radius: 0.25em;
     margin-top: 3%;
     display: block;
+}
+
+.red-btn {
+    background: red;
+    box-shadow: 0 0 10px orange;
+    margin-top: 5vh;
 }
 
 #upvote-button,

@@ -28,7 +28,8 @@ h3 {
 
 .report-blocks,
 .user-data,
-.certificates {
+.certificates,
+.content-blocks {
     margin-bottom: 5vh;
     display: grid;
     grid-gap: 3vw;
@@ -43,7 +44,9 @@ h3 {
 #data-btn,
 .end-report,
 .certificate-btn,
-#send-email-btn {
+#send-email-btn,
+.content-btn,
+.content-delete-btn {
     color: white;
     padding: 5px 15px 5px 15px;
     font-family: Poppins;
@@ -98,7 +101,8 @@ h3 {
 }
 
 #reject-btn,
-.end-report {
+.end-report,
+.content-delete-btn {
     background: red;
     box-shadow: 0 0 10px orange;
 }
@@ -107,12 +111,14 @@ h3 {
 #search-btn,
 #data-btn,
 .certificate-btn,
-#send-email-btn {
+#send-email-btn,
+.content-btn {
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
 }
 
-.certificates-container {
+.certificates-container,
+.content-verifications {
     text-align: center;
 }
 

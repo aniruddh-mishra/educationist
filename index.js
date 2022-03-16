@@ -83,6 +83,10 @@ app.get('/content/document', async (request, response) => {
     response.sendFile('content-page.html', pages)
 })
 
+app.get('/content/upload', async (request, response) => {
+    response.sendFile('upload.html', pages)
+})
+
 app.get('/create', async (request, response) => {
     response.sendFile('register-finish.html', pages)
 })
@@ -675,60 +679,45 @@ app.post('/volunteer-log', async (request, response) => {
 
 // Manages new content curated
 app.post('/new-content', async (request, response) => {
-    // Defines name based on request of user
-    var eid = ''
-    for (letter of request.body.eid) {
-        eid += letter.toLowerCase()
-    }
-    var name = null
-    var user = await db.collection('users').where('eid', '==', eid).get()
-    if (user.empty) {
-        return response.send('Done')
-    }
-    user = user.docs[0]
-    if (request.body.author === 'Yes') {
-        name = user.data().name
-    }
+    // Defines variables
+    const information = request.body.information
+    const password = request.body.password
 
-    // Defines the information for the content based on request.body
-    var information = {
-        age: request.body.age,
-        author: name,
-        date: firebase.firestore.Timestamp.fromMillis(Date.now()),
-        link: request.body.id,
-        subject: request.body.subject,
-        title: request.body.title,
-        type: request.body.type,
-        upvotes: 0,
+    // Verifies if this is an admin
+    if (password != process.env['ADMIN_PASSWORD']) {
+        return response.send('false')
     }
-
-    // Adds content with information to firebase and recieves the contentId
-    const contentId = await db.collection('content').add(information)
-    information.objectID = contentId.id
-
-    // Creates a volunteer hours entry with the content Id in it
-    const entry = {
-        date: firebase.firestore.Timestamp.fromMillis(
-            new Date(Date.now()).getTime()
-        ),
-        minutes: parseInt(request.body.minutes),
-        information: {
-            type: 'content',
-            reference: contentId,
-        },
-    }
-
-    // Updates user with volunteer hour entry defined above
-    await db
-        .collection('users')
-        .doc(user.id)
-        .update({
-            'volunteer-entries':
-                firebase.firestore.FieldValue.arrayUnion(entry),
-        })
 
     // Adds content to algolia
-    await index.saveObject(information)
+    try {
+        await index.saveObject(information)
+    } catch (e) {
+        console.log(e)
+        return response.send('false')
+    }
+
+    return response.send('Complete!')
+})
+
+// Manages content deleted
+app.post('/delete-content', async (request, response) => {
+    // Defines variables
+    const ids = request.body.ids
+
+    // Verifies if this is an admin
+    const id = ids[0]
+    const snapshot = await db.collection('content').doc(id).get()
+    if (snapshot.exists) {
+        return response.send('false')
+    }
+
+    // Removes content from algolia
+    try {
+        await index.deleteObjects(ids)
+    } catch (e) {
+        console.log(e)
+        return response.send('false')
+    }
 
     return response.send('Complete!')
 })

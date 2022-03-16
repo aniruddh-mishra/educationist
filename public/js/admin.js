@@ -10,6 +10,7 @@ var dataSet = [
 ]
 const storage = firebase.app().storage('gs://educationist-42b45.appspot.com/')
 const storageRef = storage.ref()
+var contents = {}
 
 async function setUp() {
     const reports = await db
@@ -53,6 +54,7 @@ async function setUp() {
 document.querySelector('body').style.display = 'block'
 setUp()
 certificates()
+content()
 
 async function interview(accept) {
     this.disabled = true
@@ -319,18 +321,16 @@ async function uploadCertificateFinish(request, uid) {
     document.getElementById(request).remove()
     const file = document.getElementById('file').files[0]
     const ref = storageRef.child('send').child(request + '.pdf')
-    ref.put(file, { contentType: 'application/pdf' })
+    await ref.put(file, { contentType: 'application/pdf' })
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/certificate', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
-    setTimeout(() => {
-        xhr.send(
-            JSON.stringify({
-                uid: uid,
-                request: request,
-            })
-        )
-    }, 1000)
+    xhr.send(
+        JSON.stringify({
+            uid: uid,
+            request: request,
+        })
+    )
     xhr.onload = async function () {
         if (this.response === 'Failure') {
             token('Something went wrong, please try again later')
@@ -379,4 +379,141 @@ async function announce() {
         }
         token('Emails sent!')
     }
+}
+
+async function content() {
+    const snapshot = await db
+        .collection('content')
+        .where('verified', '==', false)
+        .get()
+    var counter = 1
+    if (snapshot.empty) {
+        document.querySelector('.content-verifications').remove()
+        return
+    }
+    snapshot.forEach((doc) => {
+        var block = document.createElement('div')
+        block.className = 'block'
+        block.classList.add('content-block')
+        block.id = doc.id
+        var titleBlock = document.createElement('h3')
+        titleBlock.innerHTML = 'Content # ' + counter
+        block.append(titleBlock)
+        const button =
+            '<button onclick="openContent(this)" class="content-btn">Open Content</button>'
+        const button2 =
+            '<button onclick="verify(this)" class="content-btn">Approve Content</button>'
+        const button3 =
+            '<button onclick="deleteContent(this)" class="content-delete-btn">Delete Content</button>'
+
+        fields = [button, button2, button3]
+        for (field of fields) {
+            var fieldBlock = document.createElement('p')
+            fieldBlock.className = 'block-field'
+            fieldBlock.innerHTML = field
+            block.append(fieldBlock)
+        }
+        document.querySelector('.content-blocks').appendChild(block)
+        counter += 1
+        contents[doc.id] = doc.data()
+        contents[doc.id].verified = true
+        contents[doc.id].objectID = doc.id
+    })
+    document.querySelector('.content-verifications').classList.remove('temp')
+}
+
+function openContent(e) {
+    const url = '/content/document?id=' + e.parentNode.parentNode.id
+    window.open(url)
+}
+
+async function verify(e) {
+    const docID = e.parentNode.parentNode.id
+    await db.collection('content').doc(docID).update({
+        verified: true,
+    })
+    var password
+    cArr.forEach((val) => {
+        if (val.indexOf('admin=') === 0) password = val.substring(6)
+    })
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/new-content', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+        JSON.stringify({
+            information: contents[docID],
+            password: password,
+        })
+    )
+    xhr.onload = async function () {
+        if (this.response === 'false') {
+            token('Something went wrong, please try again later')
+            return
+        }
+        token(this.response)
+    }
+    e.parentNode.parentNode.remove()
+}
+
+async function deleteContent(e) {
+    const docID = e.parentNode.parentNode.id
+    const contentData = contents[docID]
+    var password
+    cArr.forEach((val) => {
+        if (val.indexOf('admin=') === 0) password = val.substring(6)
+    })
+    if (contentData.creator) {
+        const snapshot = await db
+            .collection('users')
+            .doc(contentData.creator)
+            .get()
+        if (snapshot.exists) {
+            const userData = snapshot.data()
+            const entries = userData['volunteer-entries']
+            for (entry of entries) {
+                if (entry.information.type != 'content') {
+                    continue
+                }
+                if (entry.information.reference.id === docID) {
+                    await db
+                        .collection('users')
+                        .doc(snapshot.id)
+                        .update({
+                            'volunteer-entries':
+                                firebase.firestore.FieldValue.arrayRemove(
+                                    entry
+                                ),
+                            'created-content':
+                                firebase.firestore.FieldValue.arrayRemove(
+                                    docID
+                                ),
+                        })
+                }
+            }
+        }
+    }
+    if (contentData['file-name']) {
+        await storageRef
+            .child('content')
+            .child(contentData.creator)
+            .child(contentData['file-name'])
+            .delete()
+    }
+    await db.collection('content').doc(docID).delete()
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/delete-content', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+        JSON.stringify({
+            ids: [docID],
+        })
+    )
+    xhr.onload = async function () {
+        if (this.response === 'false') {
+            token('Something went wrong, please try again later')
+            return
+        }
+        token(this.response)
+    }
+    e.parentNode.parentNode.remove()
 }

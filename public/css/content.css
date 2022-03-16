@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
 
 .main-body {
+    text-align: center;
     margin-top: 5vh;
 }
 
@@ -144,7 +145,6 @@
 
     .main-body {
         display: block;
-        text-align: center;
     }
 
     .search {

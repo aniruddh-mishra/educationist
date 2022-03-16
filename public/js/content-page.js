@@ -1,6 +1,11 @@
 const params = new URLSearchParams(window.location.search)
 var documentID = params.get('id')
 var bookmarks = []
+var owner = false
+var userData
+var contentData
+const storage = firebase.app().storage('gs://educationist-42b45.appspot.com/')
+const storageRef = storage.ref()
 
 async function getData() {
     const content = await db.collection('content').doc(documentID).get()
@@ -21,6 +26,7 @@ async function getData() {
         .collection('users')
         .doc(localStorage.getItem('uid'))
         .get()
+    userData = user.data()
     bookmarks = user.data().bookmarks
     if (bookmarks != undefined && bookmarks.includes(documentID)) {
         document.getElementById('bookmark-button').innerHTML = 'Unbookmark'
@@ -29,6 +35,7 @@ async function getData() {
             .setAttribute('onclick', 'unBookmark(this)')
     }
     const data = content.data()
+    contentData = data
     document.getElementById('preview').setAttribute('src', data.link)
     document.getElementById('expand').setAttribute(
         'onclick',
@@ -41,6 +48,26 @@ async function getData() {
         data.subject
     )}`
     document.getElementById('type').innerHTML = capitalize(data.type)
+    if (
+        data.creator === localStorage.getItem('uid') ||
+        userData.role === 'admin'
+    ) {
+        owner = true
+        const verified = document.createElement('p')
+        verified.id = 'verified'
+        if (data.verified) {
+            verified.innerHTML = 'Verified'
+        } else {
+            verified.innerHTML = 'To Be Verified'
+        }
+        document.getElementById('info').appendChild(verified)
+        const button = document.createElement('button')
+        button.id = 'delete'
+        button.innerHTML = 'Remove Content'
+        button.classList = 'red-btn'
+        button.setAttribute('onclick', 'deleteContent()')
+        document.getElementById('report-form').appendChild(button)
+    }
 }
 
 getData()
@@ -69,7 +96,7 @@ async function report() {
     token('Your report has been sent!')
 }
 
-async function upvote(id) {
+async function upvote() {
     const button = document.getElementById('upvote-button')
     try {
         await db
@@ -128,4 +155,47 @@ async function unBookmark(button) {
     button.innerHTML = 'Bookmark'
     button.disabled = false
     token('Removed this item from bookmark collection!')
+}
+
+async function deleteContent() {
+    const entries = userData['volunteer-entries']
+    for (entry of entries) {
+        if (entry.information.type != 'content') {
+            continue
+        }
+        if (entry.information.reference.id === documentID) {
+            await db
+                .collection('users')
+                .doc(localStorage.getItem('uid'))
+                .update({
+                    'volunteer-entries':
+                        firebase.firestore.FieldValue.arrayRemove(entry),
+                    'created-content':
+                        firebase.firestore.FieldValue.arrayRemove(documentID),
+                })
+        }
+    }
+    if (contentData['file-name']) {
+        await storageRef
+            .child('content')
+            .child(contentData.creator)
+            .child(contentData['file-name'])
+            .delete()
+    }
+    await db.collection('content').doc(documentID).delete()
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/delete-content', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+        JSON.stringify({
+            ids: [documentID],
+        })
+    )
+    xhr.onload = async function () {
+        if (this.response === 'false') {
+            token('Something went wrong, please try again later')
+            return
+        }
+        token('Your content has been successfully deleted!')
+    }
 }

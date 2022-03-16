@@ -20,6 +20,7 @@ var counter = 0
 var limit = true
 var bookmarks = []
 var checked = false
+var documentsCreated = []
 
 async function getContent(data) {
     try {
@@ -28,25 +29,34 @@ async function getContent(data) {
                 .collection('users')
                 .doc(localStorage.getItem('uid'))
                 .get()
+            documentsCreated = user.data()['created-content']
+            if (documentsCreated && documentsCreated.length > 0) {
+                const option = document.createElement('option')
+                option.value = 'mid'
+                option.innerHTML = 'My Content'
+                document.getElementById('bookmark-filter').appendChild(option)
+            }
             bookmarks = user.data().bookmarks
             checked = true
         }
         if (data != undefined) {
-            if (bookmarks.length === 0) {
+            if (data.length === 0) {
                 holder.innerHTML = 'You do not have any bookmarked items'
                 return
             }
             var snapshot = await db
                 .collection('content')
-                .where('__name__', 'in', bookmarks)
+                .where('__name__', 'in', data)
                 .get()
         } else {
             var snapshot = await db
                 .collection('content')
+                .where('verified', '==', true)
                 .orderBy('upvotes', 'desc')
-                .limit(40)
+                .limit(30)
                 .get()
         }
+
         holder.innerHTML = ''
         if (snapshot.empty) {
             holder.innerHTML = 'You do not have any bookmarked items'
@@ -187,6 +197,8 @@ async function bookmarkContent() {
     document.querySelector('.filter').classList.toggle('temp')
     if (selector === 'true') {
         getContent(bookmarks)
+    } else if (selector === 'mid') {
+        getContent(documentsCreated)
     } else {
         getContent()
     }

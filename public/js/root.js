@@ -26,7 +26,10 @@ firebase.auth().onAuthStateChanged(async (user) => {
         ) {
             logout()
         }
-        if (window.location.pathname === '/login') {
+        if (
+            window.location.pathname === '/login' ||
+            window.location.pathname === '/register'
+        ) {
             const params = new URLSearchParams(window.location.search)
             if (params.has('path')) {
                 window.location.replace(params.get('path'))
