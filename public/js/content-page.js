@@ -47,6 +47,7 @@ async function getData() {
     if (data.author === null) {
         data.author = 'Anonymous'
     }
+    document.getElementById('title').innerHTML = `Title: ${data.title}`
     document.getElementById('author').innerHTML = `Author: ${data.author}`
     document.getElementById('upvotes').innerHTML = `Upvotes: ${data.upvotes}`
     document.getElementById('age').innerHTML = `Age: ${data.age}`
