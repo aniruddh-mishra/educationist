@@ -1,58 +1,56 @@
-<body>
-    <link rel="stylesheet" type="text/css" href="../css/content.css" />
-    <div class="container">
-        <div id="navigation"></div>
-        <script src="../js/root.js"></script>
-        <div class="main-body">
-            <h1>Content Catalog</h1>
-            <p>
-                If you would like to add content to this website, please go to
-                <a style="text-decoration: underline" href="/content/upload"
-                    >this page!</a
-                ><br />
-                To bookmark content you can simply click the bookmark button.
-            </p>
-            <div class="controls">
-                <div class="filter">
-                    <input
-                        onchange="search()"
-                        id="search"
-                        placeholder="Search (separate queries with commas)"
-                        type="text"
-                    />
-                    <img
-                        id="refresh"
-                        src="https://cdn.educationisttutoring.org/images/search.svg"
-                        alt="Refresh"
-                    />
-                </div>
-                <div class="bookmarks">
-                    <select onchange="bookmarkContent()" id="bookmark-filter">
-                        <option value="true">Bookmarked Content</option>
-                        <option selected value="false">All Content</option>
-                    </select>
-                </div>
+<link rel="stylesheet" type="text/css" href="../css/content.css" />
+<div class="container">
+    <div id="navigation"></div>
+    <script src="../js/root.js"></script>
+    <div class="main-body">
+        <h1>Content Catalog</h1>
+        <p>
+            If you would like to add content to this website, please go to
+            <a style="text-decoration: underline" href="/content/upload"
+                >this page!</a
+            ><br />
+            To bookmark content you can simply click the bookmark button.
+        </p>
+        <div class="controls">
+            <div class="filter">
+                <input
+                    onchange="search()"
+                    id="search"
+                    placeholder="Search (separate queries with commas)"
+                    type="text"
+                />
+                <img
+                    id="refresh"
+                    src="https://cdn.educationisttutoring.org/images/search.svg"
+                    alt="Refresh"
+                />
             </div>
-            <template id="card-template">
-                <article class="card">
-                    <div class="clickable">
-                        <div class="banner">
-                            <img
-                                id="banner-image"
-                                src=""
-                                alt="Science Content Image"
-                            />
-                        </div>
-                        <h2 class="title">Title</h2>
-                        <div class="card-author">Anonymous</div>
+            <div class="bookmarks">
+                <select onchange="bookmarkContent()" id="bookmark-filter">
+                    <option value="true">Bookmarked Content</option>
+                    <option selected value="false">All Content</option>
+                </select>
+            </div>
+        </div>
+        <template id="card-template">
+            <article class="card">
+                <div class="clickable">
+                    <div class="banner">
+                        <img
+                            id="banner-image"
+                            src=""
+                            alt="Science Content Image"
+                        />
                     </div>
-                    <div id="tags"></div>
-                </article>
-            </template>
-        </div>
-        <div id="toaster" class="invisible">
-            <span id="alert"></span>
-        </div>
+                    <h2 class="title">Title</h2>
+                    <div class="card-author">Anonymous</div>
+                </div>
+                <div id="tags"></div>
+            </article>
+        </template>
     </div>
-    <script defer src="../js/content.js"></script>
-</body>
+    <div id="toaster" class="invisible">
+        <span id="alert"></span>
+    </div>
+</div>
+<script defer src="../js/content.js"></script>

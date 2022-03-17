@@ -1,68 +1,66 @@
-<body>
-    <link rel="stylesheet" type="text/css" href="../css/class.css" />
-    <div class="container">
-        <div id="navigation"></div>
-        <script src="../js/root.js"></script>
-        <div class="main-body temp">
-            <h1 id="name"></h1>
-            <p>Bookmark this page!</p>
-            <p id="instructions"></p>
-            <div class="main-control">
-                <div class="info">
-                    <div id="students">
-                        <h2>Students</h2>
-                    </div>
-                    <div id="tutor">
-                        <h2>Tutor</h2>
-                    </div>
-                    <div id="class-mates">
-                        <h2>Class Mates</h2>
-                    </div>
+<link rel="stylesheet" type="text/css" href="../css/class.css" />
+<div class="container">
+    <div id="navigation"></div>
+    <script src="../js/root.js"></script>
+    <div class="main-body temp">
+        <h1 id="name"></h1>
+        <p>Bookmark this page!</p>
+        <p id="instructions"></p>
+        <div class="main-control">
+            <div class="info">
+                <div id="students">
+                    <h2>Students</h2>
                 </div>
-                <div id="action">
-                    <div class="action">
-                        <textarea
-                            id="email"
-                            placeholder="Email"
-                            rows="10"
-                        ></textarea>
-                        <button onclick="sendEmail()" id="email-tutor">
-                            Email
-                        </button>
-                        <div id="action-selected" class="temp">
-                            <button onclick="removeStudent()" id="remove-btn">
-                                Remove Student
-                            </button>
-                        </div>
-                        <h1
-                            style="color: var(--invert)"
-                            class="temp"
-                            id="tutor-how-to"
-                        >
-                            Click on a Student to Log Hours
-                        </h1>
-                        <div id="tutor-action" class="temp">
-                            Minutes
-                            <input id="minutes-class" type="number" />
-                            Date
-                            <input id="date-class" type="date" />
-                            <button onclick="logClass()" id="log-hours">
-                                Log Class
-                            </button>
-                        </div>
-                        <button id="inactivate-btn" onclick="inactivate()">
-                            Inactivate Class
-                        </button>
-                        <button id="activate-btn" onclick="activate()">
-                            Activate Class
+                <div id="tutor">
+                    <h2>Tutor</h2>
+                </div>
+                <div id="class-mates">
+                    <h2>Class Mates</h2>
+                </div>
+            </div>
+            <div id="action">
+                <div class="action">
+                    <textarea
+                        id="email"
+                        placeholder="Email"
+                        rows="10"
+                    ></textarea>
+                    <button onclick="sendEmail()" id="email-tutor">
+                        Email
+                    </button>
+                    <div id="action-selected" class="temp">
+                        <button onclick="removeStudent()" id="remove-btn">
+                            Remove Student
                         </button>
                     </div>
+                    <h1
+                        style="color: var(--invert)"
+                        class="temp"
+                        id="tutor-how-to"
+                    >
+                        Click on a Student to Log Hours
+                    </h1>
+                    <div id="tutor-action" class="temp">
+                        Minutes
+                        <input id="minutes-class" type="number" />
+                        Date
+                        <input id="date-class" type="date" />
+                        <button onclick="logClass()" id="log-hours">
+                            Log Class
+                        </button>
+                    </div>
+                    <button id="inactivate-btn" onclick="inactivate()">
+                        Inactivate Class
+                    </button>
+                    <button id="activate-btn" onclick="activate()">
+                        Activate Class
+                    </button>
                 </div>
             </div>
         </div>
-        <div id="toaster" class="invisible">
-            <span id="alert"></span>
-        </div>
     </div>
-    <script defer src="../js/class.js"></script>
-</body>
+    <div id="toaster" class="invisible">
+        <span id="alert"></span>
+    </div>
+</div>
+<script defer src="../js/class.js"></script>

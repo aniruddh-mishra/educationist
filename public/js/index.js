@@ -147,7 +147,7 @@ async function placeData(data, dates, subjects, attendance) {
             'Volunteer Hours',
             [
                 Number((dates[2] / 60).toFixed(1)) + ' Hours',
-                '<a style="text-decoration: underline" href="/logs">More information</a>',
+                '<a style="text-decoration: underline; color: var(--educationist-green);" href="/logs">More information</a>',
             ],
             'small'
         )

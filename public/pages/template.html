@@ -47,5 +47,23 @@
         <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch.umd.js"></script>
     </head>
-    BODY
+    <body>
+        BODY
+        <div class="invisible" id="help-menu-container">
+            <div id="help-menu-menu"><span onclick="closeHelp()">x</span></div>
+            <div id="help-menu">
+                <p>
+                    We are still working on getting you a help menu. For now,
+                    contact
+                    <span style="word-break: break-all"
+                        >educationist@educationisttutoring.org</span
+                    >
+                    for help.
+                </p>
+            </div>
+        </div>
+        <div onclick="help()" id="help">
+            <span id="help-span">?</span>
+        </div>
+    </body>
 </html>

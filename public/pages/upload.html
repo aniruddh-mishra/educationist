@@ -1,107 +1,91 @@
-<body>
-    <link rel="stylesheet" type="text/css" href="../css/upload.css" />
-    <div id="loader-container" class="loader-none">
-        <div id="loader" class="loader"></div>
+<link rel="stylesheet" type="text/css" href="../css/upload.css" />
+<div id="loader-container" class="loader-none">
+    <div id="loader" class="loader"></div>
+</div>
+<div id="container" class="container">
+    <div id="navigation"></div>
+    <script src="../js/root.js"></script>
+    <div class="main-body">
+        <h1>Upload Content</h1>
+        <p>Fill out some information to get your content on Educationist!</p>
+        <form id="content-upload">
+            <div id="basic-info-container">
+                <h3>Title</h3>
+                <input onchange="checkField(this)" id="title" type="text" />
+                <h3>Subject</h3>
+                <select onchange="checkField(this)" id="subject">
+                    <option disabled selected value="">-- Select Option</option>
+                    <option value="science">Science</option>
+                    <option value="math">Math</option>
+                    <option value="english">English</option>
+                    <option value="python">Python</option>
+                    <option value="web-development">Web Development</option>
+                    <option value="chess">Chess</option>
+                    <option value="scratch">Scratch</option>
+                </select>
+                <h3>Type of Content</h3>
+                <select onchange="checkField(this)" id="type-content">
+                    <option disabled selected value="">-- Select Option</option>
+                    <option value="slideshow">Slideshow</option>
+                    <option value="notes">Notes</option>
+                    <option value="quiz">Quiz</option>
+                    <option value="worksheet">Worksheet</option>
+                    <option value="homework">Homework</option>
+                    <option value="course">Course</option>
+                </select>
+                <h3>Median Age</h3>
+                <input onchange="checkField(this)" id="age" type="number" />
+                <h3>Display Your Name On Website</h3>
+                <p>
+                    If yes, you accept liability of copyright claims on this
+                    document.
+                </p>
+                <select onchange="checkField(this)" id="display-name">
+                    <option selected disabled value="">-- Select Option</option>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                </select>
+                <h3>Minutes Spent Creating Content</h3>
+                <input onchange="checkField(this)" id="minutes" type="number" />
+            </div>
+            <div id="file-container">
+                <img
+                    id="file-img"
+                    src="https://cdn.educationisttutoring.org/images/upload.svg"
+                    alt="Upload"
+                />
+                <h3 style="margin-bottom: 0; margin-top: 0">File</h3>
+                <p>First, click on the file type you want to upload.</p>
+                <select onchange="fileChange(this)" id="file-type">
+                    <option selected disabled value="">-- Select Option</option>
+                    <option value="link">Link</option>
+                    <option value="upload">Upload</option>
+                </select>
+                <input
+                    onchange="checkField(this)"
+                    id="link"
+                    class="temp"
+                    placeholder="Link"
+                    type="text"
+                />
+                <input
+                    onchange="checkField(this)"
+                    class="temp"
+                    id="file"
+                    type="file"
+                />
+                <progress
+                    class="temp"
+                    value="0"
+                    max="100"
+                    id="progress"
+                ></progress>
+                <button onclick="create()">Upload</button>
+            </div>
+        </form>
     </div>
-    <div id="container" class="container">
-        <div id="navigation"></div>
-        <script src="../js/root.js"></script>
-        <div class="main-body">
-            <h1>Upload Content</h1>
-            <p>
-                Fill out some information to get your content on Educationist!
-            </p>
-            <form id="content-upload">
-                <div id="basic-info-container">
-                    <h3>Title</h3>
-                    <input onchange="checkField(this)" id="title" type="text" />
-                    <h3>Subject</h3>
-                    <select onchange="checkField(this)" id="subject">
-                        <option disabled selected value="">
-                            -- Select Option
-                        </option>
-                        <option value="science">Science</option>
-                        <option value="math">Math</option>
-                        <option value="english">English</option>
-                        <option value="python">Python</option>
-                        <option value="web-development">Web Development</option>
-                        <option value="chess">Chess</option>
-                        <option value="scratch">Scratch</option>
-                    </select>
-                    <h3>Type of Content</h3>
-                    <select onchange="checkField(this)" id="type-content">
-                        <option disabled selected value="">
-                            -- Select Option
-                        </option>
-                        <option value="slideshow">Slideshow</option>
-                        <option value="notes">Notes</option>
-                        <option value="quiz">Quiz</option>
-                        <option value="worksheet">Worksheet</option>
-                        <option value="homework">Homework</option>
-                        <option value="course">Course</option>
-                    </select>
-                    <h3>Median Age</h3>
-                    <input onchange="checkField(this)" id="age" type="number" />
-                    <h3>Display Your Name On Website</h3>
-                    <p>
-                        If yes, you accept liability of copyright claims on this
-                        document.
-                    </p>
-                    <select onchange="checkField(this)" id="display-name">
-                        <option selected disabled value="">
-                            -- Select Option
-                        </option>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>
-                    </select>
-                    <h3>Minutes Spent Creating Content</h3>
-                    <input
-                        onchange="checkField(this)"
-                        id="minutes"
-                        type="number"
-                    />
-                </div>
-                <div id="file-container">
-                    <img
-                        id="file-img"
-                        src="https://cdn.educationisttutoring.org/images/upload.svg"
-                        alt="Upload"
-                    />
-                    <h3 style="margin-bottom: 0; margin-top: 0">File</h3>
-                    <p>First, click on the file type you want to upload.</p>
-                    <select onchange="fileChange(this)" id="file-type">
-                        <option selected disabled value="">
-                            -- Select Option
-                        </option>
-                        <option value="link">Link</option>
-                        <option value="upload">Upload</option>
-                    </select>
-                    <input
-                        onchange="checkField(this)"
-                        id="link"
-                        class="temp"
-                        placeholder="Link"
-                        type="text"
-                    />
-                    <input
-                        onchange="checkField(this)"
-                        class="temp"
-                        id="file"
-                        type="file"
-                    />
-                    <progress
-                        class="temp"
-                        value="0"
-                        max="100"
-                        id="progress"
-                    ></progress>
-                    <button onclick="create()">Upload</button>
-                </div>
-            </form>
-        </div>
-        <div id="toaster" class="invisible">
-            <span id="alert"></span>
-        </div>
+    <div id="toaster" class="invisible">
+        <span id="alert"></span>
     </div>
-    <script src="../js/upload.js"></script>
-</body>
+</div>
+<script src="../js/upload.js"></script>

@@ -1,47 +1,41 @@
-<body>
-    <link rel="stylesheet" type="text/css" href="../css/unsubscribe.css" />
-    <div id="loader-container" class="loader-none">
-        <div id="loader" class="loader"></div>
-    </div>
-    <div id="container" class="container">
-        <div id="navigation"></div>
-        <script src="../js/root.js"></script>
-        <div class="main-body">
-            <h1 style="margin-bottom: 10vh">Manage Email Lists</h1>
-            <div id="button-container" class="temp">
-                <button
-                    class="red temp"
-                    id="quick-announcements"
-                    onclick="unSubscribe(this)"
-                >
-                    Unsubscribe to Quick Announcements
-                </button>
-                <button
-                    class="red temp"
-                    id="newsletter"
-                    onclick="unSubscribe(this)"
-                >
-                    Unsubscribe to Newsletter
-                </button>
-                <button
-                    class="red temp"
-                    id="student-updates"
-                    onclick="unSubscribe(this)"
-                >
-                    Unsubscribe to Student Updates
-                </button>
-                <button
-                    class="red temp"
-                    id="discord"
-                    onclick="unSubscribe(this)"
-                >
-                    Unsubscribe to Discord Bot DMs
-                </button>
-            </div>
-        </div>
-        <div id="toaster" class="invisible">
-            <span id="alert"></span>
+<link rel="stylesheet" type="text/css" href="../css/unsubscribe.css" />
+<div id="loader-container" class="loader-none">
+    <div id="loader" class="loader"></div>
+</div>
+<div id="container" class="container">
+    <div id="navigation"></div>
+    <script src="../js/root.js"></script>
+    <div class="main-body">
+        <h1 style="margin-bottom: 10vh">Manage Email Lists</h1>
+        <div id="button-container" class="temp">
+            <button
+                class="red temp"
+                id="quick-announcements"
+                onclick="unSubscribe(this)"
+            >
+                Unsubscribe to Quick Announcements
+            </button>
+            <button
+                class="red temp"
+                id="newsletter"
+                onclick="unSubscribe(this)"
+            >
+                Unsubscribe to Newsletter
+            </button>
+            <button
+                class="red temp"
+                id="student-updates"
+                onclick="unSubscribe(this)"
+            >
+                Unsubscribe to Student Updates
+            </button>
+            <button class="red temp" id="discord" onclick="unSubscribe(this)">
+                Unsubscribe to Discord Bot DMs
+            </button>
         </div>
     </div>
-    <script src="../js/unsubscribe.js"></script>
-</body>
+    <div id="toaster" class="invisible">
+        <span id="alert"></span>
+    </div>
+</div>
+<script src="../js/unsubscribe.js"></script>

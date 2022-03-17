@@ -34,6 +34,7 @@ async function classes() {
         var counter = 1
         var active = false
         var inactiveClasses = []
+        document.querySelector('.classes').innerHTML = ''
         for (classItem of data) {
             var studentEmail = ''
             var studentName = ''
@@ -118,10 +119,6 @@ async function classes() {
         spacer = document.createElement('div')
         spacer.className = 'spacer'
         document.querySelector('.classes').appendChild(spacer)
-        const blocks = document.querySelectorAll('.request')
-        for (block of blocks) {
-            block.addEventListener('click', match)
-        }
 
         if (localStorage.getItem('role') != 'student') {
             for (let i = 1; i <= maxActiveClasses; i++) {

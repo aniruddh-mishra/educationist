@@ -8,6 +8,20 @@ if (navigation) {
     navigation.replaceWith(header)
 }
 
+const paths = {
+    '/': document.getElementById('index-page'),
+    '/content': document.getElementById('content-page'),
+    '/classes': document.getElementById('classes-page'),
+    '/content/document': document.getElementById('content-page'),
+    '/logs': document.getElementById('logs-page'),
+    '/admin': document.getElementById('admin-link'),
+}
+
+const underlineItem = paths[window.location.pathname]
+if (underlineItem) {
+    underlineItem.classList.add('selected')
+}
+
 var firebaseConfig = {
     apiKey: 'AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM',
     authDomain: 'educationist-42b45.firebaseapp.com',
@@ -62,7 +76,7 @@ firebase.auth().onAuthStateChanged(async (user) => {
     } else {
         document.querySelector('.dropdown').remove()
         const r = document.querySelector(':root')
-        r.style.setProperty('--navbar-width', '25em')
+        r.style.setProperty('--navbar-width', '27em')
         document.querySelector('body').classList.remove('invisible')
         if (window.location.pathname !== '/login') {
             if (
@@ -154,6 +168,7 @@ function lightmode() {
             '--background-standout': 'rgb(37, 41, 39)',
             '--background-block': 'rgb(30, 34, 32)',
             '--background-block-hover': 'var(--background-standout)',
+            '--help-menu': 'var(--invert)',
         }
         document
             .getElementById('logo-img')
@@ -178,8 +193,9 @@ function lightmode() {
             '--basic-font': 'black',
             '--invert': 'rgb(92, 90, 90)',
             '--background-standout': '#89cab6',
-            '--background-block': 'var(--educationist-green)',
-            '--background-block-hover': '#509e86',
+            '--background-block': 'rgb(30, 34, 32)',
+            '--background-block-hover': 'rgb(37, 41, 39)',
+            '--help-menu': 'var(--background-block)',
         }
         document.getElementById('theme').setAttribute('content', 'white')
     }
@@ -197,6 +213,16 @@ function lowerCase(string) {
     return newString
 }
 
+function help() {
+    document.getElementById('help').classList.add('invisible')
+    document.getElementById('help-menu-container').classList.remove('invisible')
+}
+
+function closeHelp() {
+    document.getElementById('help').classList.remove('invisible')
+    document.getElementById('help-menu-container').classList.add('invisible')
+}
+
 window.addEventListener('load', () => {
     const mode = localStorage.getItem('lightmode')
     if (mode === 'true') {
@@ -207,8 +233,9 @@ window.addEventListener('load', () => {
             '--basic-font': 'black',
             '--invert': 'rgb(92, 90, 90)',
             '--background-standout': '#89cab6',
-            '--background-block': 'var(--educationist-green)',
-            '--background-block-hover': '#509e86',
+            '--background-block': 'rgb(30, 34, 32)',
+            '--background-block-hover': 'rgb(37, 41, 39)',
+            '--help-menu': 'var(--background-block)',
         }
 
         document
