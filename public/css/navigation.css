@@ -287,6 +287,11 @@ select option {
 }
 
 @media (max-width: 1000px) {
+    #help-menu-container {
+        width: 80vw;
+        max-width: 250px;
+    }
+
     .dropdown {
         text-align: center;
     }
@@ -390,5 +395,10 @@ select option {
         background-color: rgb(160, 39, 39);
         height: fit-content;
         font-size: 0.8rem;
+    }
+
+    #help-menu-container {
+        width: 100vw;
+        max-width: 250px;
     }
 }
