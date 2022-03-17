@@ -237,7 +237,7 @@ window.addEventListener('load', () => {
             '--background-block-hover': 'rgb(37, 41, 39)',
             '--help-menu': 'var(--background-block)',
         }
-
+        document.getElementById('theme').setAttribute('content', 'white')
         document
             .getElementById('logo-img')
             .setAttribute(

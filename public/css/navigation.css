@@ -136,7 +136,7 @@ select option {
 }
 
 .navbar .selected {
-    text-decoration: underline;
+    color: var(--invert);
 }
 
 .navbarBtn {
