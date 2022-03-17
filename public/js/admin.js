@@ -399,6 +399,10 @@ async function content() {
         var titleBlock = document.createElement('h3')
         titleBlock.innerHTML = 'Content # ' + counter
         block.append(titleBlock)
+        const input =
+            '<input style="margin-bottom: 0;" type="text" placeholder="Link" />'
+        const submit =
+            '<button onclick="replaceLink(this)" class="content-btn">Replace Link</button>'
         const button =
             '<button onclick="openContent(this)" class="content-btn">Open Content</button>'
         const button2 =
@@ -406,7 +410,7 @@ async function content() {
         const button3 =
             '<button onclick="deleteContent(this)" class="content-delete-btn">Delete Content</button>'
 
-        fields = [button, button2, button3]
+        fields = [input, submit, button, button2, button3]
         for (field of fields) {
             var fieldBlock = document.createElement('p')
             fieldBlock.className = 'block-field'
@@ -425,6 +429,19 @@ async function content() {
 function openContent(e) {
     const url = '/content/document?id=' + e.parentNode.parentNode.id
     window.open(url)
+}
+
+async function replaceLink(e) {
+    const linkInput = e.parentNode.previousSibling.childNodes[0]
+    if (linkInput.value === '') {
+        token('Put something in the link input please.')
+        return
+    }
+    const docID = e.parentNode.parentNode.id
+    await db.collection('content').doc(docID).update({
+        link: linkInput.value,
+    })
+    token('Done!')
 }
 
 async function verify(e) {
