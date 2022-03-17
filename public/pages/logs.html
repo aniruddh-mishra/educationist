@@ -1,0 +1,66 @@
+<body>
+    <link rel="stylesheet" type="text/css" href="../css/index.css" />
+    <div id="loader-container" class="loader-none">
+        <div id="loader" class="loader"></div>
+    </div>
+    <div id="container" class="container">
+        <div id="navigation"></div>
+        <script src="../js/root.js"></script>
+        <div class="main-body">
+            <h1>Logs</h1>
+            <p>
+                If you need to transfer information from an older account from
+                before 2022, please fill out
+                <a
+                    style="text-decoration: underline"
+                    href="https://docs.google.com/forms/d/1stwvh9_-rB4YNDXlPQrIj7GlePx0XNFaXvmxm2_idYA/edit"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >this form</a
+                >!
+            </p>
+            <div class="account"></div>
+            <div id="request-certificate" class="upload temp">
+                <h2>Request Certificate</h2>
+                <p>Starting Date</p>
+                <input id="start-date" style="margin-bottom: 2vh" type="date" />
+                <p>Ending Date</p>
+                <input id="end-date" style="margin-bottom: 2vh" type="date" />
+                <input
+                    onchange="uploadFile()"
+                    type="file"
+                    id="file"
+                    style="display: none"
+                />
+                <button id="easter-egg1" onclick="allTime()">All Time</button>
+                <button onclick="certificate()" id="certificate-btn">
+                    Certificate
+                </button>
+                <p>
+                    Get your own Educationist Certificate within 24 - 48 hours!
+                </p>
+                <button onclick="upload()" id="file-btn">Personal</button>
+                <p>
+                    Upload your own certificate to get signed within 24 -48
+                    hours!
+                </p>
+                <button onclick="exportData()" id="export-btn">
+                    Export Logs
+                </button>
+                <p>Export your volunteering logs in a csv format!</p>
+                <progress
+                    class="temp"
+                    style="margin-top: 5vh"
+                    value="0"
+                    max="100"
+                    id="progress"
+                ></progress>
+            </div>
+            <div class="big-blocks"></div>
+        </div>
+        <div id="toaster" class="invisible">
+            <span id="alert"></span>
+        </div>
+    </div>
+    <script src="../js/logs.js"></script>
+</body>

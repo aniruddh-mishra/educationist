@@ -103,6 +103,10 @@ app.get('/admin', async (request, response) => {
     response.send(templateEngine('admin.html'))
 })
 
+app.get('/logs', async (request, response) => {
+    response.send(templateEngine('logs.html'))
+})
+
 app.get('/classes', async (request, response) => {
     response.send(templateEngine('classes.html'))
 })
