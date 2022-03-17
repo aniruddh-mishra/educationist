@@ -1,6 +1,7 @@
 const params = new URLSearchParams(window.location.search)
 var documentID = params.get('id')
 var bookmarks = []
+var upvotes = []
 var owner = false
 var userData
 var contentData
@@ -28,6 +29,7 @@ async function getData() {
         .get()
     userData = user.data()
     bookmarks = user.data().bookmarks
+    upvotes = userData.upvotes
     if (bookmarks != undefined && bookmarks.includes(documentID)) {
         document.getElementById('bookmark-button').innerHTML = 'Unbookmark'
         document
@@ -102,6 +104,10 @@ async function report() {
 
 async function upvote() {
     const button = document.getElementById('upvote-button')
+    if (upvotes.includes(documentID)) {
+        button.disabled = true
+        token('You can only upvote an item once!')
+    }
     try {
         await db
             .collection('content')

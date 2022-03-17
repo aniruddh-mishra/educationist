@@ -48,6 +48,14 @@ const limiter = rateLimit({
 
 // Sets pages variable to use in functions
 const pages = { root: __dirname + '/public/pages' }
+function templateEngine(name) {
+    const data = fs.readFileSync(__dirname + '/public/pages/' + name, 'utf-8')
+    const template = fs.readFileSync(
+        __dirname + '/public/pages/template.html',
+        'utf-8'
+    )
+    return template.replace('BODY', data)
+}
 
 // Initializes express app
 const app = express()
@@ -56,19 +64,19 @@ app.use(express.json())
 
 // Routes
 app.get('/', async (request, response) => {
-    response.sendFile('index.html', pages)
+    response.send(templateEngine('index.html'))
 })
 
 app.get('/register', (request, response) => {
-    response.sendFile('register.html', pages)
+    response.send(templateEngine('register.html'))
 })
 
 app.get('/login', (request, response) => {
-    response.sendFile('login.html', pages)
+    response.send(templateEngine('login.html'))
 })
 
 app.get('/reset', (request, response) => {
-    response.sendFile('reset.html', pages)
+    response.send(templateEngine('reset.html'))
 })
 
 app.get('/donate', (request, response) => {
@@ -76,41 +84,45 @@ app.get('/donate', (request, response) => {
 })
 
 app.get('/content', limiter, (request, response) => {
-    response.sendFile('content.html', pages)
+    response.send(templateEngine('content.html'))
 })
 
 app.get('/content/document', async (request, response) => {
-    response.sendFile('content-page.html', pages)
+    response.send(templateEngine('content-page.html'))
 })
 
 app.get('/content/upload', async (request, response) => {
-    response.sendFile('upload.html', pages)
+    response.send(templateEngine('upload.html'))
 })
 
 app.get('/create', async (request, response) => {
-    response.sendFile('register-finish.html', pages)
+    response.send(templateEngine('register-finish.html'))
 })
 
 app.get('/admin', async (request, response) => {
-    response.sendFile('admin.html', pages)
+    response.send(templateEngine('admin.html'))
 })
 
 app.get('/classes', async (request, response) => {
-    response.sendFile('classes.html', pages)
+    response.send(templateEngine('classes.html'))
 })
 
 app.get('/class/:classId', async (request, response) => {
-    response.sendFile('class.html', pages)
+    response.send(templateEngine('class.html'))
 })
 
 app.get('/unsubscribe', async (request, response) => {
-    response.sendFile('unsubscribe.html', pages)
+    response.send(templateEngine('unsubscribe.html'))
 })
 
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
     var data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')
     data = data.replace(new RegExp('issue', 'g'), issue)
+    const template = fs.readFileSync(
+        __dirname + '/public/pages/template.html',
+        'utf-8'
+    )
     return response.send(data)
 })
 
@@ -123,7 +135,11 @@ app.get('/announcements/:issue', async (request, response) => {
     }
     message = message.message
     data = data.replace(new RegExp('message1', 'g'), message)
-    return response.send(data)
+    const template = fs.readFileSync(
+        __dirname + '/public/pages/template.html',
+        'utf-8'
+    )
+    return response.send(template.replace('BODY', data))
 })
 
 app.get('/discord', (request, response) => {
@@ -138,9 +154,8 @@ app.get('/discord', (request, response) => {
     )
 })
 
-// MAKE IT A POST REQUEST TO GET THIS STUFF, SEND CODE TO CLIENT
 app.get('/discord/auth', async (request, response) => {
-    return response.sendFile('discord.html', pages)
+    response.send(templateEngine('discord.html'))
 })
 
 app.get('/discord/token', async (request, response) => {

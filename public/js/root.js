@@ -161,6 +161,9 @@ function lightmode() {
                 'src',
                 'https://cdn.educationisttutoring.org/images/light-logos/educationist.png'
             )
+        document
+            .getElementById('theme')
+            .setAttribute('content', 'rgb(17, 19, 18)')
     } else {
         localStorage.setItem('lightmode', 'true')
         document.getElementById('lightmode-btn').innerHTML = 'Dark Mode'
@@ -178,6 +181,7 @@ function lightmode() {
             '--background-block': 'var(--educationist-green)',
             '--background-block-hover': '#509e86',
         }
+        document.getElementById('theme').setAttribute('content', 'white')
     }
     var cssRoot = document.querySelector(':root')
     for (key of Object.keys(settings)) {
