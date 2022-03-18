@@ -76,13 +76,14 @@ firebase.auth().onAuthStateChanged(async (user) => {
     } else {
         document.querySelector('.dropdown').remove()
         const r = document.querySelector(':root')
-        r.style.setProperty('--navbar-width', '27em')
+        r.style.setProperty('--navbar-width', '27rem')
         document.querySelector('body').classList.remove('invisible')
         if (window.location.pathname !== '/login') {
             if (
                 window.location.pathname === '/reset' ||
                 window.location.pathname === '/register' ||
-                window.location.pathname === '/create'
+                window.location.pathname === '/create' ||
+                window.location.pathname === '/donate'
             ) {
                 return
             }

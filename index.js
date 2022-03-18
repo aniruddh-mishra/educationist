@@ -80,7 +80,7 @@ app.get('/reset', (request, response) => {
 })
 
 app.get('/donate', (request, response) => {
-    response.redirect('https://www.paypal.com/paypalme/educationisttutoring')
+    response.send(templateEngine('donate.html'))
 })
 
 app.get('/content', limiter, (request, response) => {
