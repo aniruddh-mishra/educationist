@@ -14,6 +14,7 @@
     --extreme: black;
     --educationist-green-variation: #38b18b9d;
     --help-menu: var(--invert);
+    --scroll-bar-color: var(--educationist-green);
 }
 
 html,
@@ -178,6 +179,28 @@ select option {
     color: var(--invert);
 }
 
+/* width */
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #888;
+    border-radius: 50px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--scroll-bar-color);
+    border-radius: 50px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: var(--educationist-green-variation);
+}
+
 .hamburger-container {
     display: none;
 }
@@ -228,7 +251,7 @@ select option {
     height: 45px;
     width: 45px;
     background-color: var(--border);
-    border-radius: 50%;
+    border-radius: 100%;
     color: white;
     box-shadow: 0 0 10px black;
     text-align: center;
@@ -238,6 +261,23 @@ select option {
     cursor: pointer;
 }
 
+#tutor-menu,
+#student-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#menu-option {
+    margin-top: 5%;
+    border-color: black;
+    color: black;
+    text-align: center;
+    background-color: lightgrey;
+    width: 80%;
+    cursor: pointer;
+    border-radius: 50px;
+}
 #help span {
     font-size: 1.3rem;
     font-weight: bold;
@@ -261,6 +301,9 @@ select option {
     justify-content: end;
 }
 
+#other-questions {
+    font-size: 20px;
+}
 #help-menu-menu span {
     cursor: pointer;
     font-weight: bold;
@@ -275,7 +318,9 @@ select option {
     height: 30vh;
     max-height: 350px;
 }
-
+#help-header {
+    padding-right: 40%;
+}
 #help-menu-container {
     position: fixed;
     bottom: 20px;

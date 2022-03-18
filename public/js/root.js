@@ -170,6 +170,7 @@ function lightmode() {
             '--background-block': 'rgb(30, 34, 32)',
             '--background-block-hover': 'var(--background-standout)',
             '--help-menu': 'var(--invert)',
+            '--scroll-bar-color': 'var(--background-standout)',
         }
         document
             .getElementById('logo-img')
@@ -197,6 +198,7 @@ function lightmode() {
             '--background-block': 'rgb(30, 34, 32)',
             '--background-block-hover': 'rgb(37, 41, 39)',
             '--help-menu': 'var(--background-block)',
+            '--scroll-bar-color': 'var(--background-standout)',
         }
         document.getElementById('theme').setAttribute('content', 'white')
     }
@@ -237,6 +239,7 @@ window.addEventListener('load', () => {
             '--background-block': 'rgb(30, 34, 32)',
             '--background-block-hover': 'rgb(37, 41, 39)',
             '--help-menu': 'var(--background-block)',
+            '--scroll-bar-color': 'var(--background-standout)',
         }
         document.getElementById('theme').setAttribute('content', 'white')
         document
