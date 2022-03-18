@@ -63,6 +63,12 @@ firebase.auth().onAuthStateChanged(async (user) => {
             localStorage.setItem('eid', data.eid)
         }
 
+        if (role === 'student') {
+            document.getElementById('tutor-menu').remove()
+        } else {
+            document.getElementById('student-menu').remove()
+        }
+
         if (role != 'admin') {
             document.getElementById('admin-link').remove()
         }
