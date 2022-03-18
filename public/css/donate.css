@@ -1,0 +1,55 @@
+.fall {
+    position: absolute;
+    animation: fall-animation 10s linear infinite;
+    max-width: 10vw;
+    overflow: hidden;
+    background-color: var(--background-standout);
+    text-align: center;
+    padding: 10px;
+    border-radius: 10%;
+    overflow-wrap: break-word;
+}
+
+#falling,
+body,
+html {
+    overflow-y: hidden;
+}
+
+#donate-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 100%;
+}
+
+#donate-form {
+    z-index: 100;
+    background-color: var(--background-block);
+    padding: 10%;
+    padding-top: 3vh;
+    height: 50vh;
+    overflow-y: scroll;
+}
+
+@keyframes fall-animation {
+    0% {
+        transform: translate3d(var(--start), 0, 0);
+        opacity: 0%;
+    }
+
+    20% {
+        opacity: 100%;
+    }
+
+    100% {
+        transform: translate3d(var(--end), 150vh, 0);
+    }
+}
+
+@media (max-width: 700px) {
+    #falling {
+        display: none;
+    }
+}
