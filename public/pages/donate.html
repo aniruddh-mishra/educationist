@@ -79,7 +79,21 @@
                             Other
                         </button>
                     </div>
-                    <input id="donation-amount" class="temp" type="number" />
+                    <input
+                        onchange="coverDonation()"
+                        id="donation-amount"
+                        class="temp"
+                        type="number"
+                    />
+                </div>
+                <div class="checkbox temp">
+                    <input
+                        onchange="anonymous()"
+                        style="width: 10px"
+                        type="checkbox"
+                        id="cover"
+                    />
+                    <label id="cover-label" for="cover"></label>
                 </div>
                 <script id="paypal-script"></script>
                 <div

@@ -4,7 +4,7 @@
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
     --basic-font: var(--educationist-green);
-    --navbar-width: 43rem;
+    --navbar-width: 50rem;
     --background: rgb(17, 19, 18);
     --background-standout: rgb(37, 41, 39);
     --background-block: rgb(30, 34, 32);
@@ -123,7 +123,7 @@ select option {
 }
 
 .navbar li {
-    padding: 0 5% 0 5%;
+    padding: 0 4% 0 4%;
     font-weight: 600;
     font-size: 1.2rem;
     float: left;
@@ -341,7 +341,7 @@ select option {
     z-index: 100;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1200px) {
     #help-menu-container {
         width: 80vw;
         max-width: 250px;

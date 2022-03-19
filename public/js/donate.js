@@ -75,6 +75,9 @@ async function paypalSetUp() {
                     uid = localStorage.getItem('uid')
                 }
 
+                const cover = document.getElementById('cover').checked
+                console.log(cover)
+
                 return fetch('/paypal/orders', {
                     method: 'post',
                     headers: { 'Content-Type': 'application/json' },
@@ -82,6 +85,7 @@ async function paypalSetUp() {
                         amount: document.getElementById('donation-amount')
                             .value,
                         uid: uid,
+                        cover: cover,
                     }),
                 })
                     .then((response) => response.json())
@@ -270,7 +274,9 @@ function donationAmount(amount, e) {
     if (amount != -1) {
         document.getElementById('donation-amount').value = amount
         document.getElementById('donation-amount').classList.add('temp')
+        coverDonation()
     } else {
+        document.getElementById('cover').parentNode.classList.add('temp')
         document.getElementById('donation-amount').value = ''
         document.getElementById('donation-amount').classList.remove('temp')
     }
@@ -278,4 +284,20 @@ function donationAmount(amount, e) {
         document.querySelector('.selected-option').classList = 'option'
     }
     e.classList = 'selected-option'
+}
+
+function coverDonation() {
+    if (document.getElementById('donation-amount').value != '') {
+        var amount = document.getElementById('donation-amount').value
+        amount = fee(parseFloat(amount))
+        document.getElementById('cover').parentNode.classList.remove('temp')
+        document.getElementById('cover-label').innerHTML =
+            'Generously cover the donation fee of $' + amount
+    } else {
+        document.getElementById('cover').parentNode.classList.add('temp')
+    }
+}
+
+function fee(amount) {
+    return ((amount + 0.49) / (1 - 0.0349) - amount).toFixed(2)
 }

@@ -1105,7 +1105,8 @@ app.post('/paypal/orders', async (request, response) => {
     const APP_SECRET = process.env['PAYPAL_SECRET']
     const amount = request.body.amount
     const uid = request.body.uid
-    const order = await paypal.createOrder(amount, CLIENT_ID, APP_SECRET)
+    const cover = request.body.cover
+    const order = await paypal.createOrder(amount, CLIENT_ID, APP_SECRET, cover)
     await db
         .collection('donations')
         .doc(order.id)
