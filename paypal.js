@@ -1,4 +1,4 @@
-const base = 'https://api-m.sandbox.paypal.com'
+const base = 'https://api-m.paypal.com'
 const fetch = require('node-fetch')
 
 // create an order
