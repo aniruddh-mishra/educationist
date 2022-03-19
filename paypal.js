@@ -23,7 +23,9 @@ async function createOrder(amount, CLIENT_ID, APP_SECRET) {
             ],
         }),
     })
+    console.log(response)
     const data = await response.json()
+    console.log(data)
     return data
 }
 
