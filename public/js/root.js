@@ -15,6 +15,11 @@ const paths = {
     '/content/document': document.getElementById('content-page'),
     '/logs': document.getElementById('logs-page'),
     '/admin': document.getElementById('admin-link'),
+    '/content/': document.getElementById('content-page'),
+    '/classes/': document.getElementById('classes-page'),
+    '/content/document/': document.getElementById('content-page'),
+    '/logs/': document.getElementById('logs-page'),
+    '/admin/': document.getElementById('admin-link'),
 }
 
 const underlineItem = paths[window.location.pathname]
@@ -64,15 +69,21 @@ firebase.auth().onAuthStateChanged(async (user) => {
         }
 
         if (role === 'student') {
-            document.getElementById('tutor-menu').remove()
+            if (document.getElementById('tutor-menu'))
+                document.getElementById('tutor-menu').remove()
         } else {
-            document.getElementById('student-menu').remove()
+            if (document.getElementById('student-menu'))
+                document.getElementById('student-menu').remove()
         }
 
         if (role != 'admin') {
             document.getElementById('admin-link').remove()
         }
-        if (window.location.pathname === '/admin' && role != 'admin') {
+        if (
+            (window.location.pathname === '/admin' ||
+                window.location.pathname === '/admin/') &&
+            role != 'admin'
+        ) {
             logout()
         }
         if (localStorage.getItem('mode') === 'true') {
@@ -89,7 +100,11 @@ firebase.auth().onAuthStateChanged(async (user) => {
                 window.location.pathname === '/reset' ||
                 window.location.pathname === '/register' ||
                 window.location.pathname === '/create' ||
-                window.location.pathname === '/donate'
+                window.location.pathname === '/donate' ||
+                window.location.pathname === '/reset/' ||
+                window.location.pathname === '/register/' ||
+                window.location.pathname === '/create/' ||
+                window.location.pathname === '/donate/'
             ) {
                 return
             }
@@ -124,6 +139,12 @@ function logout() {
     localStorage.clear()
     document.cookie = 'admin=; path=/;'
     firebase.auth().signOut()
+    if (
+        window.location.pathname === '/donate/' ||
+        window.location.pathname === '/donate'
+    ) {
+        window.location.reload()
+    }
 }
 
 function dropdown() {

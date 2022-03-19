@@ -12,7 +12,7 @@ const rateLimit = require('express-rate-limit')
 const algoliasearch = require('algoliasearch')
 const { response } = require('express')
 const fetch = require('node-fetch')
-const exp = require('constants')
+const paypal = require(__dirname + '/paypal.js')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
@@ -80,6 +80,14 @@ app.get('/reset', (request, response) => {
 })
 
 app.get('/donate', (request, response) => {
+    response.send(templateEngine('donate.html'))
+})
+
+app.get('/donate/success', (request, response) => {
+    response.sendFile('donation-success.html', pages)
+})
+
+app.get('/donate/honor', (request, response) => {
     response.send(templateEngine('donate.html'))
 })
 
@@ -1083,6 +1091,91 @@ app.post('/scheduler', async (request, response) => {
         body: JSON.stringify({ key: key }),
     })
     response2 = await response2.text()
+    return response.send('Done!')
+})
+
+// Paypal Stuff
+app.post('/paypal/init', async (request, response) => {
+    const CLIENT_ID = process.env['PAYPAL_CLIENT_ID']
+    return response.send(CLIENT_ID)
+})
+
+app.post('/paypal/orders', async (request, response) => {
+    const CLIENT_ID = process.env['PAYPAL_CLIENT_ID']
+    const APP_SECRET = process.env['PAYPAL_SECRET']
+    const amount = request.body.amount
+    const uid = request.body.uid
+    const order = await paypal.createOrder(amount, CLIENT_ID, APP_SECRET)
+    await db
+        .collection('donations')
+        .doc(order.id)
+        .create({
+            uid: uid,
+            amount: amount,
+            verified: false,
+            date: firebase.firestore.Timestamp.fromMillis(Date.now()),
+        })
+    return response.send(order)
+})
+
+app.post('/paypal/orders/:orderID/capture', async (request, response) => {
+    const CLIENT_ID = process.env['PAYPAL_CLIENT_ID']
+    const APP_SECRET = process.env['PAYPAL_SECRET']
+    const { orderID } = request.params
+    const name = request.body.name
+    const email = request.body.email
+    const captureData = await paypal.capturePayment(
+        orderID,
+        CLIENT_ID,
+        APP_SECRET
+    )
+    await db
+        .collection('donations')
+        .doc(orderID)
+        .update({ verified: true, name: name, email: email })
+
+    const date = new Date()
+    const options = [
+        {
+            key: 'amount1',
+            text: captureData['purchase_units'][0].payments.captures[0].amount
+                .value,
+        },
+        {
+            key: 'date1',
+            text: date.toLocaleString('en-US', {
+                weekday: 'short', // long, short, narrow
+                day: 'numeric', // numeric, 2-digit
+                year: 'numeric', // numeric, 2-digit
+                month: 'long', // numeric, 2-digit, long, short, narrow
+            }),
+        },
+        {
+            key: 'name1',
+            text: name,
+        },
+    ]
+
+    try {
+        // Sends the email to the tutor and the student
+        await sendMail(
+            email,
+            'Donation Receipt',
+            __dirname + '/public/emails/donation.html',
+            options
+        )
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+
+        return response.send('false')
+    }
+    return response.send(captureData)
+})
+
+app.post('/paypal/orders/:orderID/cancel', async (request, response) => {
+    const { orderID } = request.params
+    await db.collection('donations').doc(orderID).delete()
     return response.send('Done!')
 })
 

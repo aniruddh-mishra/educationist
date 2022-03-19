@@ -168,7 +168,7 @@ select option {
     position: absolute;
     background-color: var(--educationist-green-variation);
     min-width: 160px;
-    z-index: 1;
+    z-index: 100;
 }
 
 .dropdown-content a,
@@ -231,6 +231,7 @@ select option {
     right: 0;
     display: flex;
     justify-content: center;
+    z-index: 100;
 }
 
 #toaster span {
@@ -239,6 +240,8 @@ select option {
     padding: 5px;
     background-color: var(--border);
     color: white;
+    border: 3px solid var(--background-standout);
+    border-top: 0;
 }
 
 .temp {
@@ -260,6 +263,7 @@ select option {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    z-index: 100;
 }
 
 #tutor-menu,
@@ -279,6 +283,7 @@ select option {
     cursor: pointer;
     border-radius: 50px;
 }
+
 #help span {
     font-size: 1.3rem;
     font-weight: bold;
@@ -305,6 +310,7 @@ select option {
 #other-questions {
     font-size: 20px;
 }
+
 #help-menu-menu span {
     cursor: pointer;
     font-weight: bold;
@@ -319,9 +325,11 @@ select option {
     height: 30vh;
     max-height: 350px;
 }
+
 #help-header {
     padding-right: 40%;
 }
+
 #help-menu-container {
     position: fixed;
     bottom: 20px;
@@ -330,6 +338,7 @@ select option {
     width: 25vw;
     max-width: 250px;
     max-height: 400px;
+    z-index: 100;
 }
 
 @media (max-width: 1000px) {
