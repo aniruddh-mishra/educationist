@@ -122,19 +122,19 @@ select option {
     width: 60px;
 }
 
+.navbar {
+    float: right;
+    padding: 0;
+    width: var(--navbar-width);
+    list-style-type: none;
+}
+
 .navbar li {
     padding: 0 4% 0 4%;
     font-weight: 600;
     font-size: 1.2rem;
     float: left;
     cursor: pointer;
-}
-
-.navbar {
-    float: right;
-    padding: 0;
-    width: var(--navbar-width);
-    list-style-type: none;
 }
 
 .navbar .selected {
