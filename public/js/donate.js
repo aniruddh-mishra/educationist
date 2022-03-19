@@ -76,7 +76,6 @@ async function paypalSetUp() {
                 }
 
                 const cover = document.getElementById('cover').checked
-                console.log(cover)
 
                 return fetch('/paypal/orders', {
                     method: 'post',
