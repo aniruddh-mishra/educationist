@@ -1,6 +1,5 @@
 var userData
 let orderId
-var anonymousValue = false
 var honorPage = false
 
 if (!localStorage.getItem('uid')) {
@@ -62,7 +61,7 @@ async function paypalSetUp() {
                     !(
                         isEmail &&
                         (document.getElementById('name').value != '' ||
-                            anonymousValue)
+                            document.getElementById('anonymous-btn').checked)
                     )
                 ) {
                     token('You must fill out the information fields')
@@ -93,7 +92,7 @@ async function paypalSetUp() {
 
             // Finalize the transaction after payer approval
             onApprove: function (data, actions) {
-                if (anonymousValue) {
+                if (document.getElementById('anonymous-btn').checked) {
                     var name = 'Anonymous'
                 } else {
                     var name = document.getElementById('name').value
@@ -131,7 +130,7 @@ async function setUpFalling() {
         const data = doc.data()
         master.push({
             name: data.name,
-            amount: parseInt(data.amount),
+            amount: data.amount,
         })
     })
     fall(
@@ -258,7 +257,6 @@ function defaultInformation() {
 function anonymous() {
     document.getElementById('name').classList.toggle('temp')
     document.getElementById('name-header').classList.toggle('temp')
-    anonymousValue = !anonymousValue
 }
 
 function donationAmount(amount, e) {

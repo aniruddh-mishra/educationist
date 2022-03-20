@@ -7,12 +7,6 @@ const fetch = require('node-fetch')
 
 // create an order
 async function createOrder(amount, CLIENT_ID, APP_SECRET, cover) {
-    var finalAmount = amount
-    if (cover) {
-        finalAmount = ((parseFloat(amount) + 0.49) / (1 - 0.0349))
-            .toFixed(2)
-            .toString()
-    }
     const accessToken = await generateAccessToken(CLIENT_ID, APP_SECRET)
     const url = `${base}/v2/checkout/orders`
     const response = await fetch(url, {
@@ -27,7 +21,7 @@ async function createOrder(amount, CLIENT_ID, APP_SECRET, cover) {
                 {
                     amount: {
                         currency_code: 'USD',
-                        value: finalAmount,
+                        value: amount,
                     },
                 },
             ],
