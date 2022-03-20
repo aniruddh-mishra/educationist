@@ -464,6 +464,9 @@ async function verify(e) {
     )
     xhr.onload = async function () {
         if (this.response === 'false') {
+            await db.collection('content').doc(docID).update({
+                verified: false,
+            })
             token('Something went wrong, please try again later')
             return
         }
