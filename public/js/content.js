@@ -46,6 +46,7 @@ async function getContent(data) {
             }
             var snapshot = await db
                 .collection('content')
+                .where('verified', '==', true)
                 .where('__name__', 'in', data)
                 .get()
         } else {
@@ -76,11 +77,8 @@ async function getContent(data) {
     } catch (e) {
         if (e.code === 'permission-denied') {
             alert(
-                'You have been banned from the Educationist servers because of detected spam. If this is an error please contact Edcuationist via email.'
+                'You have likely been banned from Educationist servers. Please contact educationist@educationistutoring.org for more information.'
             )
-            setTimeout(() => {
-                window.location.replace('https://educationisttutoring.org')
-            }, 10000)
             return
         }
     }
