@@ -155,15 +155,12 @@ app.get('/announcements/:issue', async (request, response) => {
 })
 
 app.get('/discord', (request, response) => {
-    // const url =
-    //     'https://discord.com/api/oauth2/authorize?client_id=' +
-    //     process.env['CLIENT_ID'] +
-    //     '&scope=identify%20guilds.join&response_type=code&redirect_uri=' +
-    //     encodeURIComponent(processURL + '/discord/auth')
-    // response.redirect(url)
-    response.send(
-        'We are currently working on getting our discord back online. Please try again later!'
-    )
+    const url =
+        'https://discord.com/api/oauth2/authorize?client_id=' +
+        process.env['CLIENT_ID'] +
+        '&scope=identify%20guilds.join&response_type=code&redirect_uri=' +
+        encodeURIComponent(processURL + '/discord/auth')
+    response.redirect(url)
 })
 
 app.get('/discord/auth', async (request, response) => {

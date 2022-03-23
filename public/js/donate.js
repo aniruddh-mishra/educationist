@@ -144,7 +144,7 @@ var fallingSetUp = false
 
 if (width <= 700 && honorPage) {
     document.getElementById('falling').innerHTML =
-        'Please view this page on mobile'
+        'Please view this page on a larger screen.'
 } else if (width >= 700) {
     setUpFalling()
     fallingSetUp = true
@@ -216,7 +216,7 @@ window.onresize = () => {
     if (width <= 700) {
         if (honorPage) {
             document.getElementById('falling').innerHTML =
-                'Please view this page on mobile'
+                'Please view this page on a larger screen.'
         } else {
             document.getElementById('falling').classList.add('temp')
         }
