@@ -1080,14 +1080,14 @@ app.post('/scheduler', async (request, response) => {
             await db.collection('confirmations').doc(doc.id).delete()
         }
     })
-    var response2 = await fetch(process.env['DISCORD_BOT'] + 'schedule', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ key: key }),
-    })
-    response2 = await response2.text()
+    // var response2 = await fetch(process.env['DISCORD_BOT'] + 'schedule', {
+    //     method: 'POST',
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({ key: key }),
+    // })
+    // response2 = await response2.text()
     return response.send('Done!')
 })
 
