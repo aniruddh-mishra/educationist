@@ -15,6 +15,14 @@ async function create() {
     if (document.getElementById('display-name').value === 'true') {
         author = user.name
     }
+    var subject = document.getElementById('subject').value
+    if (subject === 'other') {
+        subject = document.getElementById('other_subject').value
+    }
+    if (subject.length > 10) {
+        token('Your subject can not be greater than 10 letters in length')
+        return
+    }
     if (document.getElementById('file-type').value === 'upload') {
         const fileBtn = document.getElementById('file')
         const file = fileBtn.files[0]
@@ -38,10 +46,6 @@ async function create() {
     } else {
         var link = document.getElementById('link').value
         var upload = false
-    }
-    var subject = document.getElementById('subject').value
-    if (subject === 'other') {
-        subject = document.getElementById('other_subject').value
     }
     var content = {
         age: document.getElementById('age').value,
