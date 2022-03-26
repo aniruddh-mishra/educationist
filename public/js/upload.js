@@ -39,13 +39,17 @@ async function create() {
         var link = document.getElementById('link').value
         var upload = false
     }
+    var subject = document.getElementById('subject').value
+    if (subject === 'other') {
+        subject = document.getElementById('other_subject').value
+    }
     var content = {
         age: document.getElementById('age').value,
         author: author,
         creator: localStorage.getItem('uid'),
         date: firebase.firestore.Timestamp.fromMillis(Date.now()),
         link: link,
-        subject: document.getElementById('subject').value,
+        subject: subject,
         title: document.getElementById('title').value,
         type: document.getElementById('type-content').value,
         upvotes: 0,
@@ -134,6 +138,15 @@ function fileChange(e) {
         document.getElementById('progress').classList.remove('temp')
         document.getElementById('file').classList.remove('temp')
     }
+}
+
+function subjectChange(e) {
+    if (e.value === 'other') {
+        document.getElementById('other_subject').classList.remove('temp')
+    } else {
+        document.getElementById('other_subject').classList.add('temp')
+    }
+    checkField(e)
 }
 
 const form = document.getElementById('content-upload')
