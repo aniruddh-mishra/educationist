@@ -84,10 +84,21 @@
             <p>Select the recipients before sending the email</p>
             <textarea
                 placeholder="Email"
+                onchange="previewEmail(this)"
                 style="margin-bottom: 2vh"
                 id="email-send"
                 rows="10"
             ></textarea>
+            <br />
+            <button
+                onclick="togglePreview(this)"
+                style="margin-top: 0; margin-bottom: 3vh"
+                class="preview-email-btn"
+            >
+                Preview Email
+            </button>
+            <div class="temp" id="preview-email"></div>
+            <br />
             <select style="margin-bottom: 0" id="recipients">
                 <option value="none">-- Select Recipients</option>
                 <option value="tutor">Tutors</option>

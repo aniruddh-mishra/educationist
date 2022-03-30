@@ -13,6 +13,16 @@ const storageRef = storage.ref()
 var contents = {}
 
 async function setUp() {
+    var xhr = new XMLHttpRequest()
+    xhr.open('GET', '/announcements/preview', true)
+    xhr.send()
+    xhr.onload = async function () {
+        const response = this.response.replace(
+            'message1',
+            '<div id="preview-insert"> </div>'
+        )
+        document.getElementById('preview-email').innerHTML = response
+    }
     const reports = await db
         .collection('reports')
         .where('complete', '!=', true)
@@ -536,4 +546,18 @@ async function deleteContent(e) {
         token(this.response)
     }
     e.parentNode.parentNode.remove()
+}
+
+function previewEmail(e) {
+    console.log('called')
+    document.getElementById('preview-insert').innerHTML = e.value
+}
+
+function togglePreview(e) {
+    document.getElementById('preview-email').classList.toggle('temp')
+    if (e.innerHTML != 'Unpreview') {
+        e.innerHTML = 'Unpreview'
+    } else {
+        e.innerHTML = 'Preview Email'
+    }
 }

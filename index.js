@@ -139,7 +139,13 @@ app.get('/newsletter/:issue', (request, response) => {
 })
 
 app.get('/announcements/:issue', async (request, response) => {
+    console.log('done')
     const issue = request.params.issue
+    if (issue === 'preview') {
+        return response.send(
+            fs.readFileSync('public/emails/update.html', 'utf-8')
+        )
+    }
     var data = fs.readFileSync('public/emails/update.html', 'utf-8')
     var message = (await db.collection('announcements').doc(issue).get()).data()
     if (message === undefined) {
