@@ -866,14 +866,14 @@ app.post('/accept', async (request, response) => {
         if (!request.body.accept) {
             await sendMail(
                 email,
-                'Educationist Interview Results',
+                'Educationist Tutoring Interview Results',
                 __dirname + '/public/emails/reject.html',
                 options
             )
         } else {
             await sendMail(
                 email,
-                'Educationist Acceptance!',
+                'Educationist Tutoring Interview Results',
                 __dirname + '/public/emails/accept.html',
                 options
             )
