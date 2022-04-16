@@ -127,6 +127,10 @@ app.get('/unsubscribe', async (request, response) => {
     response.send(templateEngine('unsubscribe.html'))
 })
 
+app.get('/stats', async (request, response) => {
+    response.send(templateEngine('stats.html'))
+})
+
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
     var data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')
@@ -1186,6 +1190,40 @@ app.post('/paypal/orders/:orderID/cancel', async (request, response) => {
     const { orderID } = request.params
     await db.collection('donations').doc(orderID).delete()
     return response.send('Done!')
+})
+
+app.post('/stats', async (request, response) => {
+    const snapshot = await db.collection('users').get()
+    var tutorCount = 0
+    var studentCount = 0
+    var totalCount = 0
+    var hoursCount = 0
+    snapshot.forEach((doc) => {
+        const data = doc.data()
+        switch (data.role) {
+            case 'student': {
+                studentCount += 1
+                break
+            }
+            default: {
+                if (data['volunteer-entries']) {
+                    for (entry of data['volunteer-entries']) {
+                        hoursCount += entry.minutes / 60
+                    }
+                }
+                tutorCount += 1
+                break
+            }
+        }
+        totalCount = studentCount + tutorCount
+    })
+
+    return response.send({
+        tutorCount: tutorCount,
+        studentCount: studentCount,
+        totalCount: totalCount,
+        hours: parseInt(hoursCount),
+    })
 })
 
 // Bans user based on request

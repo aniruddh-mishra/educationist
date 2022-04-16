@@ -1,0 +1,28 @@
+#stats {
+    display: flex;
+    justify-content: space-evenly;
+    position: fixed;
+    width: 90vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    align-items: center;
+    margin-right: 5vw;
+    margin-left: 5vw;
+}
+
+#stats div {
+    text-align: center;
+}
+
+@media (max-width: 1000px) {
+    #stats {
+        display: block;
+        top: auto;
+    }
+
+    #title {
+        text-align: center;
+        margin-top: 5vh;
+    }
+}
