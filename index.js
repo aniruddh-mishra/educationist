@@ -441,7 +441,7 @@ app.post('/register', async (request, response) => {
         // Sends the email to the user
         await sendMail(
             request.body.email,
-            'Welcome to Educationist Tutoring',
+            'Confirm Educationist Account',
             __dirname + '/public/emails/confirm.html',
             options
         )
@@ -493,6 +493,11 @@ app.post('/create', async (request, response) => {
         birthday: firebase.firestore.Timestamp.fromMillis(birthday.getTime()),
         timezone: data.timezone,
     }
+
+    await db
+        .collection('extra-emails')
+        .doc(data.email.charAt(0).toLowerCase() + data.email.slice(1))
+        .delete()
 
     // Fetches the users with the same eid to confirm that the eid is unique
     const responses = await db.collection('users').where('eid', '==', eid).get()
