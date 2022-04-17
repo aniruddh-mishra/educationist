@@ -143,7 +143,6 @@ app.get('/newsletter/:issue', (request, response) => {
 })
 
 app.get('/announcements/:issue', async (request, response) => {
-    console.log('done')
     const issue = request.params.issue
     if (issue === 'preview') {
         return response.send(
