@@ -372,6 +372,7 @@ async function announce() {
         timestamp: firebase.firestore.Timestamp.fromMillis(Date.now()),
         message: message,
         eid: localStorage.getItem('eid'),
+        total: total,
     })
     id = id.id
     var xhr = new XMLHttpRequest()

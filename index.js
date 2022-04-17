@@ -149,18 +149,19 @@ app.get('/announcements/:issue', async (request, response) => {
             fs.readFileSync('public/emails/update.html', 'utf-8')
         )
     }
-    var data = fs.readFileSync('public/emails/update.html', 'utf-8')
     var message = (await db.collection('announcements').doc(issue).get()).data()
+
+    if (message.total) {
+        var data = fs.readFileSync('public/emails/total.html', 'utf-8')
+    } else {
+        var data = fs.readFileSync('public/emails/update.html', 'utf-8')
+    }
     if (message === undefined) {
         return response.send('We could not find that page')
     }
     message = message.message
     data = data.replace(new RegExp('message1', 'g'), message)
-    const template = fs.readFileSync(
-        __dirname + '/public/pages/template.html',
-        'utf-8'
-    )
-    return response.send(template.replace('BODY', data))
+    return response.send(data)
 })
 
 app.get('/discord', (request, response) => {
