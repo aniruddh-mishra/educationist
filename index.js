@@ -947,6 +947,8 @@ app.post('/announce', async (request, response) => {
         var users = await db.collection('users').get()
     } else if (role === 'test') {
         var users = 'test'
+    } else if (role === 'old') {
+        var users = 'old'
     } else {
         var users = await db.collection('users').where('role', '==', role).get()
     }
@@ -985,11 +987,29 @@ app.post('/announce', async (request, response) => {
     }
 
     var emails = []
-    users.forEach((doc) => {
-        if (!emails.includes(doc.data().email)) {
-            emails.push(doc.data().email)
-        }
-    })
+    if (users != 'old') {
+        users.forEach((doc) => {
+            if (
+                users.unsubscribe &&
+                users.unsubscribe.includes('quick-announcements')
+            ) {
+                return
+            }
+
+            if (!emails.includes(doc.data().email)) {
+                emails.push(doc.data().email)
+            }
+        })
+    }
+
+    if (role === 'old') {
+        const snapshot = await db.collection('extra-emails').get()
+        snapshot.forEach((doc) => {
+            if (!emails.includes(doc.id)) {
+                emails.push(doc.id)
+            }
+        })
+    }
 
     // Groups users to batch them into bcc emails
     var final = []
