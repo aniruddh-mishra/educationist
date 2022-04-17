@@ -11,6 +11,7 @@ var dataSet = [
 const storage = firebase.app().storage('gs://educationist-42b45.appspot.com/')
 const storageRef = storage.ref()
 var contents = {}
+var total = false
 
 async function setUp() {
     var xhr = new XMLHttpRequest()
@@ -380,6 +381,7 @@ async function announce() {
         JSON.stringify({
             role: recipients,
             id: id,
+            total: total,
         })
     )
     xhr.onload = function () {
@@ -560,4 +562,9 @@ function togglePreview(e) {
     } else {
         e.innerHTML = 'Preview Email'
     }
+}
+
+function totalEmail() {
+    total = !total
+    token(total)
 }

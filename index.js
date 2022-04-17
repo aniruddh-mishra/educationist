@@ -931,6 +931,13 @@ app.post('/announce', async (request, response) => {
     //Defines given variables
     const role = request.body.role
     const docId = request.body.id
+    const total = request.body.total
+
+    if (total) {
+        var emailPath = '/public/emails/total.html'
+    } else {
+        var emailPath = '/public/emails/update.html'
+    }
 
     // Retrieves doc
     var message = (await db.collection('announcements').doc(docId).get()).data()
@@ -969,7 +976,7 @@ app.post('/announce', async (request, response) => {
         await sendMail(
             'educationist@educationisttutoring.org',
             'Educationist Announcement',
-            __dirname + '/public/emails/update.html',
+            __dirname + emailPath,
             options
         )
         await fetch(process.env['DISCORD_BOT'] + 'announce/', {
@@ -1003,10 +1010,15 @@ app.post('/announce', async (request, response) => {
 
     if (role === 'old') {
         const snapshot = await db.collection('extra-emails').get()
+        var counter = 0
         snapshot.forEach((doc) => {
+            if (counter >= 100) {
+                return
+            }
             if (!emails.includes(doc.id)) {
                 emails.push(doc.id)
             }
+            counter++
         })
     }
 
@@ -1051,7 +1063,7 @@ app.post('/announce', async (request, response) => {
             await sendMail(
                 batch,
                 'Educationist Announcement',
-                __dirname + '/public/emails/update.html',
+                __dirname + emailPath,
                 options
             )
         } catch (err) {

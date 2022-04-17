@@ -47,7 +47,7 @@ h3 {
 #send-email-btn,
 .content-btn,
 .content-delete-btn,
-.preview-email-btn {
+.preview-email-btn, #total-email-btn {
     color: white;
     padding: 5px 15px 5px 15px;
     font-family: Poppins;
@@ -114,7 +114,7 @@ h3 {
 .certificate-btn,
 #send-email-btn,
 .content-btn,
-.preview-email-btn {
+.preview-email-btn, #total-email-btn {
     background: var(--educationist-blue);
     box-shadow: 0 0 10px var(--educationist-blue);
 }
