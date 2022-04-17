@@ -24,7 +24,7 @@ xhr.onload = async function () {
     animateValue(document.getElementById('total-hours'), 0, response.hours, 500)
 }
 
-function animateValue(obj, start, end, duration) {
+async function animateValue(obj, start, end, duration) {
     var startTimestamp
     const step = (timestamp) => {
         if (!startTimestamp) startTimestamp = timestamp
@@ -35,4 +35,5 @@ function animateValue(obj, start, end, duration) {
         }
     }
     window.requestAnimationFrame(step)
+    return
 }
