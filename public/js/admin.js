@@ -551,7 +551,9 @@ async function deleteContent(e) {
 }
 
 function previewEmail(e) {
-    console.log('called')
+    if (total) {
+        return
+    }
     document.getElementById('preview-insert').innerHTML = e.value
 }
 
@@ -564,7 +566,13 @@ function togglePreview(e) {
     }
 }
 
-function totalEmail() {
+function totalEmail(e) {
     total = !total
+    if (total) {
+        document.getElementById('preview-insert').innerHTML = ''
+        e.innerHTML = 'Template Email'
+    } else {
+        e.innerHTML = 'Total Email'
+    }
     token(total)
 }
