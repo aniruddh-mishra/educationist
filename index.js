@@ -1172,14 +1172,10 @@ app.post('/paypal/orders/:orderID/capture', async (request, response) => {
         .update({ verified: true, name: name, email: email })
 
     const date = new Date()
+
     const options = [
         {
-            key: 'amount1',
-            text: captureData['purchase_units'][0].payments.captures[0].amount
-                .value,
-        },
-        {
-            key: 'date1',
+            key: 'date',
             text: date.toLocaleString('en-US', {
                 weekday: 'short', // long, short, narrow
                 day: 'numeric', // numeric, 2-digit
@@ -1188,17 +1184,17 @@ app.post('/paypal/orders/:orderID/capture', async (request, response) => {
             }),
         },
         {
-            key: 'name1',
-            text: name,
+            key: 'amount',
+            text: captureData['purchase_units'][0].payments.captures[0].amount
+                .value,
         },
     ]
 
     try {
-        // Sends the email to the tutor and the student
         await sendMail(
             email,
             'Donation Receipt',
-            __dirname + '/public/emails/donation.html',
+            __dirname + '/public/emails/receipt.html',
             options
         )
     } catch (err) {
