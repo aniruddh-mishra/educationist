@@ -152,9 +152,15 @@ app.get('/announcements/:issue', async (request, response) => {
     var message = (await db.collection('announcements').doc(issue).get()).data()
 
     if (message.total) {
-        var data = fs.readFileSync('public/emails/total.html', 'utf-8')
+        var data = fs.readFileSync(
+            __dirname + '/public/emails/total.html',
+            'utf-8'
+        )
     } else {
-        var data = fs.readFileSync('public/emails/update.html', 'utf-8')
+        var data = fs.readFileSync(
+            __dirname + '/public/emails/update.html',
+            'utf-8'
+        )
     }
     if (message === undefined) {
         return response.send('We could not find that page')
@@ -935,9 +941,9 @@ app.post('/announce', async (request, response) => {
     const total = request.body.total
 
     if (total) {
-        var emailPath = '/public/emails/total.html'
+        var emailPath = __dirname + '/public/emails/total.html'
     } else {
-        var emailPath = '/public/emails/update.html'
+        var emailPath = __dirname + '/public/emails/update.html'
     }
 
     // Retrieves doc
@@ -977,7 +983,7 @@ app.post('/announce', async (request, response) => {
         await sendMail(
             'educationist@educationisttutoring.org',
             'Educationist Announcement',
-            __dirname + emailPath,
+            emailPath,
             options
         )
         await fetch(process.env['DISCORD_BOT'] + 'announce/', {
@@ -1064,7 +1070,7 @@ app.post('/announce', async (request, response) => {
             await sendMail(
                 batch,
                 'Educationist Announcement',
-                __dirname + emailPath,
+                emailPath,
                 options
             )
         } catch (err) {
