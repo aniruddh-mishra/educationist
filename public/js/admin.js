@@ -489,6 +489,10 @@ async function verify(e) {
 }
 
 async function deleteContent(e) {
+    if (!e.classList.contains('sure')) {
+        token('Click again if you are sure to delete this...')
+        e.classList.add('sure')
+    }
     const docID = e.parentNode.parentNode.id
     const contentData = contents[docID]
     var password

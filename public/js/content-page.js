@@ -72,7 +72,7 @@ async function getData() {
         button.id = 'delete'
         button.innerHTML = 'Remove Content'
         button.classList = 'red-btn'
-        button.setAttribute('onclick', 'deleteContent()')
+        button.setAttribute('onclick', 'deleteContent(this)')
         document.getElementById('report-form').appendChild(button)
     }
 }
@@ -168,7 +168,11 @@ async function unBookmark(button) {
     token('Removed this item from bookmark collection!')
 }
 
-async function deleteContent() {
+async function deleteContent(e) {
+    if (!e.classList.contains('sure')) {
+        token('Click again if you are sure to delete this...')
+        e.classList.add('sure')
+    }
     if (contentData.creator) {
         ownerData = userData
         if (userData.role === 'admin') {
