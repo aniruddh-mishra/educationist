@@ -296,5 +296,5 @@ function coverDonation() {
 }
 
 function fee(amount) {
-    return ((amount + 0.49) / (1 - 0.0349) - amount).toFixed(2)
+    return ((amount + 0.04) / (1 - 0.0199) - amount).toFixed(2)
 }

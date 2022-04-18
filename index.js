@@ -1163,11 +1163,11 @@ app.post('/paypal/orders', async (request, response) => {
     const uid = request.body.uid
     const cover = request.body.cover
     if (cover) {
-        amount = ((parseFloat(amount) + 0.49) / (1 - 0.0349))
+        amount = ((parseFloat(amount) + 0.04) / (1 - 0.0199))
             .toFixed(2)
             .toString()
     }
-    const order = await paypal.createOrder(amount, CLIENT_ID, APP_SECRET, cover)
+    const order = await paypal.createOrder(amount, CLIENT_ID, APP_SECRET)
     await db
         .collection('donations')
         .doc(order.id)

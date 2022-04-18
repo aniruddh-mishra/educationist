@@ -6,7 +6,7 @@ const base = process.env['PAYPAL_URL']
 const fetch = require('node-fetch')
 
 // create an order
-async function createOrder(amount, CLIENT_ID, APP_SECRET, cover) {
+async function createOrder(amount, CLIENT_ID, APP_SECRET) {
     const accessToken = await generateAccessToken(CLIENT_ID, APP_SECRET)
     const url = `${base}/v2/checkout/orders`
     const response = await fetch(url, {
