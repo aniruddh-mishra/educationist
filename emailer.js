@@ -6,16 +6,44 @@ require('dotenv').config({
 })
 
 // Creates instance of transporter
-var transporter = nodemailer.createTransport({
+var transporterRegular = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'educationist@educationisttutoring.org',
-        pass: process.env.PASSWORD,
+        user: process.env['UPDATES_USERNAME'],
+        pass: process.env['UPDATES_PASSWORD'],
     },
 })
 
+var transporterNoReply = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env['NOREPLY_USERNAME'],
+        pass: process.env['NOREPLY_PASSWORD'],
+    },
+})
+
+var transporterVolunteerHours = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env['LOGS_USERNAME'],
+        pass: process.env['LOGS_PASSWORD'],
+    },
+})
+
+var transporters = {
+    regular: transporterRegular,
+    noReply: transporterNoReply,
+    volunteerHours: transporterVolunteerHours,
+}
+
+var emails = {
+    regular: process.env['UPDATES_USERNAME'],
+    noReply: process.env['NOREPLY_USERNAME'],
+    volunteerHours: process.env['LOGS_USERNAME'],
+}
+
 // Sends the main with transporter
-function sendMail(recipient, subject, fileName, options, files) {
+function sendMail(recipient, subject, fileName, options, files, email) {
     // Reads the html file for requested email
     var data = fs.readFileSync(fileName, 'utf8')
 
@@ -26,9 +54,16 @@ function sendMail(recipient, subject, fileName, options, files) {
         }
     }
 
+    var transporter = transporterRegular
+    var emailAddress = emails.regular
+    if (email) {
+        transporter = transporters[email]
+        emailAddress = emails[email]
+    }
+
     // Changes sender info
     var mailOptions = {
-        from: 'Educationist Tutoring <educationist@educationisttutoring.org>',
+        from: 'Educationist Tutoring <' + emailAddress + '>',
         bcc: recipient,
         subject: subject,
         html: data,

@@ -710,7 +710,9 @@ app.post('/volunteer-log', async (request, response) => {
             recipients,
             'Educationist Class Log',
             __dirname + '/public/emails/volunteer.html',
-            options
+            options,
+            undefined,
+            'volunteerHours'
         )
 
         return response.send('Done!')
@@ -984,7 +986,9 @@ app.post('/announce', async (request, response) => {
             'educationist@educationisttutoring.org',
             'Educationist Announcement',
             emailPath,
-            options
+            options,
+            undefined,
+            'noReply'
         )
         await fetch(process.env['DISCORD_BOT'] + 'announce/', {
             method: 'POST',
@@ -1071,7 +1075,9 @@ app.post('/announce', async (request, response) => {
                 batch,
                 'Educationist Announcement',
                 emailPath,
-                options
+                options,
+                undefined,
+                'noReply'
             )
         } catch (err) {
             // Some sort of error for email not being sent
