@@ -169,23 +169,34 @@ async function unBookmark(button) {
 }
 
 async function deleteContent() {
-    const entries = userData['volunteer-entries']
-    for (entry of entries) {
-        if (entry.information.type != 'content') {
-            continue
+    if (contentData.creator) {
+        ownerData = userData
+        if (userData.role === 'admin') {
+            ownerData = (
+                await db.collection('users').doc(contentData.creator).get()
+            ).data()
         }
-        if (entry.information.reference.id === documentID) {
-            await db
-                .collection('users')
-                .doc(localStorage.getItem('uid'))
-                .update({
-                    'volunteer-entries':
-                        firebase.firestore.FieldValue.arrayRemove(entry),
-                    'created-content':
-                        firebase.firestore.FieldValue.arrayRemove(documentID),
-                })
+        const entries = ownerData['volunteer-entries']
+        for (entry of entries) {
+            if (entry.information.type != 'content') {
+                continue
+            }
+            if (entry.information.reference.id === documentID) {
+                await db
+                    .collection('users')
+                    .doc(contentData.creator)
+                    .update({
+                        'volunteer-entries':
+                            firebase.firestore.FieldValue.arrayRemove(entry),
+                        'created-content':
+                            firebase.firestore.FieldValue.arrayRemove(
+                                documentID
+                            ),
+                    })
+            }
         }
     }
+
     if (contentData['file-name']) {
         await storageRef
             .child('content')
