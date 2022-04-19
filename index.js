@@ -1021,15 +1021,10 @@ app.post('/announce', async (request, response) => {
 
     if (role === 'old') {
         const snapshot = await db.collection('extra-emails').get()
-        var counter = 0
         snapshot.forEach((doc) => {
-            if (counter >= 100) {
-                return
-            }
             if (!emails.includes(doc.id)) {
                 emails.push(doc.id)
             }
-            counter++
         })
     }
 
