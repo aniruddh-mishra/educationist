@@ -68,7 +68,7 @@ async function upload() {
             title.innerHTML = 'Please confirm your account to log in...'
             const information = document.createElement('p')
             information.innerHTML =
-                'You should have gotten an email to confirm your account. You will not be able to log in without this.'
+                'You should have gotten an email (check spam) to confirm your account. You will not be able to log in without this.'
             document.querySelector('.main-body').appendChild(title)
             document.querySelector('.main-body').appendChild(information)
         } else if (this.response === 'used') {
