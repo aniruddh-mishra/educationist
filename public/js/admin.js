@@ -383,6 +383,7 @@ async function announce() {
             role: recipients,
             id: id,
             total: total,
+            subject: document.getElementById('email-subject').value,
         })
     )
     xhr.onload = function () {

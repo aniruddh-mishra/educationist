@@ -941,11 +941,16 @@ app.post('/announce', async (request, response) => {
     const role = request.body.role
     const docId = request.body.id
     const total = request.body.total
+    var subject = request.body.subject
 
     if (total) {
         var emailPath = __dirname + '/public/emails/total.html'
     } else {
         var emailPath = __dirname + '/public/emails/update.html'
+    }
+
+    if (subject === '') {
+        subject = 'Educationist Announcement'
     }
 
     // Retrieves doc
@@ -984,7 +989,7 @@ app.post('/announce', async (request, response) => {
         // Sends the email
         await sendMail(
             'educationist@educationisttutoring.org',
-            'Educationist Announcement',
+            subject,
             emailPath,
             options,
             undefined,
@@ -1051,15 +1056,18 @@ app.post('/announce', async (request, response) => {
         temp.push(emails[i])
     }
 
+    if (!total) {
+        message +=
+            '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
+            docId +
+            '"> click here.</a>'
+    }
+
     // Configures email
     const options = [
         {
             key: 'message1',
-            text:
-                message +
-                '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
-                docId +
-                '"> click here.</a>',
+            text: message,
         },
     ]
 
@@ -1068,7 +1076,7 @@ app.post('/announce', async (request, response) => {
             // Sends the email
             await sendMail(
                 batch,
-                'Educationist Announcement',
+                subject,
                 emailPath,
                 options,
                 undefined,
