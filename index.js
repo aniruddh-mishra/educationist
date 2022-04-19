@@ -962,6 +962,13 @@ app.post('/announce', async (request, response) => {
 
     message = message.message
 
+    if (!total) {
+        message +=
+            '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
+            docId +
+            '"> click here.</a>'
+    }
+
     // Retrieves Users to Send Email to
     if (role === 'all') {
         var users = await db.collection('users').get()
@@ -978,11 +985,7 @@ app.post('/announce', async (request, response) => {
         const options = [
             {
                 key: 'message1',
-                text:
-                    message +
-                    '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
-                    docId +
-                    '"> click here.</a>',
+                text: message,
             },
         ]
 
@@ -1054,13 +1057,6 @@ app.post('/announce', async (request, response) => {
         final.push(temp)
         temp = []
         temp.push(emails[i])
-    }
-
-    if (!total) {
-        message +=
-            '<br><br>If you are having trouble viewing this email, <a href="https://dashboard.educationisttutoring.org/announcements/' +
-            docId +
-            '"> click here.</a>'
     }
 
     // Configures email
