@@ -935,7 +935,7 @@ app.post('/certificate', async (request, response) => {
     }
 })
 
-// Announces Messages
+// Announces Message Using Template
 app.post('/announce', async (request, response) => {
     //Defines given variables
     const role = request.body.role
