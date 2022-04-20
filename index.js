@@ -384,7 +384,7 @@ app.post('/match-commit', async (request, response) => {
         // Sends the email to the tutor and the student
         await sendMail(
             [tutorData.email, studentData.email],
-            'Educationist Tutoring Class Update',
+            'New Class Educationist Tutoring',
             __dirname + '/public/emails/match.html',
             options
         )
