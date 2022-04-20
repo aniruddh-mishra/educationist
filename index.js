@@ -430,7 +430,7 @@ app.post('/register', async (request, response) => {
             type: 'creation',
             data: request.body,
             expire: firebase.firestore.Timestamp.fromMillis(
-                Date.now() + 300000
+                Date.now() + 1200000
             ),
         })
     ).id
