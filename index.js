@@ -995,8 +995,7 @@ app.post('/announce', async (request, response) => {
             subject,
             emailPath,
             options,
-            undefined,
-            'noReply'
+            undefined
         )
         await fetch(process.env['DISCORD_BOT'] + 'announce/', {
             method: 'POST',
@@ -1070,14 +1069,7 @@ app.post('/announce', async (request, response) => {
     for (batch of final) {
         try {
             // Sends the email
-            await sendMail(
-                batch,
-                subject,
-                emailPath,
-                options,
-                undefined,
-                'noReply'
-            )
+            await sendMail(batch, subject, emailPath, options, undefined)
         } catch (err) {
             // Some sort of error for email not being sent
             console.log('Reset Email Error: ' + err)

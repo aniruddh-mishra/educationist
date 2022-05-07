@@ -14,14 +14,6 @@ var transporterRegular = nodemailer.createTransport({
     },
 })
 
-var transporterNoReply = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env['NOREPLY_USERNAME'],
-        pass: process.env['NOREPLY_PASSWORD'],
-    },
-})
-
 var transporterVolunteerHours = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -32,13 +24,11 @@ var transporterVolunteerHours = nodemailer.createTransport({
 
 var transporters = {
     regular: transporterRegular,
-    noReply: transporterNoReply,
     volunteerHours: transporterVolunteerHours,
 }
 
 var emails = {
     regular: process.env['UPDATES_USERNAME'],
-    noReply: process.env['NOREPLY_USERNAME'],
     volunteerHours: process.env['LOGS_USERNAME'],
 }
 
