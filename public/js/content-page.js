@@ -62,6 +62,15 @@ async function getData() {
         owner = true
         const verified = document.createElement('p')
         verified.id = 'verified'
+        const user = await db.collection('users').doc(data.creator).get()
+        if (user.exists) {
+            const eid = document.createElement('p')
+            eid.innerHTML = 'Username: ' + user.data().eid
+            const email = document.createElement('p')
+            email.innerHTML = 'Email Address: ' + user.data().email
+            document.getElementById('info').appendChild(eid)
+            document.getElementById('info').appendChild(email)
+        }
         if (data.verified) {
             verified.innerHTML = 'Verified'
         } else {
