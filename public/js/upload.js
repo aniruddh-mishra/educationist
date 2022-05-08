@@ -30,6 +30,10 @@ async function create() {
             token('This file is too large to upload')
             fileBtn.value = ''
         }
+        if (!file.name.includes('.pdf')) {
+            token('File must be a pdf')
+            return
+        }
         const ref = storageRef.child(
             '/content/' + localStorage.getItem('uid') + '/' + file.name
         )
