@@ -667,6 +667,13 @@ app.post('/volunteer-log', async (request, response) => {
 
         student = student.docs[0]
 
+        if (
+            student.data().unsubscribe &&
+            student.data().unsubscribe.includes('class-logs')
+        ) {
+            studentEmails.splice(studentEmails.indexOf(email), 1)
+        }
+
         // Updates user information for student's attendance
         db.collection('users')
             .doc(student.id)
@@ -701,10 +708,25 @@ app.post('/volunteer-log', async (request, response) => {
         },
     ]
 
-    try {
-        var recipients = studentEmails
-        recipients.push(tutorEmail)
+    var recipients = studentEmails
 
+    var tutor = await db
+        .collection('users')
+        .where('email', '==', tutorEmail)
+        .get()
+
+    // Returns error if student does not exist
+    if (tutor.empty) {
+        return response.send('false')
+    }
+
+    tutor = tutor.docs[0]
+
+    if (!tutor.data().unsubscribe.includes('class-logs')) {
+        recipients.push(tutorEmail)
+    }
+
+    try {
         // Sends email to tutor
         await sendMail(
             recipients,

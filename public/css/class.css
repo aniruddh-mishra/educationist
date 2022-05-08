@@ -84,6 +84,14 @@
     width: 100%;
 }
 
+#tutor-how-to {
+    color: var(--invert);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 5vh;
+    margin-bottom: 5vh;
+}
+
 @media (max-width: 1050px) {
     #students,
     #tutor,

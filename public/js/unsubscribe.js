@@ -5,13 +5,16 @@ async function setUp() {
         .get()
     const userData = user.data()
     const unsubscribed = userData.unsubscribe
-    for (unsubscribe of unsubscribed) {
-        const e = document.getElementById(unsubscribe)
-        const start = e.innerHTML.indexOf('Unsubscribe') + 'Unsubscribe'.length
-        e.innerHTML = 'Subscribe' + e.innerHTML.slice(start)
-        e.setAttribute('onclick', 'subscribe(this)')
-        e.classList.toggle('blue')
-        e.classList.toggle('red')
+    if (unsubscribed) {
+        for (unsubscribe of unsubscribed) {
+            const e = document.getElementById(unsubscribe)
+            const start =
+                e.innerHTML.indexOf('Unsubscribe') + 'Unsubscribe'.length
+            e.innerHTML = 'Subscribe' + e.innerHTML.slice(start)
+            e.setAttribute('onclick', 'subscribe(this)')
+            e.classList.toggle('blue')
+            e.classList.toggle('red')
+        }
     }
     document.getElementById('button-container').classList.remove('temp')
 }
