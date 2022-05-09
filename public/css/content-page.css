@@ -34,7 +34,7 @@
 }
 
 #message {
-    color: red;
+    color: var(--educationist-blue);
 }
 
 #preview {
@@ -126,6 +126,11 @@
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
+    }
+
+    #info-container {
+        padding-bottom: 5vh;
+        overflow-x: auto;
     }
 
     #info {
