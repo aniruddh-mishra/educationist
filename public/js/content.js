@@ -22,7 +22,7 @@ var bookmarks = []
 var checked = false
 var documentsCreated = []
 
-async function getContent(data) {
+async function getContent(data, security) {
     try {
         if (!checked) {
             const user = await db
@@ -44,11 +44,18 @@ async function getContent(data) {
                 holder.innerHTML = 'You do not have any bookmarked items'
                 return
             }
-            var snapshot = await db
-                .collection('content')
-                .where('verified', '==', true)
-                .where('__name__', 'in', data)
-                .get()
+            if (security) {
+                var snapshot = await db
+                    .collection('content')
+                    .where('__name__', 'in', data)
+                    .get()
+            } else {
+                var snapshot = await db
+                    .collection('content')
+                    .where('verified', '==', true)
+                    .where('__name__', 'in', data)
+                    .get()
+            }
         } else {
             var snapshot = await db
                 .collection('content')
@@ -196,7 +203,7 @@ async function bookmarkContent() {
     if (selector === 'true') {
         getContent(bookmarks)
     } else if (selector === 'mid') {
-        getContent(documentsCreated)
+        getContent(documentsCreated, true)
     } else {
         getContent()
     }
