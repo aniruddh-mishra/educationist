@@ -24,6 +24,9 @@ async function classInfo() {
         document.getElementById('name').innerHTML =
             subject.charAt(0).toUpperCase() + subject.slice(1) + ' Class'
     }
+    if (classData.nickName) {
+        document.getElementById('name').innerHTML = classData.nickName
+    }
     if (tutor === localStorage.getItem('uid')) {
         if (active) {
             document.getElementById('tutor-how-to').classList.remove('temp')
@@ -268,4 +271,14 @@ async function removeStudent() {
     }
     token('Removed Student')
     document.getElementById('remove-btn').disabled = false
+}
+
+async function nickName() {
+    const nick = document.getElementById('nick-name').value
+    if (nick.length > 12) {
+        token('This nick name is too long. Please choose something shorter.')
+        return
+    }
+    await db.collection('matches').doc(classId).update({ nickName: nick })
+    token('Updated nick name to ' + nick)
 }

@@ -1,3 +1,6 @@
+var userData = false
+var classData = {}
+
 var navigation = document.getElementById('navigation')
 
 document.querySelector('body').classList.add('invisible')
@@ -11,15 +14,35 @@ if (navigation) {
 const paths = {
     '/': document.getElementById('index-page'),
     '/content': document.getElementById('content-page'),
-    '/classes': document.getElementById('classes-page'),
     '/content/document': document.getElementById('content-page'),
     '/logs': document.getElementById('logs-page'),
     '/admin': document.getElementById('admin-link'),
     '/content/': document.getElementById('content-page'),
-    '/classes/': document.getElementById('classes-page'),
     '/content/document/': document.getElementById('content-page'),
     '/logs/': document.getElementById('logs-page'),
     '/admin/': document.getElementById('admin-link'),
+}
+
+const lightMode = {
+    '--background': 'white',
+    '--basic-font': 'black',
+    '--invert': 'rgb(92, 90, 90)',
+    '--background-standout': '#89cab6',
+    '--background-block': 'rgb(30, 34, 32)',
+    '--background-block-hover': 'rgb(37, 41, 39)',
+    '--help-menu': 'var(--background-block)',
+    '--scroll-bar-color': 'var(--background-standout)',
+}
+
+const darkMode = {
+    '--background': 'rgb(17, 19, 18)',
+    '--basic-font': 'var(--educationist-green)',
+    '--invert': 'white',
+    '--background-standout': 'rgb(37, 41, 39)',
+    '--background-block': 'rgb(30, 34, 32)',
+    '--background-block-hover': 'var(--background-standout)',
+    '--help-menu': 'var(--invert)',
+    '--scroll-bar-color': 'var(--background-standout)',
 }
 
 const underlineItem = paths[window.location.pathname]
@@ -60,11 +83,13 @@ firebase.auth().onAuthStateChanged(async (user) => {
         var role = localStorage.getItem('role')
         if (role == undefined) {
             data = (await db.collection('users').doc(user.uid).get()).data()
+            userData = data
             localStorage.setItem('role', data.role)
             localStorage.setItem('eid', data.eid)
             role = data.role
         } else if (localStorage.getItem('eid') == undefined) {
             data = (await db.collection('users').doc(user.uid).get()).data()
+            userData = data
             localStorage.setItem('eid', data.eid)
         }
 
@@ -116,16 +141,30 @@ firebase.auth().onAuthStateChanged(async (user) => {
             return
         }
     }
+    classes()
 })
 
 function openMenu(value) {
-    value.classList.toggle('change')
-    document.querySelector('.navbar').classList.toggle('navbar-vertical')
-    const title = document.querySelector('.title')
-    if (title) {
-        title.classList.toggle('invisible')
+    const state = document
+        .querySelector('.navbar')
+        .classList.contains('navbar-vertical')
+    if (!state) {
+        value.classList.add('change')
+        document.querySelector('.navbar').classList.add('navbar-vertical')
+        const title = document.querySelector('.title')
+        if (title) {
+            title.classList.add('invisible')
+        }
+        document.querySelector('.main-body').classList.add('invisible')
+    } else {
+        value.classList.remove('change')
+        document.querySelector('.navbar').classList.remove('navbar-vertical')
+        const title = document.querySelector('.title')
+        if (title) {
+            title.classList.remove('invisible')
+        }
+        document.querySelector('.main-body').classList.remove('invisible')
     }
-    document.querySelector('.main-body').classList.toggle('invisible')
 }
 
 function accountPage() {
@@ -147,14 +186,20 @@ function logout() {
     }
 }
 
-function dropdown() {
+function dropdown(option) {
     if (
         window.location.pathname == '/login' ||
         window.location.pathname == '/reset'
     ) {
         return
     }
-    document.getElementById('myDropdown').classList.toggle('temp')
+    if (option) {
+        document.getElementById('myDropdown').classList.add('temp')
+        document.getElementById('classesDropDown').classList.toggle('temp')
+    } else {
+        document.getElementById('classesDropDown').classList.add('temp')
+        document.getElementById('myDropdown').classList.toggle('temp')
+    }
 }
 
 window.onclick = function (event) {
@@ -189,16 +234,7 @@ function lightmode() {
     if (mode === 'true') {
         document.getElementById('lightmode-btn').innerHTML = 'Light Mode'
         localStorage.setItem('lightmode', 'false')
-        var settings = {
-            '--background': 'rgb(17, 19, 18)',
-            '--basic-font': 'var(--educationist-green)',
-            '--invert': 'white',
-            '--background-standout': 'rgb(37, 41, 39)',
-            '--background-block': 'rgb(30, 34, 32)',
-            '--background-block-hover': 'var(--background-standout)',
-            '--help-menu': 'var(--invert)',
-            '--scroll-bar-color': 'var(--background-standout)',
-        }
+        var settings = darkMode
         document
             .getElementById('logo-img')
             .setAttribute(
@@ -217,16 +253,7 @@ function lightmode() {
                 'src',
                 'https://cdn.educationisttutoring.org/images/dark-logos/educationist.png'
             )
-        var settings = {
-            '--background': 'white',
-            '--basic-font': 'black',
-            '--invert': 'rgb(92, 90, 90)',
-            '--background-standout': '#89cab6',
-            '--background-block': 'rgb(30, 34, 32)',
-            '--background-block-hover': 'rgb(37, 41, 39)',
-            '--help-menu': 'var(--background-block)',
-            '--scroll-bar-color': 'var(--background-standout)',
-        }
+        var settings = lightMode
         document.getElementById('theme').setAttribute('content', 'white')
     }
     var cssRoot = document.querySelector(':root')
@@ -258,16 +285,6 @@ window.addEventListener('load', () => {
     if (mode === 'true') {
         document.getElementById('lightmode-btn').innerHTML = 'Dark Mode'
         var cssRoot = document.querySelector(':root')
-        const lightMode = {
-            '--background': 'white',
-            '--basic-font': 'black',
-            '--invert': 'rgb(92, 90, 90)',
-            '--background-standout': '#89cab6',
-            '--background-block': 'rgb(30, 34, 32)',
-            '--background-block-hover': 'rgb(37, 41, 39)',
-            '--help-menu': 'var(--background-block)',
-            '--scroll-bar-color': 'var(--background-standout)',
-        }
         document.getElementById('theme').setAttribute('content', 'white')
         document
             .getElementById('logo-img')
@@ -280,3 +297,178 @@ window.addEventListener('load', () => {
         }
     }
 })
+
+async function classes() {
+    const uid = localStorage.getItem('uid')
+    if (!userData) {
+        userData = await db.collection('users').doc(uid).get()
+    }
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/classes', true)
+    xhr.setRequestHeader('Content-Type', 'application/json')
+    xhr.send(
+        JSON.stringify({
+            uid: uid,
+            name: userData.data().name,
+            email: userData.data().email,
+            student: userData.data().role === 'student' ? 'true' : 'false',
+        })
+    )
+    xhr.onload = function () {
+        const data = JSON.parse(this.response)
+        if (data.length === 0) {
+            document.querySelector('.class-merge').remove()
+            document.querySelector('#classesDropDown').innerHTML =
+                'You are not currently registered in any classes.'
+            return
+        }
+        if (userData.data().role === 'student') {
+            document.querySelector('.class-merge').remove()
+        }
+        var counter = 1
+        var inactiveClasses = []
+        document.querySelector('#temp-classes').remove()
+        for (classItem of data) {
+            if (classItem.data.inactive) {
+                inactiveClasses.push(classItem)
+                continue
+            }
+            var nickName = 'Class #' + counter
+            if (classItem.data.nickName) {
+                nickName = classItem.data.nickName
+            }
+            const option = document.createElement('option')
+            option.value = classItem.id
+            option.innerHTML = nickName
+            document.getElementById('class1').appendChild(option)
+            const option2 = document.createElement('option')
+            option2.value = classItem.id
+            option2.innerHTML = nickName
+            document.getElementById('class2').appendChild(option2)
+            classData[classItem.id] = classItem.data
+            var newClass = document.createElement('a')
+            newClass.id = 'class-link'
+            newClass.href = '/class/' + classItem.id
+            newClass.innerHTML = nickName
+            document.getElementById('classes-list').appendChild(newClass)
+
+            counter += 1
+        }
+
+        counter = 1
+        for (classItem of inactiveClasses) {
+            var nickName = 'Inactive Class #' + counter
+            if (classItem.data.nickName) {
+                nickName = classItem.data.nickName
+            }
+            var newClass = document.createElement('a')
+            newClass.id = 'class-link'
+            newClass.href = '/class/' + classItem.id
+            newClass.innerHTML = nickName
+            document.getElementById('classes-list').appendChild(newClass)
+            counter += 1
+        }
+    }
+}
+
+function mergeClasses() {
+    const e = document.querySelector('.class-merge')
+    if (e.innerHTML != 'Close Menu') {
+        if (window.innerWidth <= 1200) {
+            document
+                .querySelector('.hamburger-container')
+                .classList.remove('change')
+            document
+                .querySelector('.navbar')
+                .classList.remove('navbar-vertical')
+        }
+        document.querySelector('.merge-container').style.display = 'flex'
+        e.innerHTML = 'Close Menu'
+        document.querySelector('.main-body').classList.add('temp')
+    } else {
+        if (window.innerWidth <= 1200) {
+            document
+                .querySelector('.hamburger-container')
+                .classList.add('change')
+            document.querySelector('.navbar').classList.add('navbar-vertical')
+        }
+        document.querySelector('.merge-container').style.display = 'none'
+        e.innerHTML = 'Merge Classes'
+        document.querySelector('.main-body').classList.remove('temp')
+    }
+}
+
+async function classesMerge() {
+    document.getElementById('merge-btn').disabled = true
+    const class1 = document.getElementById('class1').value
+    const class2 = document.getElementById('class2').value
+    if (class1 === '' || class2 === '') {
+        document.getElementById('merge-btn').disabled = false
+        token('You must choose two classes to combine.')
+        return
+    }
+
+    if (
+        classData[class1].tutor != localStorage.getItem('uid') ||
+        classData[class2].tutor != localStorage.getItem('uid')
+    ) {
+        token('You must be a tutor in both classes to merge the classes!')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
+
+    if (class1 === class2) {
+        token('The classes must be different.')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
+
+    if (!document.getElementById('merge-btn').classList.contains('selected')) {
+        token(
+            'If you want to merge these two classes please click the merge button again.'
+        )
+        document.getElementById('merge-btn').classList.add('selected')
+        document.getElementById('merge-btn').disabled = false
+        return
+    }
+
+    const students = classData[class2].students
+    var linkedClasses = classData[class2].linkedClasses
+    if (linkedClasses === undefined) {
+        linkedClasses = []
+    }
+    linkedClasses.push(class2)
+
+    var newStudents = []
+    for (student of students) {
+        const newStudent = {
+            student: student.student,
+            studentName: student.studentName,
+            studentEmail: student.studentEmail,
+        }
+        newStudents.push(newStudent)
+    }
+
+    await db
+        .collection('matches')
+        .doc(class1)
+        .update({
+            students: firebase.firestore.FieldValue.arrayUnion(...newStudents),
+            linkedClasses: firebase.firestore.FieldValue.arrayUnion(
+                ...linkedClasses
+            ),
+        })
+
+    await db.collection('matches').doc(class2).delete()
+    token('These two classes have been merged')
+}
+
+window.onresize = function () {
+    document.querySelector('.hamburger-container').classList.remove('change')
+    document.querySelector('.navbar').classList.remove('navbar-vertical')
+    const title = document.querySelector('.title')
+    if (title) {
+        title.classList.remove('invisible')
+    }
+    document.querySelector('.main-body').classList.remove('invisible')
+}

@@ -12,7 +12,7 @@
     --invert: white;
     --border: rgb(66, 71, 66);
     --extreme: black;
-    --educationist-green-variation: #38b18b9d;
+    --educationist-green-variation: #38b18bed;
     --help-menu: var(--invert);
     --scroll-bar-color: var(--educationist-green);
 }
@@ -169,6 +169,7 @@ select option {
     background-color: var(--educationist-green-variation);
     min-width: 160px;
     z-index: 100;
+    max-width: 15rem;
 }
 
 .dropdown-content a,
@@ -342,7 +343,68 @@ select option {
     z-index: 100;
 }
 
+.merge-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 100%;
+    margin-top: 5vh;
+}
+
+#merge-menu {
+    background-color: var(--background-block);
+    z-index: 90;
+    padding: 10%;
+    padding-top: 5vh;
+    height: 60vh;
+    color: white;
+    overflow-y: auto;
+}
+
+#merge-btn, #close-merge-btn {
+    color: var(--invert);
+    padding: 5px 15px 5px 15px;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 1.1em;
+    border-radius: 0.25em;
+    margin-top: 3%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+}
+
 @media (max-width: 1200px) {
+    .navbarBtn {
+        padding-bottom: 0;
+    }
+
+    .merge-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        width: 100%;
+    }
+    
+    #merge-menu {
+        background-color: inherit;
+        z-index: 90;
+        padding: 10%;
+        padding-top: 3vh;
+        height: fit-content;
+        width: 100%;
+        color: white;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+    
     #help-menu-container {
         width: 80vw;
         max-width: 250px;
