@@ -104,27 +104,12 @@ async function placeData(dates, attendance) {
     if (dates) {
         createBlock(
             'Volunteer Hours',
-            [Number((dates[2] / 60).toFixed(1)) + ' Hours'],
-            'small'
-        )
-    }
-
-    if (attendance) {
-        createBlock(
-            'Total Attendance',
-            [Number((attendance[2] / 60).toFixed(1)) + ' Hours'],
-            'small'
-        )
-    }
-
-    spacer = document.createElement('div')
-    spacer.className = 'spacer'
-    document.querySelector('.account').appendChild(spacer)
-
-    if (dates) {
-        createBlock(
-            'Volunteer Hours',
-            ['<canvas id="volunteerHours"></canvas>'],
+            [
+                '<h3>' +
+                    Number((dates[2] / 60).toFixed(1)) +
+                    ' Hours Total</h3>',
+                '<canvas id="volunteerHours"></canvas>',
+            ],
             'large'
         )
         new Chart('volunteerHours', {
@@ -169,7 +154,12 @@ async function placeData(dates, attendance) {
     if (attendance) {
         createBlock(
             'Class Attendance',
-            ['<canvas id="attendance"></canvas>'],
+            [
+                '<h3>' +
+                    Number((attendance[2] / 60).toFixed(1)) +
+                    ' Hours Total</h3>',
+                '<canvas id="attendance"></canvas>',
+            ],
             'large'
         )
         new Chart('attendance', {
@@ -224,9 +214,7 @@ function createBlock(title, fields, size, blockId) {
         block.append(fieldBlock)
     }
     var object = ''
-    if (size === 'small') {
-        object = '.account'
-    } else if (size === 'large') {
+    if (size === 'large') {
         object = '.big-blocks'
     } else if (size === 'small request') {
         object = '.matches'

@@ -6,21 +6,9 @@
     <div id="navigation"></div>
     <script src="../js/root.js"></script>
     <div class="main-body">
-        <h1>Logs</h1>
-        <p>
-            If you need to transfer information from an older account from
-            before 2022, please fill out
-            <a
-                style="text-decoration: underline"
-                href="https://docs.google.com/forms/d/1stwvh9_-rB4YNDXlPQrIj7GlePx0XNFaXvmxm2_idYA/edit"
-                target="_blank"
-                rel="noopener noreferrer"
-                >this form</a
-            >!
-        </p>
-        <div class="account"></div>
+        <h1 style="font-size: 2.5rem; margin-bottom: 0">Logs</h1>
         <div id="request-certificate" class="upload temp">
-            <h2>Request Certificate</h2>
+            <h3>Request Certificate</h3>
             <p>Starting Date</p>
             <input id="start-date" style="margin-bottom: 2vh" type="date" />
             <p>Ending Date</p>
@@ -35,13 +23,17 @@
             <button onclick="certificate()" id="certificate-btn">
                 Certificate
             </button>
-            <p>Get your own Educationist Certificate within 24 - 48 hours!</p>
+            <p style="max-width: 400px">
+                Get your own Educationist Certificate within 24 - 48 hours!
+            </p>
             <button onclick="upload()" id="file-btn">Personal</button>
-            <p>
+            <p style="max-width: 400px">
                 Upload your own certificate to get signed within 24 -48 hours!
             </p>
             <button onclick="exportData()" id="export-btn">Export Logs</button>
-            <p>Export your volunteering logs in a csv format!</p>
+            <p style="max-width: 400px">
+                Export your volunteering logs in a csv format!
+            </p>
             <progress
                 class="temp"
                 style="margin-top: 5vh"
@@ -51,6 +43,18 @@
             ></progress>
         </div>
         <div class="big-blocks"></div>
+
+        <p>
+            If you need to transfer information from an older account from
+            before 2022, please fill out
+            <a
+                style="text-decoration: underline"
+                href="https://docs.google.com/forms/d/1stwvh9_-rB4YNDXlPQrIj7GlePx0XNFaXvmxm2_idYA/edit"
+                target="_blank"
+                rel="noopener noreferrer"
+                >this form</a
+            >!
+        </p>
     </div>
     <div id="toaster" class="invisible">
         <span id="alert"></span>
