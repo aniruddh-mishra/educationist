@@ -1,5 +1,6 @@
 var userData = false
 var classData = {}
+var inactiveClassData = {}
 
 var navigation = document.getElementById('navigation')
 
@@ -300,9 +301,7 @@ window.addEventListener('load', () => {
 
 async function classes() {
     const uid = localStorage.getItem('uid')
-    if (!userData) {
-        userData = await db.collection('users').doc(uid).get()
-    }
+    userData = await db.collection('users').doc(uid).get()
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/classes', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -361,12 +360,20 @@ async function classes() {
             if (classItem.data.nickName) {
                 nickName = classItem.data.nickName
             }
+            inactiveClassData[classItem.id] = classItem.data
             var newClass = document.createElement('a')
             newClass.id = 'class-link'
             newClass.href = '/class/' + classItem.id
             newClass.innerHTML = nickName
             document.getElementById('classes-list').appendChild(newClass)
             counter += 1
+        }
+
+        if (
+            window.location.pathname === '/classes' ||
+            window.location.pathname === '/classes/'
+        ) {
+            classesPage()
         }
     }
 }
