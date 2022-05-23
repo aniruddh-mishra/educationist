@@ -301,27 +301,34 @@ window.addEventListener('load', () => {
 
 async function classes() {
     const uid = localStorage.getItem('uid')
-    userData = await db.collection('users').doc(uid).get()
+
+    if (!userData) {
+        userData = (await db.collection('users').doc(uid).get()).data()
+    }
+
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/classes', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
     xhr.send(
         JSON.stringify({
             uid: uid,
-            name: userData.data().name,
-            email: userData.data().email,
-            student: userData.data().role === 'student' ? 'true' : 'false',
+            name: userData.name,
+            email: userData.email,
+            student: userData.role === 'student' ? 'true' : 'false',
         })
     )
     xhr.onload = function () {
         const data = JSON.parse(this.response)
+
         if (data.length === 0) {
             document.querySelector('.class-merge').remove()
+            document.getElementById('all-classes').remove()
             document.querySelector('#classesDropDown').innerHTML =
                 'You are not currently registered in any classes.'
             return
         }
-        if (userData.data().role === 'student') {
+
+        if (userData.role === 'student') {
             document.querySelector('.class-merge').remove()
         }
         var counter = 1
