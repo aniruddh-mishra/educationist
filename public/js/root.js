@@ -478,11 +478,15 @@ async function classesMerge() {
 }
 
 window.onresize = function () {
-    document.querySelector('.hamburger-container').classList.remove('change')
-    document.querySelector('.navbar').classList.remove('navbar-vertical')
-    const title = document.querySelector('.title')
-    if (title) {
-        title.classList.remove('invisible')
+    if (window.innerWidth > 1200) {
+        document
+            .querySelector('.hamburger-container')
+            .classList.remove('change')
+        document.querySelector('.navbar').classList.remove('navbar-vertical')
+        const title = document.querySelector('.title')
+        if (title) {
+            title.classList.remove('invisible')
+        }
+        document.querySelector('.main-body').classList.remove('invisible')
     }
-    document.querySelector('.main-body').classList.remove('invisible')
 }
