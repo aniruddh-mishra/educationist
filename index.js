@@ -675,7 +675,8 @@ app.post('/volunteer-log', async (request, response) => {
         }
 
         // Updates user information for student's attendance
-        db.collection('users')
+        await db
+            .collection('users')
             .doc(student.id)
             .update({
                 'attendance-entries': firebase.firestore.FieldValue.arrayUnion({
@@ -722,7 +723,12 @@ app.post('/volunteer-log', async (request, response) => {
 
     tutor = tutor.docs[0]
 
-    if (!tutor.data().unsubscribe.includes('class-logs')) {
+    if (
+        !(
+            tutor.data().unsubscribe &&
+            tutor.data().unsubscribe.includes('class-logs')
+        )
+    ) {
         recipients.push(tutorEmail)
     }
 

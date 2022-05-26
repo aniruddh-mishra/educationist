@@ -128,8 +128,8 @@ async function logClass() {
     e.disabled = true
     const date = document.getElementById('date-class')
     const minutes = document.getElementById('minutes-class')
-    if (minutes.value >= 300) {
-        token('You may only log less than 300 minutes at a time')
+    if (minutes.value > 300) {
+        token('You may only log a maximum of 300 minutes at a time')
         e.disabled = false
         return
     }
@@ -173,14 +173,6 @@ async function logClass() {
         },
     }
 
-    await db
-        .collection('users')
-        .doc(localStorage.getItem('uid'))
-        .update({
-            'volunteer-entries':
-                firebase.firestore.FieldValue.arrayUnion(entry),
-        })
-
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/volunteer-log', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -197,6 +189,13 @@ async function logClass() {
             inactivate()
             return
         }
+        await db
+        .collection('users')
+        .doc(localStorage.getItem('uid'))
+        .update({
+            'volunteer-entries':
+                firebase.firestore.FieldValue.arrayUnion(entry),
+        })
         token('This class has been logged!')
         document.getElementById('minutes-class').value = ''
         document.getElementById('date-class').value = ''
