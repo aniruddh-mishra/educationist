@@ -189,13 +189,12 @@ async function logClass() {
             inactivate()
             return
         }
-        await db
-        .collection('users')
-        .doc(localStorage.getItem('uid'))
-        .update({
-            'volunteer-entries':
-                firebase.firestore.FieldValue.arrayUnion(entry),
-        })
+        db.collection('users')
+            .doc(localStorage.getItem('uid'))
+            .update({
+                'volunteer-entries':
+                    firebase.firestore.FieldValue.arrayUnion(entry),
+            })
         token('This class has been logged!')
         document.getElementById('minutes-class').value = ''
         document.getElementById('date-class').value = ''
