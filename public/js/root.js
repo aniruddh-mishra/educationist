@@ -116,10 +116,13 @@ firebase.auth().onAuthStateChanged(async (user) => {
             document.getElementById('lightmode-btn').innerHTML = 'Dark Mode'
         }
         document.querySelector('body').classList.remove('invisible')
+        classes()
     } else {
-        document.querySelector('.dropdown').remove()
+        document.querySelector('.dropdown').parentNode.remove()
+        document.querySelector('.dropdown').parentNode.remove()
+        document.querySelector('#logs-page').parentNode.remove()
         const r = document.querySelector(':root')
-        r.style.setProperty('--navbar-width', '36rem')
+        r.style.setProperty('--navbar-width', '18rem')
         document.querySelector('body').classList.remove('invisible')
         if (window.location.pathname !== '/login') {
             if (
@@ -142,7 +145,6 @@ firebase.auth().onAuthStateChanged(async (user) => {
             return
         }
     }
-    classes()
 })
 
 function openMenu(value) {
