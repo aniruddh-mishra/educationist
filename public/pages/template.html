@@ -50,43 +50,6 @@
     <body>
         BODY
         <div class="invisible" id="help-menu-container">
-            <div id="help-menu-menu">
-                <h3 id="help-header">Help Menu</h3>
-                <span onclick="closeHelp()">X</span>
-            </div>
-            <div id="help-menu">
-                <!-- Messenger Chat Plugin Code -->
-                <div id="fb-root"></div>
-
-                <!-- Your Chat Plugin code -->
-                <div id="fb-customer-chat" class="fb-customerchat"></div>
-
-                <script>
-                    var chatbox = document.getElementById('fb-customer-chat')
-                    chatbox.setAttribute('page_id', '113478550431568')
-                    chatbox.setAttribute('attribution', 'biz_inbox')
-                </script>
-
-                <!-- Your SDK code -->
-                <script>
-                    window.fbAsyncInit = function () {
-                        FB.init({
-                            xfbml: true,
-                            version: 'v14.0',
-                        })
-                    }
-
-                    ;(function (d, s, id) {
-                        var js,
-                            fjs = d.getElementsByTagName(s)[0]
-                        if (d.getElementById(id)) return
-                        js = d.createElement(s)
-                        js.id = id
-                        js.src =
-                            'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js'
-                        fjs.parentNode.insertBefore(js, fjs)
-                    })(document, 'script', 'facebook-jssdk')
-                </script>
                 <div id="student-menu">
                     <button
                         id="menu-option"
@@ -159,8 +122,45 @@
                 </div>
             </div>
         </div>
-        <div onclick="help()" id="help">
-            <span id="help-span">?</span>
+        <div onclick="heeelp()" id="help">
+            <!-- <span id="help-span">?</span> -->
+            <div id="help-menu-menu">
+                <h3 id="help-header">Help Menu</h3>
+                <span onclick="closeHelp()">X</span>
+            </div>
+            <div id="help-menu">
+                <!-- Messenger Chat Plugin Code -->
+                <div id="fb-root"></div>
+
+                <!-- Your Chat Plugin code -->
+                <div id="fb-customer-chat" class="fb-customerchat"></div>
+
+                <script>
+                    var chatbox = document.getElementById('fb-customer-chat')
+                    chatbox.setAttribute('page_id', '113478550431568')
+                    chatbox.setAttribute('attribution', 'biz_inbox')
+                </script>
+
+                <!-- Your SDK code -->
+                <script>
+                    window.fbAsyncInit = function () {
+                        FB.init({
+                            xfbml: true,
+                            version: 'v14.0',
+                        })
+                    }
+
+                    ;(function (d, s, id) {
+                        var js,
+                            fjs = d.getElementsByTagName(s)[0]
+                        if (d.getElementById(id)) return
+                        js = d.createElement(s)
+                        js.id = id
+                        js.src =
+                            'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js'
+                        fjs.parentNode.insertBefore(js, fjs)
+                    })(document, 'script', 'facebook-jssdk')
+                </script>
         </div>
     </body>
 </html>
