@@ -4,7 +4,6 @@
 
 .main-body {
     margin-top: 2vh;
-    text-align: center;
 }
 
 .account,
@@ -19,8 +18,26 @@
     overflow-x: auto;
 }
 
+.class-merge {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .account .block {
     height: 150px;
+    display: flex;
+    justify-content: center;
+}
+
+.matches .block {
+    height: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.classes .block {
+    height: 570px;
     display: flex;
     justify-content: center;
 }
@@ -184,6 +201,6 @@
     justify-content: center;
     align-items: center;
     text-align: center;
-    margin-top: 1vh;
+    margin-top: 5vh;
     margin-bottom: 5vh;
 }

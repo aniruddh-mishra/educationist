@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
-
+ 
 :root {
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
     --basic-font: var(--educationist-green);
     --navbar-width: 52rem;
-    --background: rgb(17, 19, 18);
+    --background: whitesmoke;
     --background-standout: rgb(37, 41, 39);
     --background-block: rgb(30, 34, 32);
     --background-block-hover: var(--background-standout);
     --invert: white;
     --border: rgb(66, 71, 66);
     --extreme: black;
-    --educationist-green-variation: #38b18bed;
+    --educationist-green-variation: #38b18b9d;
     --help-menu: var(--invert);
     --scroll-bar-color: var(--educationist-green);
 }
-
+ 
 html,
 body {
     font-family: Poppins, sans-serif;
@@ -25,18 +25,19 @@ body {
     padding: 0;
     background-color: var(--background);
     overflow-x: hidden;
+    
 }
-
+ 
 a {
     text-decoration: none;
     font-size: 1em;
     color: var(--basic-font);
 }
-
+ 
 a:hover {
     color: var(--invert);
 }
-
+ 
 button {
     margin: 0;
     padding: 0;
@@ -45,19 +46,19 @@ button {
     background: none;
     cursor: pointer;
 }
-
+ 
 .main-body button:hover {
     opacity: 80%;
 }
-
+ 
 img {
     width: 100%;
 }
-
+ 
 header {
     margin: auto;
 }
-
+ 
 input,
 textarea {
     resize: none;
@@ -75,15 +76,15 @@ textarea {
     width: 100%;
     max-width: 400px;
 }
-
+ 
 input:focus {
     border: 1px solid var(--educationist-green);
 }
-
+ 
 input::placeholder {
     color: rgb(127, 129, 127);
 }
-
+ 
 select {
     -webkit-appearance: none;
     appearance: none;
@@ -99,36 +100,36 @@ select {
     cursor: pointer;
     margin-bottom: 5vh;
 }
-
+ 
 select:focus {
     border: 1px solid var(--educationist-green);
 }
-
+ 
 select option {
     color: black;
 }
-
+ 
 .invisible {
     visibility: hidden;
 }
-
+ 
 .icons {
     display: inline;
 }
-
+ 
 .logo {
     cursor: pointer;
     display: inline-block;
     width: 60px;
 }
-
+ 
 .navbar {
     float: right;
     padding: 0;
     width: var(--navbar-width);
     list-style-type: none;
 }
-
+ 
 .navbar li {
     padding: 0 4% 0 4%;
     font-weight: 600;
@@ -140,7 +141,7 @@ select option {
 .navbar .selected {
     color: var(--invert);
 }
-
+ 
 .navbarBtn {
     font-weight: 800;
     font-size: 1.2rem;
@@ -148,7 +149,7 @@ select option {
     color: var(--basic-font);
     padding-bottom: 1em;
 }
-
+ 
 .dropdown-content button,
 .dropdown-content a {
     font-size: 1em;
@@ -158,73 +159,72 @@ select option {
     text-decoration: none;
     display: block;
 }
-
+ 
 .dropdown-content button:hover,
 .dropdown-content a:hover {
     color: var(--invert);
 }
-
+ 
 .dropdown-content {
     position: absolute;
     background-color: var(--educationist-green-variation);
     min-width: 160px;
     z-index: 100;
-    max-width: 15rem;
 }
-
+ 
 .dropdown-content a,
 .dropdown-content button {
     text-decoration: none;
 }
-
+ 
 .navbarBtn:hover {
     color: var(--invert);
 }
-
+ 
 /* width */
 ::-webkit-scrollbar {
     width: 15px;
 }
-
+ 
 /* Track */
 ::-webkit-scrollbar-track {
     background: #888;
     border-radius: 50px;
 }
-
+ 
 /* Handle */
 ::-webkit-scrollbar-thumb {
     background: var(--scroll-bar-color);
     border-radius: 50px;
 }
-
+ 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
     background: var(--educationist-green-variation);
 }
-
+ 
 .hamburger-container {
     display: none;
 }
-
+ 
 .container {
     margin: auto;
     height: 100%;
     padding: 2% 10% 5% 10%;
 }
-
+ 
 .show {
     display: block;
 }
-
+ 
 .error-decorator {
     border-color: red;
 }
-
+ 
 #toaster.invisible {
     visibility: hidden;
 }
-
+ 
 #toaster {
     position: fixed;
     top: 0;
@@ -234,7 +234,7 @@ select option {
     justify-content: center;
     z-index: 100;
 }
-
+ 
 #toaster span {
     border-radius: 0px 0px 10px 10px;
     font-size: 1rem;
@@ -244,11 +244,11 @@ select option {
     border: 3px solid var(--background-standout);
     border-top: 0;
 }
-
+ 
 .temp {
     display: none;
 }
-
+ 
 #help {
     position: fixed;
     bottom: 20px;
@@ -266,14 +266,14 @@ select option {
     cursor: pointer;
     z-index: 100;
 }
-
+ 
 #tutor-menu,
 #student-menu {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
-
+ 
 #menu-option {
     margin-top: 5%;
     border-color: black;
@@ -284,16 +284,18 @@ select option {
     cursor: pointer;
     border-radius: 50px;
 }
-
+ 
 #help span {
     font-size: 1.3rem;
     font-weight: bold;
 }
-
+ 
 #help-menu p {
     margin-right: 1rem;
     margin-left: 1rem;
 }
+
+
 
 #help-menu-menu {
     background-color: var(--background-standout);
@@ -308,16 +310,16 @@ select option {
     align-items: center;
     justify-content: end;
 }
-
+ 
 #other-questions {
     font-size: 20px;
 }
-
+ 
 #help-menu-menu span {
     cursor: pointer;
     font-weight: bold;
 }
-
+ 
 #help-menu {
     background-color: var(--help-menu);
     color: var(--background-standout);
@@ -327,11 +329,11 @@ select option {
     height: 30vh;
     max-height: 350px;
 }
-
+ 
 #help-header {
     padding-right: 40%;
 }
-
+ 
 #help-menu-container {
     position: fixed;
     bottom: 20px;
@@ -343,77 +345,17 @@ select option {
     z-index: 100;
 }
 
-.merge-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;
-    width: 100%;
-    margin-top: 5vh;
-}
-
-#merge-menu {
-    background-color: var(--background-block);
-    z-index: 90;
-    padding: 10%;
-    padding-top: 5vh;
-    height: 60vh;
-    color: white;
-    overflow-y: auto;
-}
-
-#merge-btn, #close-merge-btn {
-    color: var(--invert);
-    padding: 5px 15px 5px 15px;
-    font-family: Poppins;
-    font-weight: 400;
-    font-size: 1.1em;
-    border-radius: 0.25em;
-    margin-top: 3%;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
-    width: 100%;
-    max-width: 400px;
-    background: var(--educationist-blue);
-    box-shadow: 0 0 10px var(--educationist-blue);
-}
-
+ 
 @media (max-width: 1200px) {
-    .navbarBtn {
-        padding-bottom: 0;
-    }
-
-    .merge-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: fit-content;
-        width: 100%;
-    }
-    
-    #merge-menu {
-        background-color: inherit;
-        z-index: 90;
-        padding: 10%;
-        padding-top: 3vh;
-        height: fit-content;
-        width: 100%;
-        color: white;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-    }
-    
     #help-menu-container {
         width: 80vw;
         max-width: 250px;
     }
-
+ 
     .dropdown {
         text-align: center;
     }
-
+ 
     .dropdown-content {
         display: flex;
         flex-direction: column;
@@ -422,32 +364,32 @@ select option {
         position: inherit;
         width: 100%;
     }
-
+ 
     .temp {
         display: none;
     }
-
+ 
     .dropdown-content button {
         text-align: center;
     }
-
+ 
     .navbar {
         display: none;
     }
-
+ 
     .icons {
         display: flex;
         justify-content: space-between;
         align-items: center;
     }
-
+ 
     .hamburger-container {
         height: fit-content;
         cursor: pointer;
         float: right;
         display: block;
     }
-
+ 
     .bar1,
     .bar2,
     .bar3 {
@@ -458,23 +400,23 @@ select option {
         margin-top: 6px;
         transition: 0.4s;
     }
-
+ 
     .bar1 {
         margin-top: 0;
     }
-
+ 
     .change .bar1 {
         transform: rotate(-45deg) translate(-9px, 6px);
     }
-
+ 
     .change .bar2 {
         opacity: 0;
     }
-
+ 
     .change .bar3 {
         transform: rotate(45deg) translate(-8px, -8px);
     }
-
+ 
     .navbar-vertical {
         padding-top: 7vh;
         overflow: hidden;
@@ -486,12 +428,12 @@ select option {
         flex-direction: column;
         animation: grow ease-in-out 1.3s forwards;
     }
-
+ 
     .navbar-vertical li {
         margin: 0 auto 7vh auto;
         width: fit-content;
     }
-
+ 
     @keyframes grow {
         0% {
             max-height: 0;
@@ -501,20 +443,20 @@ select option {
         }
     }
 }
-
+ 
 @media (max-width: 400px) {
     #toaster {
         top: 50vh;
         bottom: 50vh;
     }
-
+ 
     #toaster span {
         border-radius: 10px 10px 10px 10px;
         background-color: rgb(160, 39, 39);
         height: fit-content;
         font-size: 0.8rem;
     }
-
+ 
     #help-menu-container {
         width: 100vw;
         max-width: 250px;

@@ -7,21 +7,42 @@
     <div id="navigation"></div>
     <script src="../js/root.js"></script>
     <div class="main-body">
+        <h1 id = "title">Finish Registration</h1>
+        <h4>
+            Choose a username and password
+        </h4>
+        <div class = "form-div">
         <form id="register">
             <p>Username</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fa fa-user"></i>
             <input onchange="validate(this)" type="text" id="username" />
+            </div>
             <p>Password</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fa fa-lock"></i>
             <input onchange="validate(this)" type="password" id="password" />
+            </div>
             <p>Confirm Password</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fa fa-lock"></i>
             <input
                 onchange="validate(this)"
                 type="password"
                 id="password-confirm"
             />
+            </div>
+            <p>Bio </p>
+            <p onclick="fillExample()" id = 'bio-popup-text'> <u>See an example...</u></p>
+            <div id = "bio-box" class="input-container" >
+                <i id = "mini-icon" class="fa fa-address-book"></i>
+            <textarea onchange="validate(this)" id = "bio" rows="10"></textarea>
+            </div>
             <div class="buttons">
                 <button id="submit" onclick="upload()">Submit</button>
             </div>
         </form>
+        </div>
     </div>
     <div id="toaster" class="invisible">
         <span id="alert"></span>

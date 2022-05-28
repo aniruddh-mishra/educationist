@@ -1,45 +1,56 @@
+
 <link rel="stylesheet" type="text/css" href="../css/register.css" />
 <div id="loader-container" class="loader-none">
     <div id="loader" class="loader"></div>
 </div>
-
+ 
 <div id="container" class="container">
     <div id="navigation"></div>
     <script src="../js/root.js"></script>
     <div class="main-body">
         <h1>Register</h1>
-        <p>
-            If you are having trouble registering, please take a look at
-            <a
+        <h4>
+                       <a
                 style="text-decoration: underline"
                 target="_blank"
                 href="https://www.youtube.com/watch?v=1sSwUGybwpE"
-                >this video.</a
+                > Having trouble?</a
             >
-        </p>
+        </h4>
+ 
+        <div class = "form-div">
         <form id="register" class="active">
-            <p>Full Name</p>
+            <p> Full Name</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fa fa-address-book"></i>
             <input onchange="validate(this)" id="name" type="text" />
+            </div>
             <p>Birthday</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fas fa-calendar"></i>
             <input onchange="validate(this)" id="birthday" type="date" />
+        </div>
+
             <p id="email-header">Email</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fas fa-envelope"></i>
             <input onchange="validate(this)" id="email" type="email" />
+        </div>
+
             <p>Timezone</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fa fa-clock"></i>
             <select id="timezone">
                 <option value="" selected disabled>-- Select Option</option>
-                <option value="Etc/GMT+12">
-                    (GMT-12:00) International Date Line West
+                <option value="US/Eastern">
+                    (GMT-05:00) Eastern Time (US & Canada)
                 </option>
-                <option value="Pacific/Midway">
-                    (GMT-11:00) Midway Island, Samoa
+                <option value="US/East-Indiana">
+                    (GMT-05:00) Indiana (East)
                 </option>
-                <option value="Pacific/Honolulu">(GMT-10:00) Hawaii</option>
                 <option value="US/Alaska">(GMT-09:00) Alaska</option>
                 <option value="America/Los_Angeles">
                     (GMT-08:00) Pacific Time (US & Canada)
-                </option>
-                <option value="America/Tijuana">
-                    (GMT-08:00) Tijuana, Baja California
                 </option>
                 <option value="US/Arizona">(GMT-07:00) Arizona</option>
                 <option value="America/Chihuahua">
@@ -54,6 +65,24 @@
                 <option value="US/Central">
                     (GMT-06:00) Central Time (US & Canada)
                 </option>
+                <option value="Asia/Calcutta">
+                    (GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi
+                </option>
+                <option value="Asia/Calcutta">
+                    (GMT+05:30) Sri Jayawardenapura
+                </option>
+                <option value="Etc/GMT+12">
+                    (GMT-12:00) International Date Line West
+                </option>
+                <option value="Pacific/Midway">
+                    (GMT-11:00) Midway Island, Samoa
+                </option>
+                <option value="Pacific/Honolulu">(GMT-10:00) Hawaii</option>
+               
+                <option value="America/Tijuana">
+                    (GMT-08:00) Tijuana, Baja California
+                </option>
+               
                 <option value="America/Mexico_City">
                     (GMT-06:00) Guadalajara, Mexico City, Monterrey
                 </option>
@@ -63,12 +92,7 @@
                 <option value="America/Bogota">
                     (GMT-05:00) Bogota, Lima, Quito, Rio Branco
                 </option>
-                <option value="US/Eastern">
-                    (GMT-05:00) Eastern Time (US & Canada)
-                </option>
-                <option value="US/East-Indiana">
-                    (GMT-05:00) Indiana (East)
-                </option>
+               
                 <option value="Canada/Atlantic">
                     (GMT-04:00) Atlantic Time (Canada)
                 </option>
@@ -154,12 +178,7 @@
                 <option value="Asia/Karachi">
                     (GMT+05:00) Islamabad, Karachi, Tashkent
                 </option>
-                <option value="Asia/Calcutta">
-                    (GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi
-                </option>
-                <option value="Asia/Calcutta">
-                    (GMT+05:30) Sri Jayawardenapura
-                </option>
+               
                 <option value="Asia/Katmandu">(GMT+05:45) Kathmandu</option>
                 <option value="Asia/Almaty">
                     (GMT+06:00) Almaty, Novosibirsk
@@ -216,14 +235,29 @@
                     (GMT+13:00) Nuku'alofa
                 </option>
             </select>
+        </div>
             <p>Role</p>
+            <div class="input-container">
+                <i id = "mini-icon" class="fa fa-check-square	                "></i>
             <select id="role">
                 <option selected disabled value="">-- Select Option</option>
                 <option value="student">Student</option>
                 <option value="tutor">Tutor</option>
             </select>
-            <button id="submit" onclick="upload()">Submit</button>
+            </div>
+            <button id="submit" onclick="upload()">Create Account 🔒</button>
+            <h6>By selecting Create account, you agree to our Terms of Service
+            </h6>
         </form>
+    </div>
+    <h4>
+        <a
+ style="text-decoration: underline"
+ target="_blank"
+ href="/login"
+ >Already have an account?</a
+>
+</h4>
     </div>
     <div id="toaster" class="invisible">
         <span id="alert"></span>

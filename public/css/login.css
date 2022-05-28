@@ -3,16 +3,20 @@
 :root {
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
+    --font-color: #555656;
 }
 
 h1 {
     font-size: 3.2em;
+
 }
 
 h2 {
     font-size: 1.2em;
     margin: 0;
     margin-bottom: 3%;
+    color:var(--font-color);
+
 }
 
 .blur {
@@ -49,7 +53,7 @@ h2 {
     margin-top: 5%;
     margin-left: 8%;
     margin-right: 2%;
-    max-width: 40%;
+    max-width: 30%;
     height: fit-content;
     border-radius: 0.5em;
     padding: 20px;
@@ -58,6 +62,12 @@ h2 {
 .form {
     display: block;
     width: 100%;
+}
+
+.showPassword {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 #login-btn {
@@ -72,7 +82,7 @@ h2 {
     margin-top: 3%;
     display: block;
     width: 100%;
-    max-width: 400px;
+    min-width: 400px;
 }
 
 #error {
@@ -108,6 +118,68 @@ h2 {
     height: 120px;
     animation: spin 2s linear infinite;
 }
+
+.form-div{
+    box-shadow: 0px 1px 13px 3px rgba(112,112,112,0.75);
+-webkit-box-shadow: 0px 1px 13px 3px rgba(112,112,112,0.75);
+-moz-box-shadow: 0px 1px 13px 3px rgba(112,112,112,0.75);
+    background-color:#f6f6f6;
+    padding-bottom: 2vh;
+    padding-left:4vw;
+    padding-right:4vw;
+    padding-top:2vh;
+    border-radius: 1%;
+}
+.input-container {
+    display:flex;
+    flex-direction: row;
+}
+
+.checkbox {
+    justify-content: flex-start;
+}
+
+#mini-icon, #eye-icon {
+    padding:10px;
+}
+
+#eye-icon:hover {
+    cursor:pointer;
+}
+
+a:hover {
+    font-weight: 900;
+    color:var(--educationist-green);
+}
+
+p {
+    text-align:left;
+    font-weight: 900;
+    color:var(--font-color);
+
+}
+
+input {
+    border-color: var(--font-color)
+}
+ input:focus, textarea:focus {
+    box-shadow: 0 0 5px var(--educationist-blue);
+    border: 1px solid var(--educationist-blue);
+    color:black;
+  }
+
+input, textarea {
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+    color:black;
+
+  }
+
+  .main-body {
+      color: var(--font-color);
+  }
 
 @keyframes spin {
     0% {

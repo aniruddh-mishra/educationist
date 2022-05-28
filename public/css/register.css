@@ -1,27 +1,64 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
-
+ 
 :root {
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
+    --font-color: #555656;
+    --background-div:#d8c3a5;
 }
-
+ 
 .main-body {
     display: block;
     text-align: center;
+    width:100%;
     margin-top: 5vh;
+    color:var(--font-color);
 }
 
-#register {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+#mini-icon {
+    padding:10px;
 }
+
+.input-container {
+    display:flex;
+    flex-direction: row;
+}
+
+#bio-popup-text:hover {
+    color:var(--educationist-green);
+    cursor: pointer;
+}
+.form-div{
+    box-shadow: 0px 1px 13px 3px rgba(112,112,112,0.75);
+-webkit-box-shadow: 0px 1px 13px 3px rgba(112,112,112,0.75);
+-moz-box-shadow: 0px 1px 13px 3px rgba(112,112,112,0.75);
+    background-color:#f6f6f6;
+    padding-bottom: 2vh;
+    padding-left:4vw;
+    padding-right:4vw;
+    padding-top:2vh;
+    border-radius: 1%;
+    display: inline-block;
+    margin: 0 auto;
+    padding-left:2vw;
+    padding-right:2vw;
+    padding-top:2vh;
+    border-radius: 1%;
+    width:20vw;
+}
+
 
 #register input {
-    margin-bottom: 5vh;
+    color:var(--font-color);
+    margin-bottom: 1vh;
 }
 
+textarea {
+    color:var(--font-color);
+    font-family: Poppins;
+
+}
+ 
 #register button {
     color: white;
     background: var(--educationist-blue);
@@ -38,7 +75,7 @@
     width: 100%;
     max-width: 400px;
 }
-
+ 
 .buttons button {
     color: white;
     background: var(--educationist-blue);
@@ -53,16 +90,61 @@
     margin-right: auto;
     display: block;
     width: 50%;
-    max-width: 200px;
-}
+    min-width: 400px;
 
+}
+ 
+ 
+ 
 .buttons button:last-child {
     margin-left: 5vw;
 }
-
+ 
 .buttons {
-    display: flex;
-    justify-content: space-evenly;
     width: 100%;
     max-width: 400px;
+}
+ 
+ 
+ 
+#timezone, #role {
+    color: var(--font-color);
+    margin-bottom: 1vw;
+}
+
+#role {
+    margin-bottom:3vw;
+}
+
+
+p {
+    text-align:left;
+    font-weight: 900;
+}
+ input:focus, textarea:focus {
+    box-shadow: 0 0 5px var(--educationist-blue);
+    margin: 2px 2px 1px 1px;
+    border: 1px solid var(--educationist-blue);
+  }
+
+input, textarea {
+    -webkit-transition: all 0.30s ease-in-out;
+    -moz-transition: all 0.30s ease-in-out;
+    -ms-transition: all 0.30s ease-in-out;
+    -o-transition: all 0.30s ease-in-out;
+  }
+
+select:focus {
+    border: 1px solid var(--educationist-blue);
+    box-shadow: 0 0 5px var(--educationist-blue);
+    margin: 2px 2px 1px 1px;
+}
+
+h4 {
+    font-weight: 400;
+}
+
+a:hover {
+    font-weight: 900;
+    color:var(--educationist-green);
 }

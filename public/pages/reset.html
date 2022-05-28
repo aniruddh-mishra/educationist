@@ -10,6 +10,7 @@
     <h1 class="title">Reset Password</h1>
 
     <div class="main-body">
+        <div class = "form-div">
         <div class="form">
             <form onsubmit="return false;">
                 <div class="profile-img-container">
@@ -26,13 +27,15 @@
                 <h5 class="subtext">
                     Make sure to use the email you signed up with!
                 </h5>
-
+                <div class="input-container">
+                    <i id = "mini-icon" class="fa fa-user"></i>
                 <input
                     onkeyup="validate(this.id)"
                     type="text"
                     id="email"
                     placeholder="example@example.com"
                 />
+                </div>
 
                 <button id="reset-btn" onclick="resetPassword();">Reset</button>
 
@@ -56,6 +59,7 @@
                     </div>
                 </div>
             </form>
+            </div>
         </div>
 
         <div class="reset-img">
