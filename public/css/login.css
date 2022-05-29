@@ -127,10 +127,7 @@ h2 {
 .input-container {
     display:flex;
     flex-direction: row;
-}
-
-.checkbox {
-    justify-content: flex-start;
+    padding-bottom: 2vh;
 }
 
 #mini-icon, #eye-icon {
