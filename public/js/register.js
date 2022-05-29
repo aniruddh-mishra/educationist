@@ -69,8 +69,14 @@ async function upload() {
             const information = document.createElement('p')
             information.innerHTML =
                 'You should have gotten an email (check spam) to confirm your account. You will not be able to log in without this.'
+            const img = document.createElement('img')
+            img.src =
+                'https://cdn.educationisttutoring.org/images/loadingGif.gif'
+            img.style.width = '20vw'
+            img.style.textAlign = 'center'
             document.querySelector('.main-body').appendChild(title)
             document.querySelector('.main-body').appendChild(information)
+            document.querySelector('.main-body').appendChild(img)
         } else if (this.response === 'used') {
             token('This email is already taken, please use another one!')
             document.getElementById('submit').disabled = false
@@ -94,7 +100,6 @@ function validate(element) {
     element.classList.remove('error-decorator')
     return true
 }
-
 const form = document.getElementById('register')
 function handleForm(event) {
     event.preventDefault()
