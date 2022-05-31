@@ -20,6 +20,8 @@ const paths = {
     '/content/document/': document.getElementById('content-page'),
     '/logs/': document.getElementById('logs-page'),
     '/admin/': document.getElementById('admin-link'),
+    '/myprofile': document.getElementById('my-account'),
+    '/myprofile/': document.getElementById('my-account'),
 }
 
 const underlineItem = paths[window.location.pathname]

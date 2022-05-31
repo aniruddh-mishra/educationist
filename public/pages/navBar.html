@@ -1,8 +1,8 @@
 <div class="icons">
-    <div onclick="window.location.replace('educationisttutoring.org');" class="logo">
+    <div onclick="window.location.replace('/');" class="logo">
         <img
             id="logo-img"
-            src="https://cdn.educationisttutoring.org/images/light-logos/EducationistGreen.png"
+            src="https://cdn.educationisttutoring.org/images/dark-logos/educationist.png"
             alt="Logo"
         />
     </div>
@@ -40,11 +40,15 @@
         <div class="dropdown">
             <button onclick="dropdown()" class="navbarBtn">Settings</button>
             <div id="myDropdown" class="dropdown-content temp">
-                <button onclick="logout()">Logout</button>
+                <a id="all-classes" href="/myprofile">My Account</a>
+                <!--
                 <button id="lightmode-btn" onclick="lightmode()">
                     Light Mode
                 </button>
+                -->
+                <button id = "logout" onclick="logout()">Logout</button>
                 <a id="admin-link" href="/admin">Admin</a>
+                
             </div>
         </div>
     </li>

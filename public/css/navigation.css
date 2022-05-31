@@ -28,16 +28,25 @@ body {
     
 }
  
-a {
+a, #logout {
     text-decoration: none;
     font-size: 1em;
     color: var(--basic-font);
 }
- 
-a:hover {
-    color: var(--invert);
+
+li:hover {
+    background-color: var(--basic-font);
+}
+
+li:hover > a {
+    color:white;
 }
  
+
+.navbarBtn {
+    color:var(--basic-font)
+}
+
 button {
     margin: 0;
     padding: 0;
@@ -151,7 +160,7 @@ select option {
 }
  
 .dropdown-content button,
-.dropdown-content a {
+.dropdown-content a, #logout {
     font-size: 1em;
     font-weight: 500;
     color: var(--extreme);

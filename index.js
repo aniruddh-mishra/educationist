@@ -75,6 +75,10 @@ app.get('/login', (request, response) => {
     response.send(templateEngine('login.html'))
 })
 
+app.get('/myprofile', (request, response) => {
+    response.send(templateEngine('myprofile.html'))
+})
+
 app.get('/reset', (request, response) => {
     response.send(templateEngine('reset.html'))
 })
