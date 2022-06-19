@@ -46,7 +46,7 @@ async function classesPage() {
             nickName = data.nickName
         }
 
-        createBlock(nickName, options, 'small class', classItem.id)
+        createBlock(nickName, options, 'small class', id)
         counter += 1
     }
 
@@ -57,10 +57,21 @@ async function classesPage() {
     for (id of Object.keys(inactiveClassData)) {
         const data = inactiveClassData[id]
 
-        var nickName = 'Class #' + counter
+        var nickName = 'Inactive Class #' + counter
         if (data.nickName) {
             nickName = data.nickName
         }
+
+        var studentEmail = ''
+        var studentName = ''
+
+        for (student of data.students) {
+            studentEmail += student.studentEmail + ', '
+            studentName += student.studentName + ', '
+        }
+
+        studentEmail = studentEmail.trim().slice(0, -1)
+        studentName = studentName.trim().slice(0, -1)
 
         var options = []
         options.push('Student: ' + studentName)
