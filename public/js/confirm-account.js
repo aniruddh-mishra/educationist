@@ -1,3 +1,5 @@
+const { token } = require('../../zoho')
+
 function validate(element) {
     if (element.value == '') {
         element.classList.add('error-decorator')
@@ -29,6 +31,15 @@ async function upload() {
     if (password != confirmPassword) {
         token('Both passwords must match')
         document.getElementById('submit').disabled = false
+        return
+    }
+
+    if (password.length <= 6) {
+        token(
+            'This password is too short. Make sure to have atleast 6 characters.'
+        )
+        document.getElementById('submit').disabled = false
+        return
     }
 
     const urlParams = new URLSearchParams(window.location.search)
