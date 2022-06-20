@@ -1,5 +1,3 @@
-const { token } = require('../../zoho')
-
 function validate(element) {
     if (element.value == '') {
         element.classList.add('error-decorator')
