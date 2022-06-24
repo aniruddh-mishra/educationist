@@ -218,18 +218,20 @@ window.onclick = function (event) {
     }
 }
 
-function token(message) {
+function token(message, duration) {
+    if (!duration) {
+        duration = 5000
+    }
     if (!document.getElementById('toaster').classList.contains('invisible')) {
-        setTimeout(() => {
-            token(message)
-        }, 100)
-        return
+        return setTimeout(() => {
+            token(message, duration)
+        }, 500)
     }
     document.getElementById('alert').innerHTML = message
-    document.getElementById('toaster').classList.toggle('invisible')
+    document.getElementById('toaster').classList.remove('invisible')
     setTimeout(() => {
-        document.getElementById('toaster').classList.toggle('invisible')
-    }, 3000)
+        document.getElementById('toaster').classList.add('invisible')
+    }, duration)
 }
 
 function lightmode() {
