@@ -13,6 +13,7 @@ const algoliasearch = require('algoliasearch')
 const { response } = require('express')
 const fetch = require('node-fetch')
 const paypal = require(__dirname + '/paypal.js')
+const zoho = require(__dirname + '/zoho.js')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
@@ -129,6 +130,10 @@ app.get('/unsubscribe', async (request, response) => {
 
 app.get('/stats', async (request, response) => {
     response.send(templateEngine('stats.html'))
+})
+
+app.get('/zohoredirect', async (request, response) => {
+    response.send(templateEngine('zoho.html'))
 })
 
 app.get('/newsletter/:issue', (request, response) => {
@@ -253,25 +258,25 @@ app.get('/js/:filename', (request, response) => {
 // Returns matching requests to tutors
 app.post('/match-requests', async (request, response) => {
     // Defines given variables
-    const subjects = request.body.subjects
+    var subjects = request.body.subjects
     const eid = request.body.eid
 
-    // If tutor has not been accepted in any subjects, an error is returned
-    if (subjects === undefined) {
-        return response.send('error')
+    if (!subjects) {
+        subjects = []
     }
 
     // Fetches all the requests the tutor can teach and ensures the tutor does not recieve their own requests
-    var requests = await db
-        .collection('requests')
-        .where('subject', 'in', subjects)
-        .where('eid', '!=', eid)
-        .get()
+    var requests = await db.collection('requests').where('eid', '!=', eid).get()
 
     // Configures data in a list to return
     var responseObject = []
     requests.forEach((doc) => {
-        responseObject.push(doc.data())
+        if (subjects.includes(doc.data().subject))
+            responseObject.push(doc.data())
+    })
+    requests.forEach((doc) => {
+        if (!subjects.includes(doc.data().subject))
+            responseObject.push(doc.data())
     })
 
     // Sends back a list of data
@@ -324,6 +329,15 @@ app.post('/match-commit', async (request, response) => {
         var tutorData = snapshot.docs[0].data()
     }
 
+    // Fetches information about the tutor
+    if (transfer != 'true') {
+        var tutorData = (await db.collection('users').doc(tutor).get()).data()
+    }
+
+    if (!tutorData.subjects || !tutorData.subjects.includes(subject)) {
+        return response.send('subject')
+    }
+
     // Fetches information about the student
     student = await db
         .collection('users')
@@ -338,10 +352,6 @@ app.post('/match-commit', async (request, response) => {
 
     student = student.docs[0]
 
-    // Fetches information about the tutor
-    if (transfer != 'true') {
-        var tutorData = (await db.collection('users').doc(tutor).get()).data()
-    }
     const studentData = student.data()
 
     // Ads the new details to a new class in firestore
@@ -1288,6 +1298,25 @@ app.post('/stats', async (request, response) => {
         totalCount: totalCount,
         hours: parseInt(hoursCount),
     })
+})
+
+app.post('/zoho', async (request, response) => {
+    if (request.body.code) {
+        return response.send(await zoho.token(request.body.code))
+    }
+    return response.send(await zoho.code())
+})
+
+app.post('/zohoCampaign', async (request, response) => {
+    return response.send(
+        zoho.campaign(
+            request.body.name,
+            request.body.subject,
+            request.body.content,
+            request.body.list,
+            request.body.token
+        )
+    )
 })
 
 // Bans user based on request

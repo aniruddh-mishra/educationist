@@ -582,3 +582,45 @@ function totalEmail(e) {
     }
     token(total)
 }
+
+function zohoToken() {
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', '/zoho', true)
+    xhr.send()
+    xhr.onload = async function () {
+        window.open(this.response)
+    }
+}
+
+function createCampaign() {
+    const paramsObject = {
+        campaignname: 'Test',
+        from_email: 'educationist@educationisttutoring.org',
+        subject: 'Welcome Aboard',
+        content_url:
+            'https://dashboard.educationisttutoring.org/newsletter/february-2022',
+        list_details: JSON.stringify({
+            '3z668dcbee2225c29f1acb1684f08cb6b1dfae786c95c75ba66e87d54fb8f4d0e7':
+                [],
+        }),
+    }
+    const target = new URL('https://campaigns.zoho.com/api/v1.1/createCampaign')
+    target.search = new URLSearchParams(paramsObject).toString()
+    var xhr = new XMLHttpRequest()
+    xhr.open('POST', target, true)
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+    xhr.setRequestHeader(
+        'Authorization',
+        'Zoho-oauthtoken ' + localStorage.getItem('zoho_token')
+    )
+    xhr.send()
+    // var xhr = new XMLHttpRequest()
+    // xhr.open('POST', '/zohoCampaign', true)
+    // xhr.setRequestHeader('Content-Type', 'application/json')
+    // xhr.send(
+    //     JSON.stringify({
+    //         token: localStorage.getItem('zoho_token'),
+    //     })
+    // )
+    // xhr.onload = async function () {}
+}

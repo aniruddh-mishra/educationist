@@ -31,4 +31,4 @@ module.exports.secretKeys = {
 module.exports.processURL =
     process.env.DEPLOYMENT === 'production'
         ? 'https://dashboard.educationisttutoring.org'
-        : 'http://localhost'
+        : 'https://slimy-vampirebat-27.telebit.io'

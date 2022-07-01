@@ -267,12 +267,6 @@ async function matchRequests(subjects) {
             if (this.response === 'false') {
                 logout()
                 return
-            } else if (this.response === 'error') {
-                document.querySelector('.matches').remove()
-                token(
-                    'You must apply to teach subjects before signing up for a class. Please do so from the website!'
-                )
-                return resolve('Done')
             }
             const data = JSON.parse(this.response)
             if (data.length === 0) {
@@ -322,9 +316,7 @@ async function matchRequests(subjects) {
 async function match() {
     if (!this.classList.contains('selected')) {
         this.classList.add('selected')
-        token(
-            'If you are sure you want to take a class with the selected student, click again.'
-        )
+        token('Click again to confirm', 2000)
         return
     }
     this.removeEventListener('click', match)
@@ -344,6 +336,17 @@ async function match() {
     xhr.onload = function () {
         if (this.response == 'false') {
             token('Something went wrong, and your match was not completed!')
+            return
+        } else if (this.response === 'subject') {
+            token(
+                'You must apply to teach this subject before you can teach this student.'
+            )
+            setTimeout(
+                window
+                    .open('https://forms.gle/P5wxQozRj24xsBFY7', '_blank')
+                    .focus(),
+                5000
+            )
             return
         }
         token('Student matched. Check your email!')
