@@ -1,0 +1,429 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
+
+:root {
+    --background: white;
+    --educationist-green: #38b18a;
+    --educationist-blue: #16a9b6;
+    --basic-font: var(--educationist-green);
+    --invert: black;
+    --secondary-background: rgb(200, 244, 222);
+}
+
+html, body {
+    background-color: var(--background);
+    font-family: Poppins, sans-serif;
+    color: var(--basic-font);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Navbar Configuration */
+.navMenu {
+    display: flex;
+    justify-content: space-between;
+    padding: 3vh 10vw;
+}
+
+.navbar {
+    float: right;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+.navbar li {
+    float: left;
+}
+
+.navbar li > a, .dropdown-btn {
+    display: inline;
+    font-family: Poppins;
+    color: var(--basic-font);
+    float: left;
+    padding: 0 20px;
+    font-weight: 600;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.navbar .selected, .navbar li > a:hover, .dropdown-btn:hover {
+    color: var(--invert);
+}
+
+.dropdown {
+    display: flex; 
+    justify-content: center;
+}
+
+.dropdown-content {
+    margin-top: 3rem;
+    padding-top: 0.3rem;
+    max-width: 8rem;
+    flex-direction: column;
+    text-align: center;
+    z-index: 100;
+    position: absolute;
+    display: flex;
+    background-color: var(--secondary-background);
+}
+
+.dropdown-content a, .dropdown-content button {
+    padding: 0.5rem;
+    display: block;
+    color: var(--invert);
+    font-weight: 500;
+    font-size: 1.2em;
+    font-family: Poppins;
+}
+
+.dropdown-content a:hover, .dropdown-content button:hover {
+    color: var(--background);
+}
+
+@media (max-width: 1200px) {
+    .merge-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: fit-content;
+        width: 100%;
+    }
+    
+    #merge-menu {
+        background-color: inherit;
+        z-index: 90;
+        padding: 10%;
+        padding-top: 3vh;
+        height: fit-content;
+        width: 100%;
+        color: white;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .navbar {
+        display: none;
+    }
+
+    .icons {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .hamburger-container {
+        cursor: pointer;
+        float: right;
+    }
+
+    .bar1,
+    .bar2,
+    .bar3 {
+        margin-top: 6px;
+        width: 35px;
+        height: 5px;
+        background-color: var(--invert);
+        margin-top: 6px;
+        transition: 0.4s;
+    }
+
+    .bar1 {
+        margin-top: 0;
+    }
+
+    .change .bar1 {
+        transform: rotate(-45deg) translate(-9px, 6px);
+    }
+
+    .change .bar2 {
+        opacity: 0;
+    }
+
+    .change .bar3 {
+        transform: rotate(45deg) translate(-8px, -8px);
+    }
+
+    .navMenu {
+        flex-direction: column;
+    }
+
+    .navbar-vertical {
+        margin-top: 7vh;
+        overflow: hidden;
+        background-color: var(--secondary-background);
+        height: fit-content;
+        max-height: 0;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        animation: grow ease-in-out 1.3s forwards;
+    }
+
+    .navbar-vertical li {
+        margin: 3vh 0;
+        width: fit-content;
+    }
+
+    .dropdown-content {
+        position: inherit;
+        margin-top: 0;
+    }
+
+    .dropdown {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .dropdown-content a, .dropdown-content button {
+        color: var(--educationist-green);
+    }
+    
+    .dropdown-content a:hover, .dropdown-content button:hover {
+        color: var(--invert);
+    }
+
+    @keyframes grow {
+        0% {
+            max-height: 0;
+        }
+        100% {
+            max-height: 100vh;
+        }
+    }
+}
+
+/* Link Configurations */
+a {
+    text-decoration: none;
+    font-size: 1em;
+    color: var(--basic-font);
+}
+
+a:hover {
+    opacity: 80%;
+}
+
+/* Button Configurations */
+button {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+}
+
+.main-body button:hover {
+    opacity: 80%;
+}
+
+.main-body button {
+    color: white;
+    padding: 5px 15px 5px 15px;
+    font-family: Poppins;
+    font-weight: 400;
+    font-size: 1.1em;
+    border-radius: 0.25em;
+    margin-top: 3vh;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 100%;
+    max-width: 400px;
+}
+
+.btn-normal {
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+}
+
+.btn-red {
+    background: red;
+    box-shadow: 0 0 10px orange;
+}
+
+/* Image Configurations */
+img {
+    width: 100%;
+}
+
+/* Input Configurations */
+input,
+textarea {
+    resize: none;
+    outline: none;
+    background: none;
+    box-sizing: border-box;
+    border: 1px solid var(--border);
+    border-radius: 0.5em;
+    padding: 0.55em 0.75em 0.55em 0.75em;
+    font-weight: 200;
+    font-size: 0.9em;
+    color: var(--invert);
+    font-weight: 400;
+    margin-bottom: 5%;
+    width: 100%;
+    max-width: 400px;
+}
+
+input:focus, textarea:focus {
+    border: 1px solid var(--educationist-green);
+}
+
+input::placeholder, textarea::placeholder {
+    color: rgb(127, 129, 127);
+}
+
+/* Select Configurations */
+select {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: transparent;
+    border: 1px solid rgb(66, 71, 66);
+    border-radius: 0.5rem;
+    font-size: 0.9em;
+    padding: 0.55em 0.75em 0.55em 0.75em;
+    color: var(--invert);
+    width: 100%;
+    max-width: 400px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-bottom: 5vh;
+}
+
+select:focus {
+    border: 1px solid var(--educationist-green);
+}
+
+select option {
+    color: black;
+}
+
+/* Notification Configuration */
+#notification.invisible {
+    visibility: hidden;
+}
+
+#notification {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 100;
+}
+
+#alert {
+    border-radius: 0px 0px 10px 10px;
+    font-size: 1rem;
+    padding: 5px;
+    background-color: var(--border);
+    color: white;
+    border: 3px solid var(--background-standout);
+    border-top: 0;
+}
+
+/* Blocks Configurations */
+.block-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.block {
+    box-shadow: 0 0 10px var(--educationist-blue);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    background-color: var(--background-block);
+    border-radius: 2.5rem;
+    padding: 30px 30px;
+    margin: 0 2vw;
+    margin-bottom: 5vh;
+    overflow-x: hidden;
+    word-break: break-all;
+    text-align: center;
+    overflow-y: hidden;
+}
+
+.block:hover {
+    background-color: var(--background-block-hover);
+}
+
+.block-field {
+    font-size: 0.9rem;
+}
+
+.small {
+    width: 25%;
+    min-width: 200px;
+    max-width: 250px;
+}
+
+.large {
+    width: 70%;
+    min-width: 200px;
+    max-width: 700px;
+}
+
+/* Loader Configurations */
+.loader-container {
+    z-index: 10;
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loader-on {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid #3498db;
+    position: absolute;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Other Tags */
+.invisible {
+    display: none;
+}
+
+.error-decorator {
+    border-color: red;
+}
+
+/* Navigation Bar Configuration */
+.logo {
+    cursor: pointer;
+    display: inline-block;
+    width: 60px;
+}
+
+.navbar {
+    float: right;
+    padding: 0;
+    width: var(--navbar-width);
+    list-style-type: none;
+}

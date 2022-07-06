@@ -7,10 +7,8 @@ const { getFirestore } = require('firebase-admin/firestore')
 const { getAuth } = require('firebase-admin/auth')
 const { getStorage } = require('firebase-admin/storage')
 const { sendMail } = require(__dirname + '/emailer.js')
-const { secretKeys, processURL } = require(__dirname + '/setup.js')
-const rateLimit = require('express-rate-limit')
+const { processURL } = require(__dirname + '/setup.js')
 const algoliasearch = require('algoliasearch')
-const { response } = require('express')
 const fetch = require('node-fetch')
 const paypal = require(__dirname + '/paypal.js')
 const zoho = require(__dirname + '/zoho.js')
@@ -25,21 +23,20 @@ admin.initializeApp({
     storageBucket: 'educationist-42b45.appspot.com',
 })
 
-var db = getFirestore()
-var auth = getAuth()
-var storageRef = getStorage().bucket()
-var rdb = firebase.database()
-var ref = rdb.ref('/')
+let db = getFirestore()
+let auth = getAuth()
+let storageRef = getStorage().bucket()
+let rdb = firebase.database()
+let ref = rdb.ref('/')
 
-// // Initialize Algolia
+// Initialize Algolia
 const client = algoliasearch(process.env.ALGOLIA_APP, process.env.ALGOLIA_ADMIN)
 const index = client.initIndex('content_catalog')
 
-// Ban function if user spams a page
-function ban() {
-    const file = fs.readFileSync(__dirname + '/public/pages/ban.html', 'utf-8')
-    return file
-}
+// Initializes Express
+const app = express()
+app.use(express.json())
+app.listen(80, () => console.log('App available on', processURL))
 
 // Sets pages variable to use in functions
 const pages = { root: __dirname + '/public/pages' }
@@ -52,37 +49,57 @@ function templateEngine(name) {
     return template.replace('BODY', data)
 }
 
-const routes = {
-    '': 'index.html',
-    'register': 'register.html',
-    'login': 'login.html',
-    'reset': 'reset.html',
-    'donate': 'donate.html',
+const templateRoutes = {
+    register: 'register.html',
+    login: 'login.html',
+    reset: 'reset.html',
+    donate: 'donate.html',
     'donate/honor': 'donate.html',
-    'content': 'content.html',
+    content: 'content.html',
     'content/document': 'content-page.html',
     'content/upload': 'upload.html',
-    'create': 'register-finish.html',
-    'admin': 'admin.html',
-    'logs': 'logs.html',
-    'classes': 'classes.html',
-    'unsubscribe': 'unsubscribe.html',
-    'stats': 'stats.html',
-    'discord/auth': 'discord.html'
+    create: 'register-finish.html',
+    admin: 'admin.html',
+    logs: 'logs.html',
+    classes: 'classes.html',
+    unsubscribe: 'unsubscribe.html',
+    stats: 'stats.html',
+    'discord/auth': 'discord.html',
     //TODO Zoho
 }
 
-app.get('/class/:classId', async (request, response) => {
-    return response.send(templateEngine('class.html'))
+const fullPageRoutes = {
+    500: '500.html',
+    404: '404.html',
+    'donate/success': 'donation-success.html',
+    'firebase-error': 'firebase-error.html',
+    home: 'home.html',
+}
+
+app.get('/', (request, response) => {
+    return response.send(templateEngine('index.html'))
 })
 
-app.get('/donate/success', async (request, response) => {
-    return response.sendFile('donation-success.html', pages)
+// Returns static html page for other get routes
+app.get('/:page', (request, response) => {
+    let route = templateRoutes[request.params.page]
+    if (!route) {
+        route = fullPageRoutes[request.params.page]
+        if (!route) {
+            return response.sendFile('404.html', pages)
+        }
+        return response.sendFile(route, pages)
+    }
+    return response.send(templateEngine(route))
+})
+
+app.get('/class/:classId', (request, response) => {
+    return response.send(templateEngine('class.html'))
 })
 
 app.get('/newsletter/:issue', (request, response) => {
     const issue = request.params.issue
-    var data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')
+    let data = fs.readFileSync('public/pages/newsletter.html', 'utf-8')
     data = data.replace(new RegExp('issue', 'g'), issue)
     const template = fs.readFileSync(
         __dirname + '/public/pages/template.html',
@@ -91,22 +108,31 @@ app.get('/newsletter/:issue', (request, response) => {
     return response.send(data)
 })
 
-app.get('/announcements/:issue', async (request, response) => {
+app.get('/announcements/:issue', async (request, response, next) => {
     const issue = request.params.issue
     if (issue === 'preview') {
         return response.send(
             fs.readFileSync('public/emails/update.html', 'utf-8')
         )
     }
-    var message = (await db.collection('announcements').doc(issue).get()).data()
 
+    let message
+    try {
+        message = (await db.collection('announcements').doc(issue).get()).data()
+    } catch (error) {
+        console.log(error)
+        return next()
+    }
+
+    if (!message) {
+        return response.sendFile('404.html', pages)
+    }
+
+    let data
     if (message.total) {
-        var data = fs.readFileSync(
-            __dirname + '/public/emails/total.html',
-            'utf-8'
-        )
+        data = fs.readFileSync(__dirname + '/public/emails/total.html', 'utf-8')
     } else {
-        var data = fs.readFileSync(
+        data = fs.readFileSync(
             __dirname + '/public/emails/update.html',
             'utf-8'
         )
@@ -125,15 +151,7 @@ app.get('/discord', (request, response) => {
         process.env['CLIENT_ID'] +
         '&scope=identify%20guilds.join&response_type=code&redirect_uri=' +
         encodeURIComponent(processURL + '/discord/auth')
-    response.redirect(url)
-})
-
-app.get('/discord/auth', async (request, response) => {
-    response.send(templateEngine('discord.html'))
-})
-
-app.get('/discord/token', async (request, response) => {
-    return response.send('hi')
+    return response.redirect(url)
 })
 
 // Handles CSS and JS file requests
@@ -153,12 +171,11 @@ app.get('/css/:filename', (request, response) => {
         }
 
         // Sends file
-        response.sendFile(fileName, { root: './public/css' })
-        return
+        return response.sendFile(fileName, { root: './public/css' })
     }
 
     // If there is no filename send error
-    response.status(500).send('Missing query!')
+    return response.status(500).send('Missing query!')
 })
 
 app.get('/js/:filename', (request, response) => {
@@ -172,35 +189,22 @@ app.get('/js/:filename', (request, response) => {
         const file = __dirname + '/public/js/' + fileName
 
         // Error for invalid filename
-        if (fs.existsSync(file) == false) {
+        if (!fs.existsSync(file)) {
             return response.status(404).send('We could not find that file!')
         }
 
-        // Adds secret variables to the js file before sending
-        if (secretKeys[fileName.replace('.js', '')]) {
-            fs.readFile(file, 'utf8', (error, data) => {
-                if (error) {
-                    return response
-                        .status(404)
-                        .send('We could not find that file!')
-                }
-                for (key of secretKeys[fileName.replace('.js', '')].keys) {
-                    data = data.replace(key.name, key.key)
-                }
-                response.send(data)
-            })
-        } else {
-            // Returns original file if no keys needed
-            response.sendFile(fileName, { root: './public/js' })
-        }
-        return
+        // Returns file
+        return response.sendFile(fileName, { root: './public/js' })
     }
 
     // If there is no filename send error
-    response.status(500).send('Missing query!')
+    return response.status(500).send('Missing query!')
 })
 
-// Returns static html page for other get routes
-app.get('/:page', async (request, response) => {
-    return response.send(templateEngine(routes[request.params.page]))
-})
+// Handles Express Errors
+const errorFunction = (error, request, response, next) => {
+    const status = error.status || 400
+    // send back an easily understandable error message to the caller
+    return response.sendFile('500.html', pages)
+}
+app.use(errorFunction)

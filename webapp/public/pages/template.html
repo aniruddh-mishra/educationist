@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="invisible" lang="en">
+    <head>
+        <title>Educationist Tutoring</title>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta id="theme" name="theme-color" content="rgb(17, 19, 18)" />
+        <link rel="stylesheet" href="../css/index.css" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png"
+        />
+        <link
+            rel="manifest"
+            href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest"
+        />
+        <script
+            data-host="https://microanalytics.io"
+            data-dnt="false"
+            src="https://microanalytics.io/js/script.js"
+            id="ZwSg9rf6GA"
+            async
+            defer
+        ></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/pdf-lib/dist/pdf-lib.min.js"></script>
+        <script src="https://unpkg.com/downloadjs@1.4.7"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch-lite.umd.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch.umd.js"></script>
+        <script defer src="../js/index.js"></script>
+    </head>
+    <body>
+        <div class="navMenu">
+            <div class="icons">
+                <div onclick="window.location.replace('/');" class="logo">
+                    <img
+                        id="logo-img"
+                        src="https://cdn.educationisttutoring.org/images/dark-logos/educationist.png"
+                        alt="Logo"
+                    />
+                </div>
+                <div class="hamburger-container" onclick="openMenu(this)">
+                    <div class="bar1"></div>
+                    <div class="bar2"></div>
+                    <div class="bar3"></div>
+                </div>
+            </div>
+            <ul class="navbar navbar-vertical">
+                <li><a id="index-page" href="/">Home</a></li>
+                <li><a id="content-page" href="/content">Content</a></li>
+                <li>
+                    <div class="dropdown">
+                        <button
+                            class="dropdown-btn"
+                            onclick="dropDownMenu(this)"
+                        >
+                            Classes
+                        </button>
+                        <div
+                            style="color: black"
+                            id="classesDropDown"
+                            class="dropdown-content invisible"
+                        >
+                            <div id="temp-classes">
+                                <a id="class-link" href="#">---</a>
+                            </div>
+                            <div id="classes-list"></div>
+                            <button
+                                class="class-merge temp"
+                                onclick="mergeClasses(this)"
+                            >
+                                Merge Classes
+                            </button>
+                            <a href="/classes">My Classes</a>
+                        </div>
+                    </div>
+                </li>
+                <li><a id="logs-page" href="/logs">Logs</a></li>
+                <li><a id="content-page" href="/donate">Donate</a></li>
+                <li><a id="settings" href="/account">Settings</a></li>
+            </ul>
+        </div>
+
+        <div class="merge-container invisible">
+            <div id="merge-menu">
+                <h2>Combine Classes</h2>
+                <p>
+                    If you have multiple students in a class, add them to the
+                    same class here.
+                </p>
+                <h3>First Class #</h3>
+                <select id="class1">
+                    <option value="">-- Select Class</option>
+                </select>
+                <h3>Second Class #</h3>
+                <select id="class2">
+                    <option value="">-- Select Class</option>
+                </select>
+                <button
+                    style="margin-bottom: 5vh"
+                    id="merge-btn"
+                    onclick="classesMerge()"
+                >
+                    Merge Classes
+                </button>
+                <button
+                    style="margin-bottom: 5vh"
+                    id="close-merge-btn"
+                    onclick="mergeClasses()"
+                >
+                    Close Menu
+                </button>
+            </div>
+        </div>
+
+        <div id="container">BODY</div>
+        <div id="fb-root"></div>
+        <div id="fb-customer-chat" class="fb-customerchat"></div>
+
+        <!-- <script>
+            let chatbox = document.getElementById('fb-customer-chat')
+            chatbox.setAttribute('page_id', '113478550431568')
+            chatbox.setAttribute('attribution', 'biz_inbox')
+        </script>
+
+        <script>
+            window.fbAsyncInit = function () {
+                FB.init({
+                    xfbml: true,
+                    version: 'v14.0',
+                })
+            }
+            ;(function (d, s, id) {
+                var js,
+                    fjs = d.getElementsByTagName(s)[0]
+                if (d.getElementById(id)) return
+                js = d.createElement(s)
+                js.id = id
+                js.src =
+                    'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js'
+                fjs.parentNode.insertBefore(js, fjs)
+            })(document, 'script', 'facebook-jssdk')
+        </script> -->
+        <div id="notification" class="invisible">
+            <span id="alert"></span>
+        </div>
+        <div id="loader-container" class="loader-none">
+            <div id="loader" class="loader-on"></div>
+        </div>
+    </body>
+</html>
