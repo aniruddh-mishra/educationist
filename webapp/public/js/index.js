@@ -1,10 +1,6 @@
 // Initializes Important Global Variables
 const start = new Event('start')
 const guestPaths = ['login', 'reset', 'register', 'create', 'donate']
-const modes = {
-    light: {},
-    dark: {},
-}
 const paths = {
     '': document.getElementById('index-page'),
     content: document.getElementById('content-page'),
@@ -19,7 +15,6 @@ let mode
 let db
 let storageRef
 let classesData
-let cssRoot = document.querySelector(':root')
 
 // Checks path
 const underlineItem = paths[path]
@@ -137,23 +132,12 @@ async function firebaseAuthChange(user) {
         const profile = (
             await db.collection('users').doc(user.uid).get()
         ).data()
-        uid = user.uid
-        mode = profile.mode
-        if (!mode) {
-            mode = 'light'
-        }
-        if (
-            localStorage.getItem('mode') &&
-            localStorage.getItem('mode') != mode
-        ) {
-            window.reload()
-        }
-        localStorage.setItem('mode', mode)
         document.dispatchEvent(start)
     } else {
         if (!guestPaths.includes(path)) {
             if (path === '') {
-                return fetchHome()
+                document.querySelector('body').style.display = 'block'
+                return
             }
 
             window.location.replace(

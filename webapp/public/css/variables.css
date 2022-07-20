@@ -1,0 +1,8 @@
+:root {
+    --background: white;
+    --educationist-green: #38b18a;
+    --educationist-blue: #16a9b6;
+    --basic-font: var(--educationist-green);
+    --invert: black;
+    --secondary-background: rgb(200, 244, 222);
+}

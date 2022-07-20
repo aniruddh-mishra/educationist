@@ -8,4 +8,4 @@ require('dotenv').config({
 module.exports.processURL =
     process.env.DEPLOYMENT === 'production'
         ? 'https://dashboard.educationisttutoring.org'
-        : 'https://slimy-vampirebat-27.telebit.io'
+        : 'https://good-bird-23.telebit.io'
