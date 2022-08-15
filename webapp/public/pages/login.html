@@ -1,0 +1,63 @@
+<link rel="stylesheet" type="text/css" href="../css/login.css" />
+<script src="../js/login.js"></script>
+
+<div class="form">
+    <h1 class="title">Login</h1>
+    <form onsubmit="return false;">
+        <div class="profile-img-container">
+            <div class="profile-image">
+                <img
+                    src="https://cdn.educationisttutoring.org/images/profile-picture.svg"
+                    alt="Profile Picture"
+                />
+            </div>
+        </div>
+
+        <h2>Username or Email</h2>
+
+        <input
+            onkeyup="validate(this.id)"
+            type="text"
+            id="eid"
+            placeholder="Username or Email"
+        />
+
+        <h2>Password</h2>
+
+        <input
+            onkeyup="validate(this.id)"
+            type="password"
+            id="password"
+            placeholder="Password"
+        />
+
+        <button class="btn-normal" id="login-btn" onclick="login();">
+            Login
+        </button>
+
+        <div class="menu">
+            <div id="error"></div>
+
+            <div style="text-align: center">
+                <a href="/reset" target="_blank" rel="noopener noreferrer"
+                    >Forgot Password</a
+                >
+            </div>
+
+            <div style="text-align: center; margin-top: 3%">
+                <a href="/register" target="_blank" rel="noopener noreferrer"
+                    >Create your Account</a
+                >
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="login-img">
+    <img
+        src="https://cdn.educationisttutoring.org/images/login.svg"
+        alt="login-image"
+    />
+</div>
+
+<script src="../js/login.js"></script>

@@ -201,10 +201,30 @@ app.get('/js/:filename', (request, response) => {
     return response.status(500).send('Missing query!')
 })
 
+// Validates login information
+app.post('/login', async (request, response) => {
+    // Fetches user information from eid
+    const snapshot = await db
+        .collection('users')
+        .where('eid', '==', request.body.eid)
+        .get()
+
+    // Error if the username does not exist
+    if (snapshot.empty) {
+        response.send('false')
+        return
+    }
+
+    // Returns the emails
+    const email = snapshot.docs[0].data().email
+    return response.send(email)
+})
+
 // Handles Express Errors
 const errorFunction = (error, request, response, next) => {
     const status = error.status || 400
     // send back an easily understandable error message to the caller
     return response.sendFile('500.html', pages)
 }
+
 app.use(errorFunction)

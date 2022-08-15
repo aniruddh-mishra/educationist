@@ -1,6 +1,6 @@
 // Initializes Important Global Variables
 const start = new Event('start')
-const guestPaths = ['login', 'reset', 'register', 'create', 'donate']
+const guestPaths = ['', 'login', 'reset', 'register', 'create', 'donate']
 const paths = {
     '': document.getElementById('index-page'),
     content: document.getElementById('content-page'),
@@ -31,6 +31,32 @@ if (!localStorage.getItem('mode')) {
 } else {
     document.querySelector('html').classList.remove('invisible')
     changeMode(localStorage.getItem('mode'))
+}
+
+// Makes any string lowercase
+function lowerCase(string) {
+    var newString = ''
+    for (character of string) {
+        newString += character.toLowerCase()
+    }
+    return newString
+}
+
+// Load Function
+function bufferToggle() {
+    document.querySelector('.navMenu').classList.toggle('blur')
+    document.getElementById('container').classList.toggle('blur')
+    document.getElementById('loader-container').classList.toggle('invisible')
+    for (const input of document.querySelectorAll('body input, body button')) {
+        input.disabled = document
+            .querySelector('.navMenu')
+            .classList.contains('blur')
+    }
+}
+
+// Open Menu
+function openMenu() {
+    document.getElementById('navbar').classList.toggle('navbar-vertical')
 }
 
 // Requests Function
@@ -129,24 +155,24 @@ function firebaseInit() {
 async function firebaseAuthChange(user) {
     if (user) {
         // Sets important global variables
-        const profile = (
-            await db.collection('users').doc(user.uid).get()
-        ).data()
-        document.dispatchEvent(start)
+        activatePage()
     } else {
-        if (!guestPaths.includes(path)) {
-            if (path === '') {
-                document.querySelector('body').style.display = 'block'
-                return
-            }
-
+        if (path === '') {
+            fetchHome()
+        } else if (!guestPaths.includes(path)) {
             window.location.replace(
                 '/login?path=' +
                     window.location.pathname +
                     window.location.search
             )
+        } else {
+            activatePage()
         }
     }
+}
+
+function activatePage() {
+    document.querySelector('body').classList.remove('invisible')
 }
 
 // Main Website Logged Out
@@ -154,9 +180,7 @@ function fetchHome() {
     request('/home', 'GET', (response) => {
         document.querySelector('html').remove()
         document.write(response)
-        let script = document.createElement('script')
-        script.setAttribute('src', '../js/home.js')
-        document.body.appendChild(script)
+        activatePage()
     })
 }
 

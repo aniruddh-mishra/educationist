@@ -5,7 +5,7 @@
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta id="theme" name="theme-color" content="rgb(17, 19, 18)" />
+        <link rel="stylesheet" href="../css/variables.css" />
         <link rel="stylesheet" href="../css/index.css" />
         <link
             rel="apple-touch-icon"
@@ -48,7 +48,7 @@
         <script src="https://cdn.jsdelivr.net/npm/algoliasearch@4.5.1/dist/algoliasearch.umd.js"></script>
         <script defer src="../js/index.js"></script>
     </head>
-    <body>
+    <body class="invisible">
         <div class="navMenu">
             <div class="icons">
                 <div onclick="window.location.replace('/');" class="logo">
@@ -58,13 +58,13 @@
                         alt="Logo"
                     />
                 </div>
-                <div class="hamburger-container" onclick="openMenu(this)">
+                <div class="hamburger-container" onclick="openMenu()">
                     <div class="bar1"></div>
                     <div class="bar2"></div>
                     <div class="bar3"></div>
                 </div>
             </div>
-            <ul class="navbar navbar-vertical">
+            <ul id="navbar" class="navbar">
                 <li><a id="index-page" href="/">Home</a></li>
                 <li><a id="content-page" href="/content">Content</a></li>
                 <li>
@@ -84,12 +84,12 @@
                                 <a id="class-link" href="#">---</a>
                             </div>
                             <div id="classes-list"></div>
-                            <button
+                            <!-- <button
                                 class="class-merge temp"
                                 onclick="mergeClasses(this)"
                             >
                                 Merge Classes
-                            </button>
+                            </button> -->
                             <a href="/classes">My Classes</a>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
             </ul>
         </div>
 
-        <div class="merge-container invisible">
+        <!-- <div class="merge-container invisible">
             <div id="merge-menu">
                 <h2>Combine Classes</h2>
                 <p>
@@ -130,40 +130,14 @@
                     Close Menu
                 </button>
             </div>
-        </div>
+        </div> -->
 
         <div id="container">BODY</div>
-        <div id="fb-root"></div>
-        <div id="fb-customer-chat" class="fb-customerchat"></div>
 
-        <!-- <script>
-            let chatbox = document.getElementById('fb-customer-chat')
-            chatbox.setAttribute('page_id', '113478550431568')
-            chatbox.setAttribute('attribution', 'biz_inbox')
-        </script>
-
-        <script>
-            window.fbAsyncInit = function () {
-                FB.init({
-                    xfbml: true,
-                    version: 'v14.0',
-                })
-            }
-            ;(function (d, s, id) {
-                var js,
-                    fjs = d.getElementsByTagName(s)[0]
-                if (d.getElementById(id)) return
-                js = d.createElement(s)
-                js.id = id
-                js.src =
-                    'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js'
-                fjs.parentNode.insertBefore(js, fjs)
-            })(document, 'script', 'facebook-jssdk')
-        </script> -->
         <div id="notification" class="invisible">
             <span id="alert"></span>
         </div>
-        <div id="loader-container" class="loader-none">
+        <div id="loader-container" class="invisible">
             <div id="loader" class="loader-on"></div>
         </div>
     </body>
