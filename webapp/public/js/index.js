@@ -57,6 +57,7 @@ function bufferToggle() {
 // Open Menu
 function openMenu() {
     document.getElementById('navbar').classList.toggle('navbar-vertical')
+    document.getElementById('container').classList.toggle('invisible')
 }
 
 // Requests Function
@@ -94,26 +95,27 @@ function notify(message, duration) {
     }
 
     // Handles if existing alert
-    if (!document.getElementById('toaster').classList.contains('invisible')) {
+    if (
+        !document.getElementById('notification').classList.contains('invisible')
+    ) {
         return setTimeout(() => {
-            token(message, duration)
+            notify(message, duration)
         }, 500)
     }
 
     // Sets alert
     document.getElementById('alert').innerHTML = message
-    document.getElementById('toaster').classList.remove('invisible')
+    document.getElementById('notification').classList.remove('invisible')
     setTimeout(() => {
-        document.getElementById('toaster').classList.add('invisible')
+        document.getElementById('notification').classList.add('invisible')
     }, duration)
 }
 
 // Logout Function
 function logout() {
     localStorage.clear()
-    document.cookie = 'admin=; path=/;'
     firebase.auth().signOut()
-    if (path === 'donate') {
+    if (guestPaths.includes(path)) {
         window.location.reload()
     }
 }
@@ -154,7 +156,23 @@ function firebaseInit() {
 // AuthChange handler for firebase login
 async function firebaseAuthChange(user) {
     if (user) {
-        // Sets important global variables
+        if (
+            localStorage.getItem('uid') === null ||
+            localStorage.getItem('uid') != user.uid
+        ) {
+            logout()
+        }
+        if (
+            window.location.pathname === '/login' ||
+            window.location.pathname === '/register'
+        ) {
+            const params = new URLSearchParams(window.location.search)
+            if (params.has('path')) {
+                window.location.replace(params.get('path'))
+                return
+            }
+            window.location.replace('/')
+        }
         activatePage()
     } else {
         if (path === '') {
@@ -272,17 +290,23 @@ function setClasses() {
 }
 
 // Creates Blocks
-function createBlock(header, sections, size, blockId) {
+function createBlock(title, sections, size, blockId) {
     let block = document.createElement('div')
     block.classList.add('block')
+    block.classList.add(size)
     if (blockId) {
         block.id = blockId
     }
-    let titleBlock = document.createElement('h3')
-    titleBlock.innerHTML = header
-    block.appendChild(titleBlock)
-    for (const section of sections) {
+    if (title) {
+        let titleBlock = document.createElement('h3')
+        titleBlock.classList.add('title')
+        titleBlock.innerHTML = title
+        block.appendChild(titleBlock)
     }
+    for (const section of sections) {
+        block.appendChild(section)
+    }
+    return block
 }
 
 firebaseInit()

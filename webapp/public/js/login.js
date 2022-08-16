@@ -1,10 +1,6 @@
 // Login function
 function login() {
-    // Configures screen to show loading
-    document.getElementById('container').classList.add('blur')
-    document
-        .getElementById('loader-container')
-        .classList.replace('loader-none', 'loader-container')
+    bufferToggle()
 
     // Gets the values of eid and password
     var eid = lowerCase(document.getElementById('eid').value.trim())
@@ -12,11 +8,7 @@ function login() {
 
     // Ensures fields are filled in
     if (eid == '' || password == '') {
-        // Removes loading configurations
-        document.getElementById('container').classList.remove('blur')
-        document
-            .getElementById('loader-container')
-            .classList.replace('loader-container', 'loader-none')
+        bufferToggle()
 
         // Adds error message
         document.getElementById('error').classList.add('error')
@@ -66,11 +58,7 @@ function signIn(email, password) {
             localStorage.setItem('uid', uid)
         })
         .catch((error) => {
-            // Removes loading configurations
-            document.getElementById('container').classList.remove('blur')
-            document
-                .getElementById('loader-container')
-                .classList.replace('loader-container', 'loader-none')
+            bufferToggle()
 
             // Adds error messages
             document.getElementById('error').innerHTML =

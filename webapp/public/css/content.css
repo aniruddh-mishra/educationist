@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
+
+#container {
+    text-align: center;
+    margin-top: 5vh;
+}
+
+h1 {
+    margin-bottom: 5vh;
+}
+
+.controls {
+    display: block;
+    text-align: center;
+}
+
+.selector {
+    min-width: 300px;
+}
+
+#selector-filter {
+    max-width: 455px;
+}
+
+.filter {
+    align-content: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+}
+
+#search {
+    min-width: 300px;
+    margin-bottom: 4vh;
+}
+
+#refresh {
+    cursor: pointer;
+    color: white;
+    background: var(--educationist-blue);
+    box-shadow: 0 0 10px var(--educationist-blue);
+    padding: 5px;
+    border-radius: 0.25em;
+    width: 25px;
+    height: 25px;
+    margin-left: 20px;
+}
+
+#refresh:hover {
+    opacity: 80%;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    height: 20vh;
+    overflow: hidden;
+    margin-bottom: 3vh;
+}
+
+.card-author {
+    text-align: center;
+    color: grey;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#tags {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+    line-height: 2;
+}
+
+#tags a,
+#tags div {
+    min-width: 1.3rem;
+    font-weight: 700;
+    color: var(--invert);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    border: 3px solid var(--educationist-blue);
+    border-radius: 2rem;
+    padding: 0.2rem 0.65rem;
+    background-color: var(--background);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#tags div:hover, #tags a:hover {
+    border-color: white;
+    opacity: 100%;
+}
+
+#tags img {
+    width: 0.8rem;
+}
