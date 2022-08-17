@@ -12,9 +12,6 @@ const subjects = [
     'scratch',
     'history',
 ]
-let upvoted
-let counter = 0
-let limit = true
 let bookmarks = []
 let documentsCreated = []
 
@@ -85,6 +82,10 @@ function createCard(id, link, title, subject, author, tags) {
     let clickable = document.createElement('div')
     clickable.classList.add('clickable')
 
+    let titleBlock = document.createElement('h3')
+    titleBlock.classList.add('title')
+    titleBlock.innerHTML = title
+
     let banner = document.createElement('div')
     banner.classList.add('banner')
 
@@ -105,6 +106,7 @@ function createCard(id, link, title, subject, author, tags) {
     authorTag.innerHTML = author
     authorTag.classList.add('card-author')
 
+    clickable.appendChild(titleBlock)
     clickable.appendChild(banner)
     clickable.appendChild(authorTag)
 
@@ -129,7 +131,7 @@ function createCard(id, link, title, subject, author, tags) {
 
     tagsDiv.appendChild(bookmarkButton)
 
-    let card = createBlock(title, [clickable, tagsDiv], 'small', id)
+    let card = createBlock(false, [clickable, tagsDiv], 'small', id)
     card.querySelector('.clickable').setAttribute(
         'onclick',
         'openLink("' + link + '")'
@@ -159,10 +161,6 @@ async function search() {
             [result.type, result.age]
         )
     }
-}
-
-function openLink(link) {
-    window.open(link, '_blank').focus()
 }
 
 async function bookmark(id, button) {

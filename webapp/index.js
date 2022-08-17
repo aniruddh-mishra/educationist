@@ -56,7 +56,6 @@ const templateRoutes = {
     donate: 'donate.html',
     'donate/honor': 'donate.html',
     content: 'content.html',
-    'content/document': 'content-page.html',
     'content/upload': 'upload.html',
     create: 'register-finish.html',
     admin: 'admin.html',
@@ -145,6 +144,11 @@ app.get('/announcements/:issue', async (request, response, next) => {
     return response.send(data)
 })
 
+app.get('/content/document', async (request, response) => {
+    let documentId = request.query.id
+    return response.send(templateEngine('content-document.html'))
+})
+
 app.get('/discord', (request, response) => {
     const url =
         'https://discord.com/api/oauth2/authorize?client_id=' +
@@ -166,8 +170,8 @@ app.get('/css/:filename', (request, response) => {
         const file = __dirname + '/public/css/' + fileName
 
         // Error for invalid filename
-        if (fs.existsSync(file) == false) {
-            response.status(404).send('We could not find that file!')
+        if (!fs.existsSync(file)) {
+            return response.status(404).send('We could not find that file!')
         }
 
         // Sends file
@@ -218,6 +222,52 @@ app.post('/login', async (request, response) => {
     // Returns the emails
     const email = snapshot.docs[0].data().email
     return response.send(email)
+})
+
+// Manages content deleted
+app.post('/delete-content', async (request, response) => {
+    // Defines variables
+    const ids = request.body.ids
+
+    // Verifies if this is an admin
+    const id = ids[0]
+    const snapshot = await db.collection('content').doc(id).get()
+    if (snapshot.exists) {
+        return response.send('false')
+    }
+
+    // Removes content from algolia
+    try {
+        await index.deleteObjects(ids)
+    } catch (e) {
+        console.log(e)
+        return response.send('false')
+    }
+
+    return response.send('Complete!')
+})
+
+// Manages new content curated
+app.post('/new-content', async (request, response) => {
+    // Defines variables
+    const information = request.body.information
+    const documentID = information.objectID
+
+    // Verifies if this is an admin
+    const snapshot = await db.collection('content').doc(documentID).get()
+    if (!snapshot.exists || !snapshot.data().verified) {
+        return response.send('false')
+    }
+
+    // Adds content to algolia
+    try {
+        await index.saveObject(information)
+    } catch (e) {
+        console.log(e)
+        return response.send('false')
+    }
+
+    return response.send('Complete!')
 })
 
 // Handles Express Errors

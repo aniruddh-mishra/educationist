@@ -42,6 +42,33 @@ function lowerCase(string) {
     return newString
 }
 
+// Alert Function
+function customAlert(information, handler) {
+    document.getElementById('alert-container').classList.remove('invisible')
+    document.getElementById('alert-content').innerHTML = information
+    document.getElementById('continue-alert').onclick = () => {
+        document.getElementById('alert-container').classList.add('invisible')
+        handler()
+    }
+}
+
+document.getElementById('close-alert').onclick = () => {
+    document.getElementById('alert-container').classList.add('invisible')
+}
+
+// Capitalize Function
+function capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+// Not Found Function
+function notFound() {
+    request('/404.html', 'GET', (response) => {
+        document.querySelector('html').remove()
+        document.write(response)
+    })
+}
+
 // Load Function
 function bufferToggle() {
     document.querySelector('.navMenu').classList.toggle('blur')
@@ -52,6 +79,17 @@ function bufferToggle() {
             .querySelector('.navMenu')
             .classList.contains('blur')
     }
+}
+
+// Bottom Menu
+function toggleBottomMenu() {
+    document.querySelector('.bottom-menu').classList.toggle('invisible')
+    document.querySelector('.bottom-btn').classList.toggle('invisible')
+}
+
+// Open Link
+function openLink(link) {
+    window.open(link, '_blank').focus()
 }
 
 // Open Menu

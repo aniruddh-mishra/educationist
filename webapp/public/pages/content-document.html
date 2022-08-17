@@ -1,0 +1,46 @@
+<link rel="stylesheet" type="text/css" href="../css/content-document.css" />
+<h1 id="title">Title</h1>
+
+<div id="content">
+    <div id="preview-container">
+        <iframe id="preview" frameborder="0"></iframe>
+    </div>
+    <div id="menu">
+        <div id="info-container">
+            <div id="info">
+                <p id="author"></p>
+                <p id="upvotes"></p>
+                <p id="age"></p>
+                <p id="subject"></p>
+                <p id="type"></p>
+            </div>
+            <div id="action">
+                <div id="upvote-button" onclick="upvote()">Upvote</div>
+                <div id="expand">Open</div>
+                <div id="bookmark-button" onclick="bookmark(this)">
+                    Bookmark
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="bottom-menu invisible">
+    <div class="bottom-menu-header">
+        <p></p>
+        <i onclick="toggleBottomMenu()" class="bi bi-x"></i>
+    </div>
+    <div class="bottom-menu-content">
+        <form id="report-form">
+            <textarea id="report-text" placeholder="Report"></textarea>
+            <button onclick="report()" id="submit-report" class="btn-normal">
+                Submit Report
+            </button>
+        </form>
+    </div>
+</div>
+
+<div onclick="toggleBottomMenu()" class="bottom-btn">
+    <i class="bi bi-flag"></i>
+</div>
+<script defer src="../js/content-document.js"></script>

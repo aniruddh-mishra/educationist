@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
-
 #container {
     text-align: center;
     margin-top: 5vh;
@@ -96,4 +94,14 @@ h1 {
 
 #tags img {
     width: 0.8rem;
+}
+
+@media (max-width: 950px) {
+    #search {
+        min-width: 200px;
+    }
+
+    .selector {
+        min-width: 245px;
+    }
 }

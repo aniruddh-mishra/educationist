@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Poppins:wght@200;400;700&display=swap');
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css");
+
 :root {
     --background: white;
     --background-block: rgb(30, 34, 32);
@@ -8,4 +11,5 @@
     --invert: black;
     --secondary-background: rgb(200, 244, 222);
     --border: rgb(116, 116, 116);
+    --bottom-box-content: rgb(219, 239, 215)
 }
