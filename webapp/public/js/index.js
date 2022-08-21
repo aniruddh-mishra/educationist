@@ -232,6 +232,7 @@ async function firebaseAuthChange(user) {
         }
         activatePage()
     } else {
+        localStorage.clear()
         if (path === '') {
             fetchHome()
         } else if (!guestPaths.includes(path)) {

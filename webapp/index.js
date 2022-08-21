@@ -377,6 +377,10 @@ app.post('/create', async (request, response) => {
         timezone: data.timezone,
     }
 
+    if (data.unsubscribe) {
+        userInfo.unsubscribe = data.unsubscribe
+    }
+
     await db.collection('extra-emails').doc(lowerCase(data.email)).delete()
 
     // Fetches the users with the same eid to confirm that the eid is unique

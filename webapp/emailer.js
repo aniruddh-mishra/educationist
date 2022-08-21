@@ -1,5 +1,6 @@
 const fs = require('fs')
 const sgMail = require('@sendgrid/mail')
+const { send } = require('process')
 require('dotenv').config({
     path: __dirname + '/.env',
 })
@@ -29,7 +30,10 @@ async function sendMail(recipient, subject, fileName, options, files, email) {
 
     const msg = {
         to: recipient,
-        from: sender,
+        from: {
+            name: 'Educationist Tutoring',
+            email: sender,
+        },
         subject: subject,
         html: html,
     }

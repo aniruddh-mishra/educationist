@@ -46,6 +46,7 @@ async function register() {
     let confirmPassword = validate(document.getElementById('password-confirm'))
     if (!(username && password && confirmPassword)) {
         document.getElementById('submit').disabled = false
+        bufferToggle()
         return
     }
 

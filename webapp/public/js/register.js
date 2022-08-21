@@ -31,6 +31,18 @@ function backPage() {
 }
 
 async function register() {
+    if (
+        !(
+            document.getElementById('consent').checked ||
+            document.getElementById('parent-consent').checked
+        )
+    ) {
+        return customAlert(
+            'You must agree to terms and conditions to register.',
+            () => {},
+            true
+        )
+    }
     bufferToggle()
     const nameElm = document.getElementById('name')
     const name = validate(nameElm)
@@ -65,6 +77,12 @@ async function register() {
             window.location.replace('/')
         }, 3000)
         return
+    }
+
+    let unsubscribe = false
+
+    if (!document.getElementById('newsletter-consent').checked) {
+        unsubscribe = ['newsletter']
     }
 
     request(
@@ -104,6 +122,7 @@ async function register() {
             role: role,
             timezone: timezone,
             timestamp: new Date(Date.now()),
+            unsubscribe: unsubscribe,
         }
     )
 }

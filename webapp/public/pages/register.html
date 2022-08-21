@@ -4,9 +4,7 @@
 <h1>Sign Up</h1>
 <p>
     If you already have an account
-    <a style="text-decoration: underline" target="_blank" href="/login"
-        >sign in.</a
-    >
+    <a style="text-decoration: underline" href="/login">sign in.</a>
 </p>
 
 <form id="register">
@@ -207,7 +205,18 @@
                 <a href="/terms">terms and conditions.</a></label
             >
         </div>
-        <div class="navigation-btns">
+        <div
+            style="margin-top: 5vh"
+            id="newsletter-consent-container"
+            class="consent-fields"
+        >
+            <input checked type="checkbox" id="newsletter-consent" />
+            <label for="newsletter-consent"
+                >I would like to receive updates and emails from Educationist
+                Tutoring.</label
+            >
+        </div>
+        <div style="margin-top: 3vh" class="navigation-btns">
             <button class="btn-normal" id="back-btn" onclick="backPage()">
                 Back
             </button>

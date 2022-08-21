@@ -4,7 +4,7 @@
     "description": "We are bringing the two websites for Educationist into one place.",
     "main": "index.js",
     "scripts": {
-        "dev": "~/telebit enable && nodemon -e js,css,html ./index.js"
+        "dev": "~/telebit disable && ~/telebit enable && nodemon -e js,css,html ./index.js"
     },
     "author": "Aniruddh Mishra",
     "license": "MIT",
