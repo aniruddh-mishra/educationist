@@ -45,7 +45,7 @@ html, body {
 }
 
 .navbar .selected, .navbar li > a:hover, .dropdown-btn:hover {
-    color: var(--invert);
+    color: var(--educationist-green);
 }
 
 .dropdown {
@@ -175,11 +175,11 @@ html, body {
     }
 
     .dropdown-content a, .dropdown-content button {
-        color: var(--educationist-green);
+        color: var(--invert);
     }
     
     .dropdown-content a:hover, .dropdown-content button:hover {
-        color: var(--invert);
+        color: var(--educationist-green);
     }
 
     @keyframes grow {
@@ -192,11 +192,61 @@ html, body {
     }
 }
 
+/* Footer Configurations */
+footer {
+    padding: 4vh 7vw;
+    margin-top: 10vh;
+    font-size: 0.8rem;
+    background-color: var(--footer-background);
+    color: var(--footer-font);
+}
+
+footer a {
+    color: var(--footer-font);
+}
+
+.footer-columns {
+    padding: 0 2vw;
+    padding-top: 3vh;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-column {
+    max-width: 30vw;
+}
+
+.socials a {
+    padding-left: 1.5vw;
+}
+
+.company-info-mobile {
+    display: none;
+}
+
+@media (max-width: 900px) {
+    .footer-column {
+        max-width: 10vw;
+    }
+
+    .company-info {
+        display: none;
+    }
+
+    .company-info-mobile {
+        display: block;
+        max-width: none;
+        text-align: center;
+        margin-top: 5vh;
+    }
+}
+
 /* Link Configurations */
 a {
     text-decoration: none;
     font-size: 1em;
-    color: var(--basic-font);
+    color: var(--educationist-green);
 }
 
 a:hover {
@@ -432,6 +482,11 @@ select option {
 
 .error-decorator {
     border-color: red;
+}
+
+form i {
+    margin-left: -30px;
+    cursor: pointer;
 }
 
 /* Navigation Bar Configuration */

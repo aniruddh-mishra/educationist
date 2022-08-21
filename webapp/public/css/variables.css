@@ -7,9 +7,11 @@
     --background-block-hover: rgb(48, 56, 52);
     --educationist-green: #38b18a;
     --educationist-blue: #16a9b6;
-    --basic-font: var(--educationist-green);
+    --basic-font: var(--invert);
     --invert: black;
     --secondary-background: rgb(200, 244, 222);
     --border: rgb(116, 116, 116);
-    --bottom-box-content: rgb(219, 239, 215)
+    --bottom-box-content: rgb(219, 239, 215);
+    --footer-background: var(--background);
+    --footer-font: var(--invert);
 }

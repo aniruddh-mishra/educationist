@@ -44,7 +44,7 @@
 #upvote-button:hover,
 #expand:hover,
 #bookmark-button:hover {
-    border-color: var(--basic-font);
+    border-color: var(--educationist-green);
 }
 
 #report-text {

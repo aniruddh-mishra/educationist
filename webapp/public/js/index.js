@@ -42,8 +42,24 @@ function lowerCase(string) {
     return newString
 }
 
+// Password Visibility
+function passwordVisibility(element) {
+    let input = element.previousSibling
+    const type = input.getAttribute('type') === 'text' ? 'password' : 'text'
+    input.setAttribute('type', type)
+    if (type === 'password') {
+        return element.setAttribute('class', 'bi bi-eye')
+    }
+
+    element.setAttribute('class', 'bi bi-eye-slash')
+}
+
 // Alert Function
-function customAlert(information, handler) {
+function customAlert(information, handler, message) {
+    document.getElementById('continue-alert').classList.remove('invisible')
+    if (message) {
+        document.getElementById('continue-alert').classList.add('invisible')
+    }
     document.getElementById('alert-container').classList.remove('invisible')
     document.getElementById('alert-content').innerHTML = information
     document.getElementById('continue-alert').onclick = () => {
@@ -72,6 +88,7 @@ function notFound() {
 // Load Function
 function bufferToggle() {
     document.querySelector('.navMenu').classList.toggle('blur')
+    document.querySelector('footer').classList.toggle('blur')
     document.getElementById('container').classList.toggle('blur')
     document.getElementById('loader-container').classList.toggle('invisible')
     for (const input of document.querySelectorAll('body input, body button')) {
@@ -96,6 +113,7 @@ function openLink(link) {
 function openMenu() {
     document.getElementById('navbar').classList.toggle('navbar-vertical')
     document.getElementById('container').classList.toggle('invisible')
+    document.querySelector('footer').classList.toggle('invisible')
 }
 
 // Requests Function
@@ -202,7 +220,8 @@ async function firebaseAuthChange(user) {
         }
         if (
             window.location.pathname === '/login' ||
-            window.location.pathname === '/register'
+            window.location.pathname === '/register' ||
+            window.location.pathname === '/create'
         ) {
             const params = new URLSearchParams(window.location.search)
             if (params.has('path')) {

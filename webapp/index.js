@@ -54,16 +54,13 @@ const templateRoutes = {
     login: 'login.html',
     reset: 'reset.html',
     donate: 'donate.html',
-    'donate/honor': 'donate.html',
     content: 'content.html',
-    'content/upload': 'upload.html',
-    create: 'register-finish.html',
+    create: 'confirm-account.html',
     admin: 'admin.html',
     logs: 'logs.html',
     classes: 'classes.html',
     unsubscribe: 'unsubscribe.html',
     stats: 'stats.html',
-    'discord/auth': 'discord.html',
     //TODO Zoho
 }
 
@@ -73,6 +70,15 @@ const fullPageRoutes = {
     'donate/success': 'donation-success.html',
     'firebase-error': 'firebase-error.html',
     home: 'home.html',
+}
+
+// Makes any string lowercase
+function lowerCase(string) {
+    var newString = ''
+    for (character of string) {
+        newString += character.toLowerCase()
+    }
+    return newString
 }
 
 app.get('/', (request, response) => {
@@ -270,9 +276,140 @@ app.post('/new-content', async (request, response) => {
     return response.send('Complete!')
 })
 
+// Places registration information into confirmaiton code
+app.post('/register', async (request, response) => {
+    // Fetches users with the defined email
+    const responses = await db
+        .collection('users')
+        .where('email', '==', request.body.email)
+        .get()
+
+    // Checks if there were users with the previous query
+    if (!responses.empty) {
+        return response.send('used')
+    }
+
+    // Adds the confirmation code to the database and saves document id
+    const documentId = (
+        await db.collection('confirmations').add({
+            type: 'creation',
+            data: request.body,
+            expire: firebase.firestore.Timestamp.fromMillis(
+                Date.now() + 1200000
+            ),
+        })
+    ).id
+
+    // Creates email information to send to user that just registered
+    const options = [
+        {
+            key: 'link1',
+            text: processURL + '/create?confirm=' + documentId,
+        },
+    ]
+
+    const emailSendResult = sendMail(
+        request.body.email,
+        'Confirm Educationist Account',
+        __dirname + '/public/emails/confirm.html',
+        options
+    )
+
+    if (emailSendResult) {
+        return response.send('true')
+    }
+
+    return response.send('false')
+})
+
+// Finally creates the account
+app.post('/create', async (request, response) => {
+    // Defines given variables
+    const code = request.body.code
+    const password = request.body.password
+    const eid = request.body.eid
+
+    if (!code) {
+        return response.send('failure')
+    }
+
+    // Fetches data for the confirmation code given by frontend
+    var data = await db.collection('confirmations').doc(code).get()
+
+    // Checks whether the code is valid
+    if (!data.exists) {
+        return response.send('error')
+    }
+
+    if (data.data().expire.toDate() <= Date.now()) {
+        await db.collection('confirmations').doc(data.id).delete()
+        return response.send('expired')
+    }
+
+    // Returns data from confirmation code
+    data = data.data().data
+
+    // Fetches users with the defined email
+    let responses = await db
+        .collection('users')
+        .where('email', '==', data.email)
+        .get()
+
+    // Checks if there were users with the previous query
+    if (!responses.empty) {
+        return response.send('used')
+    }
+
+    // Defines the timestamp and birthday in terms of js data object
+    const timeStamp = new Date(data.timestamp)
+    const birthday = new Date(data.birthday)
+
+    // Defines user information based on previous information
+    const userInfo = {
+        registration: firebase.firestore.Timestamp.fromMillis(
+            timeStamp.getTime()
+        ),
+        email: lowerCase(data.email),
+        name: data.name,
+        eid: eid,
+        role: data.role,
+        birthday: firebase.firestore.Timestamp.fromMillis(birthday.getTime()),
+        timezone: data.timezone,
+    }
+
+    await db.collection('extra-emails').doc(lowerCase(data.email)).delete()
+
+    // Fetches the users with the same eid to confirm that the eid is unique
+    responses = await db.collection('users').where('eid', '==', eid).get()
+
+    // Checks if there were users with the previous query
+    if (!responses.empty) {
+        return response.send('false')
+    }
+
+    // Creates firebase auth user, and returns uid of the user
+    try {
+        var uid = (
+            await auth.createUser({
+                email: userInfo.email,
+                password: password,
+            })
+        ).uid
+    } catch {
+        return response.send('failure')
+    }
+
+    // Creates user with the uid and user information defined above
+    await db.collection('users').doc(uid).create(userInfo)
+
+    // Deletes the confirmation code that was just completed
+    await db.collection('confirmations').doc(code).delete()
+
+    return response.send('true')
+})
+
 // Handles Express Errors
 const errorFunction = (error, request, response, next) => {
-    const status = error.status || 400
     // send back an easily understandable error message to the caller
     return response.sendFile('500.html', pages)
 }
