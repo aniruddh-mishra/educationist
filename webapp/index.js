@@ -276,6 +276,25 @@ app.post('/new-content', async (request, response) => {
     return response.send('Complete!')
 })
 
+// Anouncements retrieval
+app.post('/announcements', async (request, response) => {
+    const number = request.body.number
+
+    const snapshot = await db
+        .collection('announcements')
+        .where('total', '==', false)
+        .orderBy('timestamp')
+        .limitToLast(number)
+        .get()
+
+    let announcements = []
+    snapshot.forEach((result) => {
+        announcements.push(result.data())
+    })
+
+    return response.send(announcements)
+})
+
 // Places registration information into confirmaiton code
 app.post('/register', async (request, response) => {
     // Fetches users with the defined email

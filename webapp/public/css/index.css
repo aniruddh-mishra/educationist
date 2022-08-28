@@ -75,7 +75,7 @@ html, body {
 }
 
 .dropdown-content a:hover, .dropdown-content button:hover {
-    color: var(--background);
+    color: grey;
 }
 
 @media (max-width: 1200px) {

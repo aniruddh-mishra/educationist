@@ -10,7 +10,6 @@ const paths = {
 }
 let path = window.location.pathname.replace(/^\/?|\/?$/g, '')
 let profile
-let uid
 let mode
 let db
 let storageRef
@@ -110,7 +109,7 @@ function openLink(link) {
 }
 
 // Open Menu
-function openMenu() {
+function toggleMenu() {
     document.getElementById('navbar').classList.toggle('navbar-vertical')
     document.getElementById('container').classList.toggle('invisible')
     document.querySelector('footer').classList.toggle('invisible')
@@ -230,6 +229,8 @@ async function firebaseAuthChange(user) {
             }
             window.location.replace('/')
         }
+        profile = (await db.collection('users').doc(user.uid).get()).data()
+        setClasses(user.uid)
         activatePage()
     } else {
         localStorage.clear()
@@ -269,82 +270,85 @@ function changeMode(selectedMode) {
 }
 
 // Sets the classes in the menu and adds classes to data
-function setClasses() {
-    const data = JSON.stringify({
-        uid: uid,
-        name: profile.name,
-        email: profile.email,
-        student: profile.role === 'student' ? 'true' : 'false',
+async function setClasses(uid) {
+    const student = profile.role === 'student' ? 'true' : 'false'
+    const email = profile.email
+    const name = profile.name
+
+    // Configures data to be returned in a list
+    var classes = []
+    // Data if user is a tutor
+    if (student === 'false') {
+        // Fetches data if user is a tutor
+        var matches = await db
+            .collection('matches')
+            .where('tutor', '==', uid)
+            .get()
+
+        // Adds data to the return list
+        matches.forEach((doc) => {
+            classes.push({ data: doc.data(), id: doc.id })
+        })
+    }
+
+    // Fetches all classes when user is a student
+    matches = await db
+        .collection('matches')
+        .where('students', 'array-contains', {
+            student: uid,
+            studentName: name,
+            studentEmail: email,
+        })
+        .get()
+
+    if (classes.length === 0 && matches.empty) {
+        document.getElementById('classes-dropdown').onclick = () => {
+            openLink('/classes')
+        }
+        return
+    }
+
+    // Adds classes to list
+    matches.forEach((doc) => {
+        classes.push({ data: doc.data(), id: doc.id })
     })
-    request(
-        '/classes',
-        'POST',
-        (response) => {
-            classesData = JSON.parse(response)
-            if (!classesData.length) {
-                document.querySelector('.merge-container').remove()
-                document.querySelector('#classesDropDown').innerHTML =
-                    'You are not currently registered in any classes.'
-                return
-            }
 
-            if (profile.role === 'student') {
-                document.querySelector('.merge-container').remove()
-                document.querySelector('.class-merge').remove()
-            }
+    document.querySelector('#temp-classes').remove()
+    let inactiveClasses = []
+    let activeClasses = []
+    let counter = 1
+    for (classItem of classes) {
+        if (classItem.data.inactive) {
+            inactiveClasses.push(classItem)
+            continue
+        }
+        activeClasses.push(classItem)
+        var nickName = 'Class #' + counter
+        if (classItem.data.nickName) {
+            nickName = classItem.data.nickName
+        }
+        var newClass = document.createElement('a')
+        newClass.id = 'class-link'
+        newClass.href = '/class/' + classItem.id
+        newClass.innerHTML = nickName
+        document.getElementById('classes-list').appendChild(newClass)
+        counter += 1
+    }
 
-            document.querySelector('#temp-classes').remove()
-
-            let inactiveClasses = []
-            let activeClasses = []
-            let counter = 1
-            for (classItem of classesData) {
-                if (classItem.data.inactive) {
-                    inactiveClasses.push(classItem)
-                    continue
-                }
-                activeClasses.push(classItem)
-                var nickName = 'Class #' + counter
-                if (classItem.data.nickName) {
-                    nickName = classItem.data.nickName
-                }
-                const option = document.createElement('option')
-                option.value = classItem.id
-                option.innerHTML = nickName
-                document.getElementById('class1').appendChild(option)
-                const option2 = document.createElement('option')
-                option2.value = classItem.id
-                option2.innerHTML = nickName
-                document.getElementById('class2').appendChild(option2)
-                classData[classItem.id] = classItem.data
-                var newClass = document.createElement('a')
-                newClass.id = 'class-link'
-                newClass.href = '/class/' + classItem.id
-                newClass.innerHTML = nickName
-                document.getElementById('classes-list').appendChild(newClass)
-
-                counter += 1
-            }
-
-            // Adds classes to the classes menu
-            counter = 1
-            for (classItem of inactiveClasses) {
-                var nickName = 'Inactive Class #' + counter
-                if (classItem.data.nickName) {
-                    nickName = classItem.data.nickName
-                }
-                inactiveClassData[classItem.id] = classItem.data
-                var newClass = document.createElement('a')
-                newClass.id = 'class-link'
-                newClass.href = '/class/' + classItem.id
-                newClass.innerHTML = nickName
-                document.getElementById('classes-list').appendChild(newClass)
-                counter += 1
-            }
-        },
-        false,
-        data
-    )
+    // Adds classes to the classes menu
+    counter = 1
+    for (classItem of inactiveClasses) {
+        var nickName = 'Inactive Class #' + counter
+        if (classItem.data.nickName) {
+            nickName = classItem.data.nickName
+        }
+        var newClass = document.createElement('a')
+        newClass.id = 'class-link'
+        newClass.href = '/class/' + classItem.id
+        newClass.innerHTML = nickName
+        document.getElementById('classes-list').appendChild(newClass)
+        counter += 1
+    }
 }
 
 // Creates Blocks
@@ -368,3 +372,13 @@ function createBlock(title, sections, size, blockId) {
 }
 
 firebaseInit()
+
+window.onresize = () => {
+    width = window.innerWidth
+    if (
+        width > 1200 &&
+        document.getElementById('navbar').classList.contains('navbar-vertical')
+    ) {
+        toggleMenu()
+    }
+}
