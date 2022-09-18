@@ -8,7 +8,6 @@
 }
 
 .account,
-.matches,
 .classes,
 .my-requests {
     margin-bottom: 5vh;
@@ -17,6 +16,13 @@
     padding-top: 10px;
     grid-auto-flow: column;
     overflow-x: auto;
+}
+
+.matches{
+    width:100%;
+}
+.requests-table {
+    width:100%;
 }
 
 .account .block {
@@ -186,4 +192,93 @@
     text-align: center;
     margin-top: 1vh;
     margin-bottom: 5vh;
+}
+.requests-table{
+    color:black;
+    background-color: rgb(247, 244, 244);
+    text-align: center;
+    font-family: Poppins;
+    border-collapse: collapse;
+    font-size: .85em;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.requests-table thead tr {
+    text-align: center;
+    font-family: Poppins;
+    font-size:1.2em;
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+.requests-table thead tr {
+    text-align: center;
+}
+
+.request-count {
+    background-color: #f7611c
+}
+
+.requests-table th,
+.requests-table td {
+
+    font-family: Poppins;
+    padding: 12px 15px;
+}
+.styled-table tbody tr {
+    font-family: Poppins;
+    border-bottom: 1px solid #dddddd;
+}
+
+tr:hover {background-color: rgb(234, 234, 234);}
+
+
+
+.styled-table tbody tr {
+    font-family: Poppins;
+    border-bottom: 1px solid #dddddd;
+}
+
+.match-me-button {
+  padding: 8px 14px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 2px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+  background-color: white;
+  color: #f7611c;
+  border: 2px solid #f7611c;
+}
+.match-me-button:hover {
+    background-color: #f7611c;
+    color: white;
+}
+
+
+
+@media only screen and (max-width: 992px) {
+    .requests-table tr > *:nth-child(1) {
+        display: none;
+    }
+    .requests-table tr > *:nth-child(3) {
+        display: none;
+    }
+    .requests-table tr > *:nth-child(6) {
+        display: none;
+    }
+
+}
+
+@media only screen and (max-width: 600px) {
+    .requests-table tr > *:nth-child(4) {
+        display: none;
+    }
+    .requests-table{
+        font-size:.75em;
+    }
+
 }

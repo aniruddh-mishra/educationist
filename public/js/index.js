@@ -180,8 +180,49 @@ async function placeData(data, dates, subjects, attendance) {
         matchRequests(subjects)
     }
     myRequests()
+}
 
-    document.querySelector('.matching-request').classList.remove('temp')
+function createRequestBlock(count, username, age, subject, timezone) {
+    var requestBody = document.createElement('tbody')
+    var requestRow = document.createElement('tr')
+
+    var requestCount = document.createElement('th')
+    requestCount.innerHTML = count
+    requestCount.classList.add('request-count')
+
+    var requestName = document.createElement('th')
+    requestName.innerHTML = username
+
+    var requestUsername = document.createElement('th')
+    requestUsername.innerHTML = username
+
+    var requestAge = document.createElement('th')
+    requestAge.innerHTML = age
+
+    var requestSubject = document.createElement('th')
+    requestSubject.innerHTML = subject
+
+    var requestTimezone = document.createElement('th')
+    requestTimezone.innerHTML = timezone
+
+    var requestButton = document.createElement('th')
+    var button = document.createElement('button')
+    button.innerHTML = 'MATCH'
+    button.addEventListener('click', match)
+    button.classList.add('match-me-button')
+    requestButton.appendChild(button)
+
+    requestRow.appendChild(requestCount)
+    requestRow.appendChild(requestName)
+    requestRow.appendChild(requestUsername)
+    requestRow.appendChild(requestAge)
+    requestRow.appendChild(requestSubject)
+    requestRow.appendChild(requestTimezone)
+    requestRow.appendChild(requestButton)
+
+    requestBody.appendChild(requestRow)
+
+    document.querySelector('.requests-table').appendChild(requestBody)
 }
 
 function createBlock(title, fields, size, blockId) {
@@ -263,6 +304,7 @@ async function matchRequests(subjects) {
                 eid: localStorage.getItem('eid'),
             })
         )
+
         xhr.onload = function () {
             if (this.response === 'false') {
                 logout()
@@ -292,28 +334,23 @@ async function matchRequests(subjects) {
                 .querySelector('.match-instructions')
                 .appendChild(instructions)
             var counter = 1
+
             for (request of data) {
-                createBlock(
-                    'Student #' + counter,
-                    [
-                        'EID: ' + request.eid,
-                        'Subject: ' +
-                            request.subject.charAt(0).toUpperCase() +
-                            request.subject.slice(1),
-                        'Timezone: ' + request.timezone,
-                        'Age: ' + request.age,
-                    ],
-                    'small request'
+                createRequestBlock(
+                    counter,
+                    request.eid,
+                    request.age,
+                    request.subject,
+                    request.timezone
                 )
+
                 counter += 1
             }
+
             spacer = document.createElement('div')
             spacer.className = 'spacer'
             document.querySelector('.matches').appendChild(spacer)
-            const blocks = document.querySelectorAll('.request')
-            for (block of blocks) {
-                block.addEventListener('click', match)
-            }
+
             resolve('Done')
         }
     })
@@ -322,6 +359,7 @@ async function matchRequests(subjects) {
 async function match() {
     if (!this.classList.contains('selected')) {
         this.classList.add('selected')
+        this.innerHTML = 'CLICK AGAIN'
         token(
             'If you are sure you want to take a class with the selected student, click again.'
         )
@@ -329,8 +367,9 @@ async function match() {
     }
     this.removeEventListener('click', match)
     const requestBlock = this
-    const eid = this.childNodes[1].innerText.slice(5)
-    const subject = this.childNodes[2].innerText.slice(9)
+    var requestRow = requestBlock.parentNode.parentNode
+    const eid = requestRow.childNodes[2].innerText
+    const subject = requestRow.childNodes[4].innerText
     var xhr = new XMLHttpRequest()
     xhr.open('POST', '/match-commit', true)
     xhr.setRequestHeader('Content-Type', 'application/json')
@@ -347,7 +386,7 @@ async function match() {
             return
         }
         token('Student matched. Check your email!')
-        requestBlock.remove()
+        requestRow.remove()
     }
 }
 
