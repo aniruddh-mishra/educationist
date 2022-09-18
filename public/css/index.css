@@ -277,6 +277,9 @@ tr:hover {background-color: rgb(234, 234, 234);}
     .requests-table tr > *:nth-child(4) {
         display: none;
     }
+    .requests-table tr > *:nth-child(2) {
+        display: none;
+    }
     .requests-table{
         font-size:.75em;
     }
