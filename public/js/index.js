@@ -344,7 +344,7 @@ async function matchRequests(subjects) {
                     request.timezone
                 )
 
-                counter += 1
+                counter = counter + 1
             }
 
             spacer = document.createElement('div')
