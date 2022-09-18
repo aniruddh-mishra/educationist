@@ -94,8 +94,16 @@ firebase.auth().onAuthStateChanged(async (user) => {
             localStorage.setItem('eid', data.eid)
         }
 
-        if (role == 'tutor') {
+        if (role === 'tutor' && window.location.pathname === '/') {
             document.getElementById('matching-request').remove()
+        }
+
+        if (role === 'student') {
+            if (document.getElementById('tutor-menu'))
+                document.getElementById('tutor-menu').remove()
+        } else {
+            if (document.getElementById('student-menu'))
+                document.getElementById('student-menu').remove()
         }
 
         if (role != 'admin') {
