@@ -1,0 +1,41 @@
+#container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.float {
+    box-shadow: 0 0 10px gray;
+    width: 75vw;
+    padding: 5vh 3vw;
+    border-radius: 50px;
+
+}
+
+.profile-pic {
+    border-radius: 50%;
+    max-height: 100px;
+    max-width: 100px;
+}
+
+#profile-pic-change {
+    cursor: pointer;
+    text-decoration: underline;
+    margin-bottom: 5%;
+}
+
+#profile-pic-change:hover {
+    color: gray;
+}
+
+.panel {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.information {
+    display: flex;
+    justify-content: center;
+}

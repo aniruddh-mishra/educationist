@@ -61,6 +61,7 @@ const templateRoutes = {
     classes: 'classes.html',
     unsubscribe: 'unsubscribe.html',
     stats: 'stats.html',
+    account: 'account.html',
     //TODO Zoho
 }
 

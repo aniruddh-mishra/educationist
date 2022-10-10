@@ -24,12 +24,14 @@
 
         <h2>Password</h2>
 
-        <input
-            onkeyup="validate(this.id)"
-            type="password"
-            id="password"
-            placeholder="Password"
-        /><i onclick="passwordVisibility(this)" class="bi bi-eye"></i>
+        <div class="password-input">
+            <input
+                onkeyup="validate(this.id)"
+                type="password"
+                id="password"
+                placeholder="Password"
+            /><i onclick="passwordVisibility(this)" class="bi bi-eye"></i>
+        </div>
 
         <button class="btn-normal" id="login-btn" onclick="login();">
             Login

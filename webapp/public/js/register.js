@@ -15,10 +15,16 @@ function nextPage() {
 
     if (role === 'student') {
         document.getElementById('consent-container').classList.add('invisible')
+        document
+            .getElementById('parent-consent-container')
+            .classList.remove('invisible')
     } else {
         document
             .getElementById('parent-consent-container')
             .classList.add('invisible')
+        document
+            .getElementById('consent-container')
+            .classList.remove('invisible')
     }
 
     document.getElementById('part1').classList.add('invisible')
