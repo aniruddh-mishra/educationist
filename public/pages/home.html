@@ -1,44 +1,445 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx"
-            crossorigin="anonymous"
-        />
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
-            crossorigin="anonymous"
-        ></script>
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="https://cdn.educationisttutoring.org/images/favicons/apple-touch-icon.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="https://cdn.educationisttutoring.org/images/favicons/favicon-32x32.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="https://cdn.educationisttutoring.org/images/favicons/favicon-16x16.png"
-        />
-        <link
-            rel="manifest"
-            href="https://cdn.educationisttutoring.org/images/favicons/site.webmanifest"
-        />
-        <title>Educationist Tutoring</title>
-    </head>
-    <body>
-        poop
-    </body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://cdn.educationisttutoring.org/images/light-logos/educationist.png">
+    <script src="https://kit.fontawesome.com/20c99b3ec8.js" crossorigin="anonymous"></script>
+
+
+    <link href="../css/home.css" rel="stylesheet">
+
+    <title>Educationist Tutoring</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      
+      <symbol id="money" viewBox="0 0 16 16">
+  <path d="M5.5 9.511c.076.954.83 1.697 2.182 1.785V12h.6v-.709c1.4-.098 2.218-.846 2.218-1.932 0-.987-.626-1.496-1.745-1.76l-.473-.112V5.57c.6.068.982.396 1.074.85h1.052c-.076-.919-.864-1.638-2.126-1.716V4h-.6v.719c-1.195.117-2.01.836-2.01 1.853 0 .9.606 1.472 1.613 1.707l.397.098v2.034c-.615-.093-1.022-.43-1.114-.9H5.5zm2.177-2.166c-.59-.137-.91-.416-.91-.836 0-.47.345-.822.915-.925v1.76h-.005zm.692 1.193c.717.166 1.048.435 1.048.91 0 .542-.412.914-1.135.982V8.518l.087.02z"/>
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+  <path d="M8 13.5a5.5 5.5 0 1 1 0-11 5.5 5.5 0 0 1 0 11zm0 .5A6 6 0 1 0 8 2a6 6 0 0 0 0 12z"/>      
+      </symbol>
+
+  <symbol id="clock" viewBox="0 0 16 16">
+    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
+    <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
+    <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+  </symbol>
+
+  <symbol id="clock" viewBox="0 0 16 16">
+    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022l-.074.997zm2.004.45a7.003 7.003 0 0 0-.985-.299l.219-.976c.383.086.76.2 1.126.342l-.36.933zm1.37.71a7.01 7.01 0 0 0-.439-.27l.493-.87a8.025 8.025 0 0 1 .979.654l-.615.789a6.996 6.996 0 0 0-.418-.302zm1.834 1.79a6.99 6.99 0 0 0-.653-.796l.724-.69c.27.285.52.59.747.91l-.818.576zm.744 1.352a7.08 7.08 0 0 0-.214-.468l.893-.45a7.976 7.976 0 0 1 .45 1.088l-.95.313a7.023 7.023 0 0 0-.179-.483zm.53 2.507a6.991 6.991 0 0 0-.1-1.025l.985-.17c.067.386.106.778.116 1.17l-1 .025zm-.131 1.538c.033-.17.06-.339.081-.51l.993.123a7.957 7.957 0 0 1-.23 1.155l-.964-.267c.046-.165.086-.332.12-.501zm-.952 2.379c.184-.29.346-.594.486-.908l.914.405c-.16.36-.345.706-.555 1.038l-.845-.535zm-.964 1.205c.122-.122.239-.248.35-.378l.758.653a8.073 8.073 0 0 1-.401.432l-.707-.707z"/>
+    <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0v1z"/>
+    <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5z"/>
+  </symbol>
+
+  <symbol id="personal" viewBox="0 0 16 16">
+    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/>
+  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/>
+  </symbol>
+  <symbol id="facebook" viewBox="0 0 16 16">
+    <path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+  </symbol>
+  <symbol id="instagram" viewBox="0 0 16 16">
+      <path d="M8 0C5.829 0 5.556.01 4.703.048 3.85.088 3.269.222 2.76.42a3.917 3.917 0 0 0-1.417.923A3.927 3.927 0 0 0 .42 2.76C.222 3.268.087 3.85.048 4.7.01 5.555 0 5.827 0 8.001c0 2.172.01 2.444.048 3.297.04.852.174 1.433.372 1.942.205.526.478.972.923 1.417.444.445.89.719 1.416.923.51.198 1.09.333 1.942.372C5.555 15.99 5.827 16 8 16s2.444-.01 3.298-.048c.851-.04 1.434-.174 1.943-.372a3.916 3.916 0 0 0 1.416-.923c.445-.445.718-.891.923-1.417.197-.509.332-1.09.372-1.942C15.99 10.445 16 10.173 16 8s-.01-2.445-.048-3.299c-.04-.851-.175-1.433-.372-1.941a3.926 3.926 0 0 0-.923-1.417A3.911 3.911 0 0 0 13.24.42c-.51-.198-1.092-.333-1.943-.372C10.443.01 10.172 0 7.998 0h.003zm-.717 1.442h.718c2.136 0 2.389.007 3.232.046.78.035 1.204.166 1.486.275.373.145.64.319.92.599.28.28.453.546.598.92.11.281.24.705.275 1.485.039.843.047 1.096.047 3.231s-.008 2.389-.047 3.232c-.035.78-.166 1.203-.275 1.485a2.47 2.47 0 0 1-.599.919c-.28.28-.546.453-.92.598-.28.11-.704.24-1.485.276-.843.038-1.096.047-3.232.047s-2.39-.009-3.233-.047c-.78-.036-1.203-.166-1.485-.276a2.478 2.478 0 0 1-.92-.598 2.48 2.48 0 0 1-.6-.92c-.109-.281-.24-.705-.275-1.485-.038-.843-.046-1.096-.046-3.233 0-2.136.008-2.388.046-3.231.036-.78.166-1.204.276-1.486.145-.373.319-.64.599-.92.28-.28.546-.453.92-.598.282-.11.705-.24 1.485-.276.738-.034 1.024-.044 2.515-.045v.002zm4.988 1.328a.96.96 0 1 0 0 1.92.96.96 0 0 0 0-1.92zm-4.27 1.122a4.109 4.109 0 1 0 0 8.217 4.109 4.109 0 0 0 0-8.217zm0 1.441a2.667 2.667 0 1 1 0 5.334 2.667 2.667 0 0 1 0-5.334z"/>
+  </symbol>
+  <symbol id="twitter" viewBox="0 0 16 16">
+    <path d="M5.026 15c6.038 0 9.341-5.003 9.341-9.334 0-.14 0-.282-.006-.422A6.685 6.685 0 0 0 16 3.542a6.658 6.658 0 0 1-1.889.518 3.301 3.301 0 0 0 1.447-1.817 6.533 6.533 0 0 1-2.087.793A3.286 3.286 0 0 0 7.875 6.03a9.325 9.325 0 0 1-6.767-3.429 3.289 3.289 0 0 0 1.018 4.382A3.323 3.323 0 0 1 .64 6.575v.045a3.288 3.288 0 0 0 2.632 3.218 3.203 3.203 0 0 1-.865.115 3.23 3.23 0 0 1-.614-.057 3.283 3.283 0 0 0 3.067 2.277A6.588 6.588 0 0 1 .78 13.58a6.32 6.32 0 0 1-.78-.045A9.344 9.344 0 0 0 5.026 15z"/>
+  </symbol>
+
+      
+</svg>
+
+    <!-- Example Code -->
+    
+    <nav class="navbar navbar-expand-xl navbar-dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="https://cdn.educationisttutoring.org/images/light-logos/educationist.png" alt="" width="60">
+          </a>        
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
+            <li class="nav-item">
+              <a  class="nav-link" aria-current="page" href="#">Students</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Tutors</a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Donate</a>
+              </li>
+              <div class="sign-in-up">
+                <li class="nav-item">
+                    <a class="nav-link sign-in" href="#">Sign in</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link sign-up" href="#">Sign up</a>
+                  </li>
+              </div>
+              
+
+          </ul>
+
+        </div>
+        
+      </div>
+    </nav>
+
+    <div class = 'front-page'>
+    <div class="educationist-main-container container col-xxl-8 px-4 bottom-border-blue">
+      <div class="row flex-lg-row align-items-center g-5 py-5">
+        <div class="col-lg-7">
+          <h1 class="display-3 fw-bold lh-1 mb-3 free-tutoring">Free tutoring for students, by students</h1>
+          <p class="lead mini-para">We are a <mark>501 (c)(3)</mark> student-run nonprofit started in 2019 that connects students to tutors about the world, all for free.
+          </p>
+          <p class="lead"> We offer subjects in: 
+          </p>
+          <ul class="list-group list-group-flush mb-5">
+            <li class="list-group-item">Math:  <span class="badge rounded-pill text-bg-success">Algebra</span>  <span class="badge rounded-pill text-bg-success">Geometry</span> <span class="badge rounded-pill text-bg-success">Trigonometry</span></li>
+            <li class="list-group-item">Science: <span class="badge rounded-pill text-bg-success">Biology</span> <span class="badge rounded-pill text-bg-success">Chemistry</span> <span class="badge rounded-pill text-bg-success">Physics</span></li>
+            <li class="list-group-item">English: <span class="badge rounded-pill text-bg-success">Reading</span> <span class="badge rounded-pill text-bg-success">Writing</span> <span class="badge rounded-pill text-bg-success">Grammar</span> <span class="badge rounded-pill text-bg-success">Speaking</span></li>
+          </ul>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <button type="button" class="btn-tutor-get-tutoring btn btn-primary btn-lg px-4 me-md-2">Sign up today</button>
+          </div>
+        </div>
+        <div id = 'img-block' class="col-10 col-sm-8 col-lg-5 img-block img-collage">
+          <div class="parent">
+
+            
+            <div class="div1" data-bs-toggle="tooltip" data-bs-placement="top" title="Tutor Brian teaching his student about Math and Science"></div>
+            <div class="div2" data-bs-toggle="tooltip" data-bs-placement="right" title="Tutor Aniruddh teaching Trigonometry to his student"> </div>
+            <div class="div3" data-bs-toggle="tooltip" data-bs-placement="left" title="Tutor Nikhil teaching Algebra to his student"> </div>
+            <div class="div4" data-bs-toggle="tooltip" data-bs-placement="left" title="Tutor Aaditya teaching his student grammar and writing"> </div>
+            <div class="div5" data-bs-toggle="tooltip" data-bs-placement="right" title="Tutor Prithvi teaching Calculus to his student"> </div>
+            <div class="div6" data-bs-toggle="tooltip" data-bs-placement="right" title="Tutor Wesley teaching his student Chess classes"><span class="badge rounded-pill bg-primary text-light hover-over-me" >Interactive, hover over me.</span></div>
+
+
+            </div>
+
+        </div>
+        
+      </div>
+    </div> 
+
+    <div class="container px-4 py-4 my-7 sponsors">
+      <p style = 'text-align: center' class = 'mb-4'>Supported by:</p>
+    <div class="row mb-3 text-center">
+      <div class="col themed-grid-col"><img class = 'sponsor-logo-picture' src="https://1000logos.net/wp-content/uploads/2021/05/Google-logo-500x281.png" alt=""></div>
+      <div class="col themed-grid-col"><img class = 'sponsor-logo-picture'  src="https://uploads-ssl.webflow.com/6133c979be5f892b11fe81dc/6238ad802ba7486fe9c7dd9c_Canva_Logo-p-1080.png" alt=""></div>
+      <div class="col themed-grid-col"><img class = 'sponsor-logo-picture' src="https://sevalaya.org/wp-content/uploads/2022/03/Sevalaya-Logo-2.jpg" alt=""></div>
+    </div>
+    </div>
+
+  </div>
+    <div class ='green-background my-5'>
+    <div id ='stats-card' class="container px-4 py-5" id="custom-cards">
+      <h2 style = "font-size:3.3em;"class="pb-2">By The Numbers...</h2>
+  
+      <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        <div class="col">
+          <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-4 shadow-lg" style="background-image: url('https://cdn.educationisttutoring.org/images/tutor-home-image-min.png'); background-position: center;">
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+              <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold stats">Tutors <br> <span class = 'count count-tutor' data-from="0" data-to="2000" data-time="4000">0</span><span class="count">+</span></h2>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="col">
+          <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-4 shadow-lg" style="background-image: url('https://cdn.educationisttutoring.org/images/student-home-image.png'); background-position: center;">
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+              <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold stats">Students <br> <span class = 'count count-student' data-from="0" data-to="1500" data-time="4000">0</span><span class="count">+</span></h2>
+         
+            </div>
+          </div>
+        </div>
+  
+        <div class="col">
+          <div class="card card-cover h-100 overflow-hidden text-white bg-dark rounded-4 shadow-lg" style="background-image: url('https://cdn.educationisttutoring.org/images/hours-home-image.png'); background-position: center; background-size: cover;">
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+              <h2 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold stats">Hours <br> <span class = 'count count-hours' data-from="0" data-to="7400" data-time="4000">0</span><span class="count">+</span></h2>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <div id ='why-us' class="container px-4 py-5" id="hanging-icons">
+      <div class="blue-accent"></div>
+      <h1 style = "font-size:3.3em;" class="pb-2">Why Educationist Tutoring?</h1>
+      <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+        <div class="col d-flex align-items-start">
+          <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+            <svg class="bi money-icon" width="2em" height="2em"><use xlink:href="#money"/></svg>
+          </div>
+          <div>
+            <h2 class = "border-bottom">Free Classes</h2>
+            <p class="sub-list-point">All tutors part of Educationist Tutoring are <strong>volunteers</strong>, meaning they are helping out of the good in their hearts. No payments are taken in exchange for classes and you can request as many different subjects and classes you need help with</p>
+            
+          </div>
+        </div>
+
+        <div class="col d-flex align-items-start">
+          <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+            <svg class="bi clock-icon" width="2em" height="2em"><use xlink:href="#clock"/></svg>
+          </div>
+          <div>
+            <h2 class = "border-bottom">Flexible Timings</h2>
+            <p class="sub-list-point">Once matched with a tutor and they reach out to you through email, you will be able to communicate and decide a time that works best for both of you. If you need to reschedule or cancel, you can easily let your tutor know. </p>
+            
+          </div>
+        </div>
+        <div class="col d-flex align-items-start">
+          <div class="icon-square bg-light text-dark d-inline-flex align-items-center justify-content-center fs-4 flex-shrink-0 me-3">
+            <svg class="bi personal-icon" width="2em" height="2em"><use xlink:href="#personal"/></svg>
+          </div>
+          <div>
+            <h2 class = "border-bottom">Personalized</h2>
+            <p class="sub-list-point">All Educationist Classes are 1-on-1 meaning your student can get specialized assistance based on their needs. Cuppled with our vast variety of content from tutors and curators, we have material for all students! </p>
+            
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+
+    <div class ='green-background my-5'>
+      <div id ='stats-card' class="container px-4 py-5" id="custom-cards">
+        <h2 style = "font-size:3.3em;"class="pb-2">A Global Initiative</h2>
+        <div class="row">
+          <div class="stats-container col">
+            <div class="container long-stats-container">
+              <div class="row row-cols-2">
+                <div class="col">
+                  <div class = 'stat-text-title'>25+</div>
+                  <div class = 'paragraph stat-text'>countries reached</div>
+                </div>
+                <div class="col">
+                  <div class = 'stat-text-title'>140,000</div>
+                  <div class = 'paragraph stat-text'>Google Business views</div>
+                </div>
+                <div class="col">
+                  <div class = 'stat-text-title'>5</div>
+                  <div class = 'paragraph stat-text'>non-profit partnerships</div>
+                </div>
+                <div class="col">
+                  <div class = 'stat-text-title'>500+</div>
+                  <div class = 'paragraph stat-text'>pieces of content created</div>
+                </div>
+              </div>
+              <div class = 'legend d-flex flex-row'>
+                <div class = 'color-legend'></div>
+                <div style = 'color:#6a5a5a;'>Countries Reached Worldwide</div>
+              </div>
+            </div>
+
+          </div>
+          <div class="map-col col">        <img class = 'map' src="https://cdn.educationisttutoring.org/images/student-tutor-interactions/MapChartEducationist.png" alt="">
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  
+  
+
+    <div class="container col-xxl-8 px-4 py-5">
+      <div class="blue-accent"></div>
+      <h1 style = "font-size:3.3em;" class="pb-2">Our Dashboard</h1>
+      <div class="row flex-lg-row align-items-center g-5 py-5">
+        <div class="col-lg-6">
+          <div class="list-group w-auto">
+            <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+              <img src="https://cdn-icons-png.flaticon.com/512/1516/1516989.png" alt="twbs" width="32" height="32" class="flex-shrink-0">
+              <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0 list-header">Easily request and find students</h6>
+                  <p class="mb-0 opacity-75 list-header-mini">You can request a class if you are a student, or find classes in the subjects you are accepted in and get matched.</p>
+                </div>
+              </div>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+              <img src="https://cdn-icons-png.flaticon.com/512/6663/6663539.png" alt="twbs" width="32" height="32" class="flex-shrink-0">
+              <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0 list-header">Create and find content</h6>
+                  <p class="mb-0 opacity-75 list-header-mini">On top of being a tutor, you can upload content you made for classes for other tutors and get volunteering hours</p>
+                </div>
+              </div>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+              <img src="https://cdn-icons-png.flaticon.com/512/3884/3884295.png" alt="twbs" width="32" height="32" class="flex-shrink-0">
+              <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0 list-header">Log Hours & Track Class Progress</h6>
+                  <p class="mb-0 opacity-75 list-header-mini">On the classes tab you can log your hours after a class, see total hours, and see a graph of your progress.</p>
+                </div>
+              </div>
+            </a>
+            <a class="list-group-item list-group-item-action d-flex gap-3 py-3" aria-current="true">
+              <img src="https://cdn-icons-png.flaticon.com/512/2912/2912761.png" alt="twbs" width="32" height="32" class="flex-shrink-0">
+              <div class="d-flex gap-2 w-100 justify-content-between">
+                <div>
+                  <h6 class="mb-0 list-header">Get Certificates</h6>
+                  <p class="mb-0 opacity-75 list-header-mini">To verify your hours for NHS, college applications, etc, you can request a certificate on the logs page and get it in 48 hours</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="col-10 col-sm-8 col-lg-6 img-block">
+          <img class = 'main-img' src="https://cdn.educationisttutoring.org/images/student-tutor-interactions/EducationistWireFrame.png" alt="Bootstrap Themes" width="100%" loading="lazy">
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="bg-dark text-center text-white footer">
+  <!-- Grid container -->
+  <div class="container p-4">
+    <!-- Section: Social media -->
+    <section class="mb-4">
+      <!-- Facebook -->
+      <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/educationistcorporation/" role="button"
+        ><i class="fab fa-facebook-f"></i
+      ></a>
+
+      <!-- Twitter -->
+      <a class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/educationisttu1" role="button"
+        ><i class="fab fa-twitter"></i
+      ></a>
+
+      <!-- Google -->
+      <a class="btn btn-outline-light btn-floating m-1" href="https://educationisttutoring.org" role="button"
+        ><i class="fab fa-google"></i
+      ></a>
+
+      <!-- Instagram -->
+      <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/educationisttutoring/?hl=en" role="button"
+        ><i class="fab fa-instagram"></i
+      ></a>
+
+      <!-- Linkedin -->
+      <a class="btn btn-outline-light btn-floating m-1" href="https://www.linkedin.com/company/educationist-tutoring/" role="button"
+        ><i class="fab fa-linkedin-in"></i
+      ></a>
+    </section>
+    <!-- Section: Social media -->
+    <!-- Section: Text -->
+    <section class="mb-4">
+      <p>
+        Educationist is a free tutoring service designed to assist elementary and middle schoolers with their studies. Around the world, there is a prominent dependence on out of school tuition classes to help aid students to do well in their subjects and their exams.
+      </p>
+    </section>
+    <!-- Section: Text -->
+
+    <!-- Section: Links -->
+    <section class="">
+      <!--Grid row-->
+      <div class="row">
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Tutoring</h5>
+
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a href="#!" class="text-white">Become a Tutor</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Get Tutoring</a>
+            </li>
+            <li>
+              <a href="https://www.youtube.com/watch?v=1sSwUGybwpE&t=156s&ab_channel=EducationistTutoring" class="text-white">Dashboard Walkthrough</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">About Us</h5>
+
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a href="#!" class="text-white">Our Story</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Donate</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Club Chapters</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Safety</h5>
+
+          <ul class="list-unstyled mb-0">
+            <li>
+              <a href="#!" class="text-white">Terms of Service</a>
+            </li>
+            <li>
+              <a href="#!" class="text-white">Tutor Rules</a>
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+          <h5 class="text-uppercase">Contact</h5>
+
+          <ul class="list-unstyled mb-0">
+            <li>
+              <div class="contact-text">              📧educationist@educationisttutoring.org
+              </div>  
+            </li>
+            <li>
+              <div class="contact-text">              📞 (512) 123 1234
+              </div>  
+            </li>
+          </ul>
+        </div>
+        <!--Grid column-->
+      </div>
+      <!--Grid row-->
+    </section>
+    <!-- Section: Links -->
+  </div>
+  <!-- Grid container -->
+
+  <!-- Copyright -->
+  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+    © 2022 Copyright:
+    <a class="text-white" href="https://mdbootstrap.com/">educationisttutoring.com</a>
+  </div>
+  <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
+
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="home.js"></script>
+    <script>
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    </script>
+  </body>
 </html>

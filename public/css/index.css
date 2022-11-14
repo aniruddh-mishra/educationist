@@ -282,12 +282,12 @@ button {
 
 .btn-normal {
     background: var(--educationist-blue);
-    box-shadow: 0 0 10px var(--educationist-blue);
+    /* box-shadow: 0 0 10px var(--educationist-blue); */
 }
 
 .btn-red {
     background: red;
-    box-shadow: 0 0 10px orange;
+    /* box-shadow: 0 0 10px orange; */
 }
 
 /* Image Configurations */
