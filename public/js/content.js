@@ -76,7 +76,14 @@ async function getContent(data, security) {
 }
 
 specialContent()
-getContent()
+const urlParams = new URLSearchParams(window.location.search)
+const searchQuery = urlParams.get('search')
+if (searchQuery) {
+    document.getElementById('search').value = searchQuery
+    search()
+} else {
+    getContent()
+}
 
 function createCard(id, link, title, subject, author, tags) {
     let clickable = document.createElement('div')
