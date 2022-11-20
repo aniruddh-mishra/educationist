@@ -108,3 +108,5 @@ token.json
 
 test.js
 .vercel
+
+.DS_Store
