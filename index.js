@@ -71,6 +71,8 @@ const fullPageRoutes = {
     'donate/success': 'donation-success.html',
     'firebase-error': 'firebase-error.html',
     home: 'home.html',
+    students: 'students.html',
+    "terms-of-service": 'tos.html'
 }
 
 // Makes any string lowercase

@@ -27,6 +27,7 @@
 })(jQuery)
 
 $(document).ready(function () {
+    console.log('TEST')
     $('.count-tutor').counter()
     $('.count-student').counter()
     $('.count-hours').counter()
