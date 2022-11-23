@@ -28,12 +28,9 @@ body {
 
 .navbar {
     height:100px;
-    top:0;
-    position:sticky;
-    z-index: 1000;
     background-color: var(--educationist-green);
 }
-.nav-link {
+.nav-bar-link {
     color: white; font-weight: 700; text-align: center;
     font-size:1.2em;
 }
@@ -143,7 +140,7 @@ mark {
 }
 
 #img-block {
-    background-color: #eadfcf;
+    background-color: rgba(56, 176, 138, .2);
     border-radius: 25px;
     padding:20px;
 }
@@ -170,6 +167,8 @@ mark {
 .explore-div:hover {
     background-color: var(--educationist-green);
 }
+
+
 
 /* Styling Icons */
 .bi {
@@ -241,6 +240,13 @@ mark {
     filter: grayscale(100%);
 }
 
+.sponsor-logo-picture:hover {
+    width:120px;
+    filter: grayscale(0%);
+}
+
+
+
 
 .bottom-border-blue {
     border-bottom: 8px solid var(--educationist-green);
@@ -285,13 +291,14 @@ mark {
 }
 
 .front-page {
-    padding-top:2%;
-    height:90vh;
+    min-width:550px;
+    max-height:900px;
+
 }
 
 .free-tutoring
 {
-    font-size:4.1em;
+    font-size:3.5em;
   background-image: linear-gradient(
     -225deg,
     #000000 0%,
@@ -306,6 +313,7 @@ mark {
   background-size: 200% auto;
   color: #fff;
   background-clip: text;
+  text-fill-color: transparent;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: textclip 4s linear infinite;
@@ -662,3 +670,6 @@ mark {
             left: 0;
         }
     }
+
+
+    
