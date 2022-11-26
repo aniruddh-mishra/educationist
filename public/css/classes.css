@@ -1,0 +1,26 @@
+.title {
+    margin-bottom: 10vh;
+}
+
+#combine-classes {
+    margin-top: 10vh;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#cards {
+    margin-bottom: 10vh;
+}
+
+@media (max-width: 950px) {
+    #container {
+        text-align: center;
+    }
+}

@@ -503,6 +503,12 @@ form i {
     list-style-type: none;
 }
 
+#container {
+    display: flex;
+    align-content: center;
+    flex-direction: column;
+}
+
 /* Bottom Hovering Button/Menu */
 .bottom-btn {
     position: fixed;
@@ -619,4 +625,73 @@ form i {
 
 #alert-box button {
     width: 150px;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+td, th {
+    text-align: center;
+    padding: 2rem;
+    border-right: 0.5px solid rgba(107, 107, 107, 0.213);
+    overflow-wrap: break-word;
+}
+
+td:last-child, th:last-child {
+    border-right: none;
+}
+
+tr:nth-child(even) {
+    background-color: var(--table-background);
+}
+
+.table-btn {
+    border: 1px solid black;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-family: Poppins, sans-serif !important;
+    color: var(--basic-font) !important;
+    font-size: 1rem !important;
+    border-radius: 0 !important;
+}
+
+.table-btn:hover {
+    background-color: rgba(0, 0, 0, 0.087);
+}
+
+@media (max-width: 700px) {
+    th {
+        display: none;
+    }
+
+    td {
+        border: none;
+        width: 100%;
+        display: inline-block;
+        margin: 0 10%;
+    }
+
+    td:has(.table-btn) {
+        display: flex;
+        justify-content: center;
+    }
+
+    tr {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: none;
+        border-radius: 2.5rem;
+        overflow-wrap: break-word;
+        background-color: var(--table-background);
+        margin-bottom: 5vh;
+        padding: 0 10%;
+    }
+
+    td:first-child {
+        font-weight: bold;
+    }
 }
