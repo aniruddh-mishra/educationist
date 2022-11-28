@@ -6,14 +6,14 @@ const paths = {
     content: document.getElementById('content-page'),
     'content/document': document.getElementById('content-page'),
     logs: document.getElementById('logs-page'),
-    admin: document.getElementById('admin-link'),
+    classes: document.getElementById('classes-dropdown'),
 }
 let path = window.location.pathname.replace(/^\/?|\/?$/g, '')
 let profile
 let mode
 let db
 let storageRef
-let classesData
+var classesData
 
 // Checks path
 const underlineItem = paths[path]
@@ -275,8 +275,8 @@ async function setClasses(uid) {
     const email = profile.email
     const name = profile.name
 
-    // Configures data to be returned in a list
     var classes = []
+
     // Data if user is a tutor
     if (student === 'false') {
         // Fetches data if user is a tutor
@@ -329,11 +329,14 @@ async function setClasses(uid) {
         }
         var newClass = document.createElement('a')
         newClass.id = 'class-link'
-        newClass.href = '/class/' + classItem.id
+        newClass.href = '/class?id=' + classItem.id
         newClass.innerHTML = nickName
         document.getElementById('classes-list').appendChild(newClass)
         counter += 1
     }
+
+    classesData = [activeClasses, inactiveClasses]
+    this.dispatchEvent(new CustomEvent('classesReady'))
 
     // Adds classes to the classes menu
     counter = 1
@@ -344,7 +347,7 @@ async function setClasses(uid) {
         }
         var newClass = document.createElement('a')
         newClass.id = 'class-link'
-        newClass.href = '/class/' + classItem.id
+        newClass.href = '/class?id=' + classItem.id
         newClass.innerHTML = nickName
         document.getElementById('classes-list').appendChild(newClass)
         counter += 1

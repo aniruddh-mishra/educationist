@@ -1,0 +1,59 @@
+<link rel="stylesheet" type="text/css" href="../css/class.css" />
+<div class="title">
+    <h1 id="name"></h1>
+    <i onclick="editClass(this)" class="bi bi-pencil"></i>
+</div>
+
+<div class="main-control">
+    <div class="info">
+        <div id="students">
+            <h2>Students</h2>
+        </div>
+        <div id="tutor">
+            <h2>Tutor</h2>
+        </div>
+        <div id="class-mates">
+            <h2>Class Mates</h2>
+        </div>
+    </div>
+    <div id="action">
+        <div id="tutor-action">
+            <div id="log-class">
+                <h3>Log a New Class</h3>
+                <p>Duration of Class in Minutes</p>
+                <input
+                    onkeyup="validate(this)"
+                    id="minutes-class"
+                    type="number"
+                />
+                <p>Date of Class</p>
+                <input onchange="validate(this)" id="date-class" type="date" />
+                <button class="btn-normal" onclick="logClass()" id="log-hours">
+                    Log Class
+                </button>
+            </div>
+        </div>
+        <button onclick="sendEmail()" class="btn-normal" id="email-class">
+            Email Class
+        </button>
+    </div>
+    <div class="invisible" id="edit-control">
+        <input id="nick-name" type="text" placeholder="Class Name" />
+        <button class="btn-normal" id="nick-button" onclick="nickName()">
+            Change Name
+        </button>
+        <button class="btn-red" id="inactivate-btn" onclick="inactivate()">
+            Archive Class
+        </button>
+    </div>
+    <div id="archived" class="invisible">
+        <img
+            src="http://cdn.educationisttutoring.org/images/trash.svg"
+            alt="Trash Can"
+        />
+        <button id="activate-btn" class="btn-normal" onclick="activate()">
+            Activate Class
+        </button>
+    </div>
+</div>
+<script defer src="../js/class.js"></script>

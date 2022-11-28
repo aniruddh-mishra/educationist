@@ -122,6 +122,9 @@ function createCard(id, link, title, subject, author, tags) {
     for (const tag of tags) {
         tagElement = document.createElement('a')
         tagElement.innerHTML = tag
+        tagElement.onclick = function () {
+            expand(this.innerHTML)
+        }
         tagsDiv.appendChild(tagElement)
     }
 
@@ -145,6 +148,10 @@ function createCard(id, link, title, subject, author, tags) {
     )
 
     holder.appendChild(card)
+}
+
+function expand(query) {
+    openLink('/content?search=' + query)
 }
 
 async function search() {

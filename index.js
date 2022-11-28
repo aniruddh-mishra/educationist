@@ -62,6 +62,7 @@ const templateRoutes = {
     unsubscribe: 'unsubscribe.html',
     stats: 'stats.html',
     account: 'account.html',
+    class: 'class.html',
     //TODO Zoho
 }
 
@@ -99,10 +100,6 @@ app.get('/:page', (request, response) => {
         return response.sendFile(route, pages)
     }
     return response.send(templateEngine(route))
-})
-
-app.get('/class/:classId', (request, response) => {
-    return response.send(templateEngine('class.html'))
 })
 
 app.get('/newsletter/:issue', (request, response) => {
@@ -432,6 +429,118 @@ app.post('/create', async (request, response) => {
     await db.collection('confirmations').doc(code).delete()
 
     return response.send('true')
+})
+
+app.post('/volunteer-log', async (request, response) => {
+    // Defines given variables
+    const students = request.body.students
+    const tutorEmail = request.body.tutorEmail
+    const entry = request.body.entry
+    const minutes = entry.minutes
+
+    let studentEmails = []
+    for (const student of students) {
+        // Fetches student based on student email
+        let studentData = await db
+            .collection('users')
+            .where('email', '==', student.studentEmail)
+            .get()
+
+        // Returns error if student does not exist
+        if (studentData.empty) {
+            return response.send('false')
+        }
+
+        studentData = studentData.docs[0]
+        console.log(studentData.data())
+
+        if (
+            !(
+                studentData.data().unsubscribe &&
+                studentData.data().unsubscribe.includes('class-logs')
+            )
+        ) {
+            studentEmails.push(studentData.data().email)
+        }
+
+        // Updates user information for student's attendance
+        await db
+            .collection('users')
+            .doc(studentData.id)
+            .update({
+                'attendance-entries': firebase.firestore.FieldValue.arrayUnion({
+                    date: firebase.firestore.Timestamp.fromMillis(
+                        new Date(entry.date).getTime()
+                    ),
+                    minutes: entry.minutes,
+                    information: entry.information,
+                }),
+            })
+    }
+
+    // Configures email information
+    var options = [
+        {
+            key: 'minutes1',
+            text: minutes,
+        },
+        {
+            key: 'email1',
+            text: tutorEmail,
+        },
+        {
+            key: 'name1',
+            text: entry.information.tutor,
+        },
+        {
+            key: 'subject1',
+            text: entry.information.subject,
+        },
+    ]
+
+    var recipients = studentEmails
+
+    var tutor = await db
+        .collection('users')
+        .where('email', '==', tutorEmail)
+        .get()
+
+    // Returns error if student does not exist
+    if (tutor.empty) {
+        return response.send('false')
+    }
+
+    tutor = tutor.docs[0]
+
+    if (
+        !(
+            tutor.data().unsubscribe &&
+            tutor.data().unsubscribe.includes('class-logs')
+        )
+    ) {
+        recipients.push(tutorEmail)
+    }
+
+    console.log(recipients)
+
+    try {
+        // Sends email to tutor
+        await sendMail(
+            recipients,
+            'Educationist Class Log',
+            __dirname + '/public/emails/logs.html',
+            options,
+            false,
+            'logs'
+        )
+
+        return response.send('Done!')
+    } catch (err) {
+        // Some sort of error for email not being sent
+        console.log('Reset Email Error: ' + err)
+
+        return response.send('Failure')
+    }
 })
 
 // Handles Express Errors

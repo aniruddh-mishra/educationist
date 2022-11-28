@@ -14,4 +14,5 @@
     --bottom-box-content: rgb(219, 239, 215);
     --footer-background: var(--background);
     --footer-font: var(--invert);
+    --table-background: #16a9b65d;
 }
