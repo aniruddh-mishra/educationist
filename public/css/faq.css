@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
+:root {
+    --educationist-green: rgb(56, 176, 138);
+    --educationist-blue: rgb(22, 169, 182);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+.container-fluid {
+    width:70%;
+}
+
+.sign-in, .sign-up {
+    border-radius: 25px;
+    width:100px;
+    border: 3.25px solid white;
+
+}
+
+
+
+
+.sign-up {
+    margin-left:15px;
+    background-color: var(--educationist-blue);
+}
+
+.navbar {
+    height:100px;
+    background-color: var(--educationist-green);
+    margin:0px;
+
+}
+.nav-bar-link {
+    color: white; font-weight: 700; text-align: center;
+    font-size:1.2em;
+}
+.sign-in {
+    color: var(--educationist-blue);
+    margin-right: 20px;
+    border-radius: 14px;
+    background-color: white;
+    box-shadow: none;
+    font-size: 17px;
+}
+.sign-up {
+    color: var(--educationist-blue);
+    margin-right: 20px;
+    border-radius: 14px;
+    background-color: white;
+    box-shadow: none;
+    font-size: 17px;
+    box-shadow: 0 5px 14px 0 var(--educationist-blue);
+}
+
+.sign-in, .sign-up {
+    transition: transform .15s; /* Animation */
+    font-weight: 600;
+
+}
+
+.sign-up:hover, .sign-in:hover {
+    color:var(--educationist-green);
+    transform: scale(1.05);
+}
+.navbar-nav {
+    z-index: 10;
+    width:100%;
+    background-color: var(--educationist-green);
+    justify-content: space-around;
+}
+
+.stat-text-title {
+    padding-top:25px;
+    margin-bottom: 7px;
+    font-size: 45px;
+    line-height: 1.2em;
+    font-weight: 700;
+    color: rgb(27, 167, 122);
+}
+
+.stat-text {
+    color:#6a5a5a;
+    max-width: 210px;
+    margin-bottom: 0;
+    line-height: 1.4em;
+    font-size:20px;
+    font-weight: 100;
+}
+
+.color-legend {
+    width:25px;
+    height:25px;
+    border-radius: 25px;
+    margin-right: 10px;
+    background-color: var(--educationist-green);
+}
+
+.legend {
+    color:black;
+    margin-top:40px;
+}
+
+.border-top-blue {
+    border-top:10px solid var(--educationist-blue);
+    
+}
+
+.blue-accent {
+    width:120px;
+    background-color: var(--educationist-blue);
+    height:6px;
+    margin-bottom:21px;
+}
+
+.sign-in-up {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.subjects-row {
+    margin-top:40px;
+}
+.navbar-collapse-div {
+    z-index: 10;
+    background-color: var(--educationist-green);
+}
+
+
+mark {
+    background-color: #FFC107;
+    border-radius: 10px;
+    
+}
+.contact-text{
+    font-size:.8em;
+}
+
+.text-bg-success {
+    font-size: .9em;
+}
+
+#img-block {
+    background-color: rgba(56, 176, 138, .2);
+    border-radius: 25px;
+    padding:20px;
+}
+.student-container {
+    background-color: black;
+    background-image: url("https://media.discordapp.net/attachments/812795685807980588/1025814737499476039/output-onlinepngtools.png?width=811&height=456");
+    background-size: cover;
+
+}
+.register-div {
+    background-color: #ce462e;
+    width:100%;
+    transition-duration: .4s;
+}
+.register-div:hover {
+    background-color: #a62b15;
+}
+
+.explore-div {
+    background-color: var(--educationist-blue);
+    width:100%;
+    transition-duration: .4s;
+}
+.explore-div:hover {
+    background-color: var(--educationist-green);
+}
+
+
+
+/* Styling Icons */
+.bi {
+    border-radius: 25px;
+}
+
+.money-icon {
+    background-color: rgb(88, 212, 88);
+}
+
+.clock-icon {
+    background-color: rgb(228, 189, 141);
+}
+
+.personal-icon {
+    background-color: rgb(215, 212, 212);
+}
+
+.sub-list-point {
+    font-size:1.2em;
+    line-height: 2em;
+}
+
+.count {
+    width:100%;
+    font-size:2em;
+}
+
+.list-header {
+    font-size: 1.5em;
+}
+.navbar-collapse {
+    padding-top:10px;
+}
+
+.faq {
+    padding: 5rem;
+}
