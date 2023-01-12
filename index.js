@@ -74,6 +74,7 @@ const fullPageRoutes = {
     home: 'home.html',
     students: 'students.html',
     'terms-of-service': 'tos.html',
+    faq:'faq.html'
 }
 
 // Makes any string lowercase
