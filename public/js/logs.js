@@ -192,11 +192,10 @@ async function placeData(dates, attendance) {
     }
 }
 
-function createBlock(title, fields, size, blockId) {
+function createBlock(title, fields) {
     var block = document.createElement('div')
-    block.className = 'block ' + size
-    block.id = blockId
-    var titleBlock = document.createElement('h3')
+    block.classList.add('graph')
+    var titleBlock = document.createElement('h2')
     titleBlock.className = 'title-block'
     titleBlock.innerHTML = title
     block.append(titleBlock)
@@ -206,15 +205,7 @@ function createBlock(title, fields, size, blockId) {
         fieldBlock.innerHTML = field
         block.append(fieldBlock)
     }
-    var object = ''
-    if (size === 'large') {
-        object = '.big-blocks'
-    } else if (size === 'small request') {
-        object = '.matches'
-    } else if (size.includes('small class')) {
-        object = '.classes'
-    }
-    document.querySelector(object).appendChild(block)
+    document.querySelector('.graphs').appendChild(block)
 }
 
 function upload() {
@@ -536,4 +527,4 @@ function allTime() {
         .substring(0, 10)
 }
 
-// getData()
+getData()

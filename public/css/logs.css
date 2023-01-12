@@ -1,8 +1,22 @@
 .main-body {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 #certificate-type {
     margin-bottom: 2vh;
+}
+
+.graphs {
+    margin-top: 5vh;
+    width: 50%;
+    margin-right: 5vw;
+
+}
+
+.graph {
+    width: 100%;
+    border: black 1px solid;
+    padding: 5%;
+    text-align: center;
 }
