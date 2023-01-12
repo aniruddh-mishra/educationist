@@ -2,6 +2,10 @@
     margin-bottom: 10vh;
 }
 
+#container {
+    text-align: center;
+}
+
 #combine-classes {
     margin-top: 10vh;
     display: flex;

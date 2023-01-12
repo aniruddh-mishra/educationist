@@ -5,7 +5,7 @@ let upvotes = []
 let owner = false
 let userData
 let contentData
-document.getElementById('container').classList.add('invisible')
+bufferToggle()
 
 async function getData() {
     let content
@@ -95,7 +95,7 @@ async function getData() {
         button.setAttribute('onclick', 'deleteContent(this)')
         document.getElementById('report-form').appendChild(button)
     }
-    document.getElementById('container').classList.remove('invisible')
+    bufferToggle()
 }
 
 getData()

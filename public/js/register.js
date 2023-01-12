@@ -27,7 +27,6 @@ function nextPage() {
             .classList.remove('invisible')
     }
 
-    console.log('test')
     document.getElementById('part1').classList.add('invisible')
     document.getElementById('part2').classList.remove('invisible')
 }
@@ -152,5 +151,4 @@ const form = document.getElementById('register')
 function handleForm(event) {
     event.preventDefault()
 }
-
 form.addEventListener('submit', handleForm)

@@ -7,10 +7,11 @@ const paths = {
     'content/document': document.getElementById('content-page'),
     logs: document.getElementById('logs-page'),
     classes: document.getElementById('classes-dropdown'),
+    class: document.getElementById('classes-dropdown'),
 }
 let path = window.location.pathname.replace(/^\/?|\/?$/g, '')
 let profile
-let mode
+// let mode
 let db
 let storageRef
 var classesData
@@ -22,15 +23,15 @@ if (underlineItem) {
 }
 
 // Checks if mode has been changed
-if (!localStorage.getItem('mode')) {
-    document.addEventListener('start', () => {
-        document.querySelector('html').classList.remove('invisible')
-        changeMode(mode)
-    })
-} else {
-    document.querySelector('html').classList.remove('invisible')
-    changeMode(localStorage.getItem('mode'))
-}
+// if (!localStorage.getItem('mode')) {
+//     document.addEventListener('start', () => {
+//         document.querySelector('html').classList.remove('invisible')
+//         changeMode(mode)
+//     })
+// } else {
+//     document.querySelector('html').classList.remove('invisible')
+//     changeMode(localStorage.getItem('mode'))
+// }
 
 // Makes any string lowercase
 function lowerCase(string) {
@@ -231,7 +232,6 @@ async function firebaseAuthChange(user) {
         }
         profile = (await db.collection('users').doc(user.uid).get()).data()
         setClasses(user.uid)
-        activatePage()
     } else {
         localStorage.clear()
         if (path === '') {
@@ -242,14 +242,8 @@ async function firebaseAuthChange(user) {
                     window.location.pathname +
                     window.location.search
             )
-        } else {
-            activatePage()
         }
     }
-}
-
-function activatePage() {
-    document.querySelector('body').classList.remove('invisible')
 }
 
 // Main Website Logged Out
@@ -257,7 +251,6 @@ function fetchHome() {
     request('/home', 'GET', (response) => {
         document.querySelector('html').remove()
         document.write(response)
-        activatePage()
     })
 }
 

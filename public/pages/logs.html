@@ -1,0 +1,41 @@
+<link rel="stylesheet" type="text/css" href="../css/logs.css" />
+<h1>Logs</h1>
+<div class="main-body">
+    <div class="graphs"></div>
+    <div id="action">
+        <h3>Export Logged Data</h3>
+        <p style="max-width: 400px">
+            Export your volunteering logs in a csv format!
+        </p>
+        <button onclick="exportData()" class="btn-normal">Export Logs</button>
+        <progress
+            class="invisible"
+            style="margin-top: 5vh"
+            value="0"
+            max="100"
+            id="progress"
+        ></progress>
+        <h3 style="margin-top: 5vh">Request a Certificate</h3>
+        <p>Starting Date</p>
+        <input id="start-date" style="margin-bottom: 2vh" type="date" />
+        <p>Ending Date</p>
+        <input id="end-date" style="margin-bottom: 2vh" type="date" />
+        <input
+            onchange="uploadFile()"
+            type="file"
+            id="file"
+            style="display: none"
+        />
+        <button class="btn-normal" onclick="allTime()">All Time</button>
+        <p>Certificate Type</p>
+        <select id="certificate-type">
+            <option selected disabled value="">--Select Type</option>
+            <option value="regular">Educationist Certificate</option>
+            <option value="custom">Custom Certificate</option>
+        </select>
+        <button onclick="certificate()" class="btn-normal">
+            Request Certificate
+        </button>
+    </div>
+</div>
+<script src="../js/logs.js"></script>

@@ -11,6 +11,7 @@ async function classesPage() {
     ) {
         document.querySelector('.classes').innerHTML =
             'You are not currently registered in any classes.'
+        bufferToggle()
         return
     }
     var counter = 1
@@ -123,6 +124,7 @@ async function classesPage() {
     }
 
     setHeights()
+    document.getElementById('template').remove()
     bufferToggle()
 }
 
@@ -197,7 +199,8 @@ async function classesMerge() {
         newStudentsNames
     document.getElementById(
         class1
-    ).firstChild.nextSibling.nextSibling.nextSibling.innerHTML += newStudentsEmails
+    ).firstChild.nextSibling.nextSibling.nextSibling.innerHTML +=
+        newStudentsEmails
     bufferToggle()
     setHeights()
 }

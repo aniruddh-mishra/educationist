@@ -1,14 +1,9 @@
 
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
-  :root {
-      --educationist-green: rgb(56, 176, 138);
-      --educationist-blue: rgb(22, 169, 182);
-  }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
   
-  body {
+body {
     font-family: 'Inter', sans-serif;
-
-  }
+}
 
 html, body {
     background-color: var(--background);
@@ -298,7 +293,7 @@ button {
 }
 
 .btn-red {
-    background: red;
+    background: rgb(223, 56, 56) !important;
     /* box-shadow: 0 0 10px orange; */
 }
 
@@ -357,6 +352,24 @@ select:focus {
 
 select option {
     color: black;
+}
+
+.password-input {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-bottom: 5vh;
+}
+
+.password-input input {
+    margin-bottom: 0;
+}
+
+.password-input i {
+    margin-left: -30px;
+    cursor: pointer;
 }
 
 /* Notification Configuration */
@@ -496,11 +509,6 @@ select option {
     border-color: red;
 }
 
-form i {
-    margin-left: -30px;
-    cursor: pointer;
-}
-
 /* Navigation Bar Configuration */
 .logo {
     cursor: pointer;
@@ -548,7 +556,7 @@ form i {
     position: fixed;
     bottom: 30px;
     right: 30px;
-    height: 35vh;
+    height: 30vh;
 }
 
 .bottom-menu-header {
@@ -556,26 +564,21 @@ form i {
     max-width: 300px;
     min-width: 200px;
     min-height: 25px;
-    height: 5vh;
+    height: 2.5em;
     background-color: var(--educationist-green);
     border-radius: 20px 20px 0 0;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
+    justify-content: right;
+    padding: .25em .75em 0 .75em;
 }
 
 .bottom-menu-content {
     background-color: var(--bottom-box-content);
     border-radius: 0 0 20px 20px;
-    height: 30vh;
     max-width: 300px;
     min-width: 200px;
     overflow-y: scroll;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 1em .25em;
 }
 
 .bottom-menu-header i {

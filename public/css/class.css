@@ -22,7 +22,7 @@ table {
     border-bottom: 1px solid black;
 }
 
-.selected {
+.selected-person {
     background-color: #38b18b74 !important;
 }
 
@@ -70,5 +70,9 @@ table {
     #action, #edit-control {
         margin: 0;
         margin-bottom: 5vh;
+    }
+
+    #template {
+        display: none;
     }
 }

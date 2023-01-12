@@ -2,6 +2,7 @@ const urlParams = new URLSearchParams(window.location.search)
 const classId = urlParams.get('id')
 var selectedStudents = []
 var classData = ''
+bufferToggle()
 
 async function classInfo() {
     var active = true
@@ -126,13 +127,16 @@ async function classInfo() {
         }
         document.getElementById(table[2]).appendChild(tableElm)
     }
+    document.getElementById('template').remove()
+    document.querySelector('.info').classList.remove('invisible')
+    bufferToggle()
 }
 
 classInfo()
 
 async function addStudent(button) {
     const studentId = button.parentNode.parentNode.id
-    document.getElementById(studentId).classList.toggle('selected')
+    document.getElementById(studentId).classList.toggle('selected-person')
     if (selectedStudents.includes(studentId)) {
         button.innerHTML = 'Select Student'
         const index = selectedStudents.indexOf(studentId)

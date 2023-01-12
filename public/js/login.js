@@ -74,7 +74,7 @@ function validate(value) {
 
     if (password && eid && error.innerHTML == 'All fields are required') {
         // Removes error message and replaces with invisible character
-        error.innerHTML = ''
+        error.innerHTML = '&nbsp;'
     }
 }
 

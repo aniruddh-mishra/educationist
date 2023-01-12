@@ -1,19 +1,32 @@
 <link rel="stylesheet" type="text/css" href="../css/classes.css" />
 <h1 class="title">Classes</h1>
-<div id="cards" class="block-container"></div>
-<h1>Combine Classes</h1>
-<p>If you have multiple students in a single class, merge them below.</p>
-<div id="combine-classes">
-    <h3>First Class</h3>
-    <select id="first-class">
-        <option selected disabled value="">-- Select Class</option>
-    </select>
-    <h3>Second Class</h3>
-    <select id="second-class">
-        <option selected disabled value="">-- Select Class</option>
-    </select>
-    <button class="btn-normal" onclick="classesMergeStep1()">
-        Merge Classes
-    </button>
+<div class="classes">
+    <div id="cards" class="block-container">
+        <div id="template" class="block small">
+            <h3 class="title">Class #</h3>
+            <p>Student:</p>
+            <p>Tutor:</p>
+            <p>Student Email:</p>
+            <p>Tutor Email:</p>
+            <p>Subject:</p>
+            <button class="btn-normal">Expand</button>
+        </div>
+    </div>
+    <h1>Combine Classes</h1>
+    <p>If you have multiple students in a single class, merge them below.</p>
+    <div id="combine-classes">
+        <h3>First Class</h3>
+        <select id="first-class">
+            <option selected disabled value="">-- Select Class</option>
+        </select>
+        <h3>Second Class</h3>
+        <select id="second-class">
+            <option selected disabled value="">-- Select Class</option>
+        </select>
+        <button class="btn-normal" onclick="classesMergeStep1()">
+            Merge Classes
+        </button>
+    </div>
 </div>
+
 <script defer src="../js/classes.js"></script>

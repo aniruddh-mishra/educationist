@@ -1,27 +1,26 @@
-
 <link rel="stylesheet" type="text/css" href="../css/register.css" />
 
-
-<form id="register" class="register-section">
+<form onsubmit="return false;" id="register" class="register-section">
     <p>Username</p>
     <input onchange="validate(this)" type="text" id="username" />
     <p>Password (Must be atleast 6 characters long)</p>
-    <div class="input-fields">
+    <div class="password-input">
         <input onchange="validate(this)" type="password" id="password" /><i
             onclick="passwordVisibility(this)"
             class="bi bi-eye"
         ></i>
     </div>
     <p>Confirm Password</p>
-    <div class="input-fields">
+    <div class="password-input">
         <input
             onchange="validate(this)"
             type="password"
             id="password-confirm"
         /><i onclick="passwordVisibility(this)" class="bi bi-eye"></i>
     </div>
-
-
+    <button class="btn-normal" id="login-btn" onclick="register();">
+        Confirm
+    </button>
 </form>
 
 <script defer src="../js/confirm-account.js"></script>

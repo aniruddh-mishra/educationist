@@ -48,13 +48,23 @@
 }
 
 #report-text {
+    font-size: 100%;
+    flex-grow: 1;
     margin: 0 5%;
     width: 90%;
     color: var(--invert);
 }
 
+#report-form {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
 #report-form button {
-    margin: 5%;
+    background-color: var(--educationist-green);
+    font-size: .9em;
+    margin: .75rem 5% 0 5%;
     width: 90%;
 }
 

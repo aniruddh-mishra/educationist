@@ -1,0 +1,8 @@
+.main-body {
+    display: flex;
+    justify-content: space-between;
+}
+
+#certificate-type {
+    margin-bottom: 2vh;
+}

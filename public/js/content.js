@@ -14,6 +14,8 @@ const subjects = [
 ]
 let bookmarks = []
 let documentsCreated = []
+let loaded = false
+bufferToggle()
 
 async function specialContent() {
     const user = await db
@@ -73,6 +75,10 @@ async function getContent(data, security) {
             [data.type, data.age]
         )
     })
+    if (!loaded) {
+        bufferToggle()
+        loaded = true
+    }
 }
 
 specialContent()
@@ -159,6 +165,7 @@ async function search() {
     if (query == '') {
         return getContent()
     }
+    urlParams.append('search', query)
     const index = client.initIndex('content_catalog')
     var results = await index.search(query)
     holder.innerHTML = ''
