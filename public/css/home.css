@@ -20,7 +20,6 @@ body {
 
 
 
-
 .sign-up {
     margin-left:15px;
     background-color: var(--educationist-blue);
@@ -235,15 +234,7 @@ mark {
     height: 570px;
 }
 
-.sponsor-logo-picture {
-    width:120px;
-    filter: grayscale(100%);
-}
 
-.sponsor-logo-picture:hover {
-    width:120px;
-    filter: grayscale(0%);
-}
 
 
 
@@ -275,8 +266,13 @@ mark {
 .btn-tutor-get-tutoring {
     font-size:1.5em;
     width:100%;
+
+
 }
 
+.bb {
+    border: 2px solid black;
+}
 .map {
     width:100%;
 }
@@ -298,26 +294,59 @@ mark {
 
 .free-tutoring
 {
-    font-size:3.5em;
-  background-image: linear-gradient(
-    -225deg,
-    #000000 0%,
-    #000000 29%,
-    #16a9b6 67%,
-    #38b18a 100%
-  );
-  padding-bottom: 10px;
+    font-size:3.7em;
 
-  background-size: auto auto;
-  background-clip: border-box;
-  background-size: 200% auto;
-  color: #fff;
-  background-clip: text;
-  text-fill-color: transparent;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: textclip 4s linear infinite;
 }
+
+/* Slider */
+@keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-120px * 10));
+    }
+  }
+  .slider {
+    background: white;
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .125);
+    height: 100px;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    width: 1260px;
+  }
+  .slider::before, .slider::after {
+    background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+    content: "";
+    height: 100px;
+    position: absolute;
+    z-index: 2;
+  }
+  .slider::after {
+    right: 0;
+    top: 0;
+    transform: rotateZ(180deg);
+  }
+  .slider::before {
+    left: 0;
+    top: 0;
+  }
+  .slider .slide-track {
+    animation: scroll 15s linear infinite;
+    display: flex;
+    width: calc(500px * 10);
+  }
+  .slider .slide {
+    height: 100px;
+    padding-left:100px;
+  }
+
+  .sponsor-logo-picture {
+    height:70px;
+}
+  
+
 
 @keyframes textclip {
   to {

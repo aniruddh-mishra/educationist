@@ -3,17 +3,19 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="https://cdn.educationisttutoring.org/images/light-logos/educationist.png">
     <script src="https://kit.fontawesome.com/20c99b3ec8.js" crossorigin="anonymous"></script>
-
-
     <link href="../css/home.css" rel="stylesheet">
-
     <title>Educationist Tutoring</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  </head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <!-- jQuery first, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <!-- Slick Slider JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>  </head>
+    <script src="../js/home.js"></script>
 
   <body>
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -54,6 +56,8 @@
 </svg>
 
     <!-- Example Code -->
+
+    
     
     <nav class="navbar navbar-expand-xl navbar-dark">
       <div class="container-fluid">
@@ -96,7 +100,7 @@
     <div class="educationist-main-container container col-xxl-8 px-4 bottom-border-blue">
       <div class="row flex-lg-row align-items-center g-5 py-5">
         <div class="col-lg-7">
-          <h1 class="display-3 fw-bold lh-1 mb-3 free-tutoring">Free tutoring for students, by students</h1>
+          <h1 class="display-3 fw-bold lh-1 mb-3 free-tutoring"> <span class = 'highlighted'> Free tutoring </span> for students, by students</h1>
           <p class="lead mini-para">We are a <mark>501 (c)(3)</mark> student-run nonprofit started in 2019 that connects students to tutors about the world, all for free.
           </p>
           <p class="lead"> We offer subjects in: 
@@ -107,8 +111,8 @@
             <li class="list-group-item">English: <span class="badge rounded-pill text-bg-success">Reading</span> <span class="badge rounded-pill text-bg-success">Writing</span> <span class="badge rounded-pill text-bg-success">Grammar</span> <span class="badge rounded-pill text-bg-success">Speaking</span></li>
           </ul>
           <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-            <a href="">
-              <button type="button" class="btn-tutor-get-tutoring btn btn-primary btn-lg px-4 me-md-2">Sign up today</button>
+            <a style = 'width: 100%' href="">
+              <button type="button" class="btn-tutor-get-tutoring btn btn-dark btn-lg px-4 me-md-2">Sign up today</button>
             </a>
           </div>
         </div>
@@ -132,12 +136,50 @@
     </div> 
 
     <div class="container px-4 py-4 my-7 sponsors">
+      <div class="slider">
+        <div class="slide-track">
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://pbs.twimg.com/profile_images/1605297940242669568/q8-vPggS_400x400.jpg" alt="brand-number-one-1" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://uploads-ssl.webflow.com/6133c979be5f892b11fe81dc/6238ad802ba7486fe9c7dd9c_Canva_Logo-p-1080.png" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="          https://assets.letsendorse.com/le/1507704839_OkyBbIqKUiaqPOxjoY_15077048396473/2018/03/25/PnPabu15219747376410.png            " alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://sevalaya.org/wp-content/uploads/2022/03/Sevalaya-Logo-2.jpg" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://projectheena.com/uploads/ngo/34143142400613/profileImage/images/ranjana.jpg" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://content.hostgator.com/img/ads_logo.png" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://donorbox.org/nonprofit-blog/wp-content/uploads/2021/09/word-image-6-e1631105762527.jpeg" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="https://1000logos.net/wp-content/uploads/2016/11/Facebook-Logo-Meaning.jpg" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="http://www.behindwoods.com/cmsadmin/images/behindwoods-logo-og-1.jpg" alt="" />
+          </div>
+          <div class="slide">
+            <img class = 'sponsor-logo-picture' src="http://www.tamiu.edu/scce/images/nhr-logocopy.jpg" alt="" />
+          </div>
+
+
+        </div>
+      </div>
+      <!--
       <p style = 'text-align: center' class = 'mb-4'>Supported by:</p>
     <div class="row mb-3 text-center">
       <div class="col themed-grid-col"><img class = 'sponsor-logo-picture' src="https://1000logos.net/wp-content/uploads/2021/05/Google-logo-500x281.png" alt=""></div>
       <div class="col themed-grid-col"><img class = 'sponsor-logo-picture'  src="https://uploads-ssl.webflow.com/6133c979be5f892b11fe81dc/6238ad802ba7486fe9c7dd9c_Canva_Logo-p-1080.png" alt=""></div>
       <div class="col themed-grid-col"><img class = 'sponsor-logo-picture' src="https://sevalaya.org/wp-content/uploads/2022/03/Sevalaya-Logo-2.jpg" alt=""></div>
     </div>
+    -->
     </div>
 
   </div>
@@ -361,7 +403,6 @@
     
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../js/home.js"></script>
     <script>
 const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
 const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
