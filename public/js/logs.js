@@ -13,6 +13,7 @@ const month = [
     'November',
     'December',
 ]
+bufferToggle()
 
 async function getData() {
     const uid = localStorage.getItem('uid')
@@ -91,6 +92,7 @@ async function getData() {
         attendanceData = [dates, hours, minutes]
     }
     placeData(volunteering, attendanceData)
+    bufferToggle()
 }
 
 async function placeData(dates, attendance) {

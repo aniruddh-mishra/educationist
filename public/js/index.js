@@ -16,6 +16,19 @@ let db
 let storageRef
 var classesData
 
+// Firebase Data
+var apiKey = 'AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM'
+var authDomain = 'educationist-42b45.firebaseapp.com'
+var projectId = 'educationist-42b45'
+var storageId = 'gs://educationist-42b45.appspot.com/'
+
+if (location.hostname === 'localhost') {
+    apiKey = 'AIzaSyC1zUOqzGCvu9DWemRvm8rY4PBj6yZM-vs'
+    authDomain = 'educationist-development.firebaseapp.com'
+    projectId = 'educationist-development'
+    storageId = 'educationist-development.appspot.com'
+}
+
 // Checks path
 const underlineItem = paths[path]
 if (underlineItem) {
@@ -194,17 +207,15 @@ window.onclick = function (event) {
 // Firebase initialize
 function firebaseInit() {
     let firebaseConfig = {
-        apiKey: 'AIzaSyDf83xltbEW7NoN1PezsCgmtTQesxknfbM',
-        authDomain: 'educationist-42b45.firebaseapp.com',
-        projectId: 'educationist-42b45',
+        apiKey: apiKey,
+        authDomain: authDomain,
+        projectId: projectId,
     }
     firebase.initializeApp(firebaseConfig)
 
     // Initializes database and storage variables
     db = firebase.firestore()
-    const storage = firebase
-        .app()
-        .storage('gs://educationist-42b45.appspot.com/')
+    const storage = firebase.app().storage(storageId)
     storageRef = storage.ref()
     firebase.auth().onAuthStateChanged(firebaseAuthChange)
 }
@@ -244,6 +255,7 @@ async function firebaseAuthChange(user) {
             )
         }
     }
+    document.getElementById('container').classList.remove('invisible')
 }
 
 // Main Website Logged Out
