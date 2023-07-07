@@ -333,7 +333,7 @@ app.post('/match-commit', async (request, response) => {
 
     // Confirms if eid is valid
     if (student.empty) {
-        return response.send('false')
+        return response.send('false2')
     }
 
     student = student.docs[0]
@@ -405,7 +405,7 @@ app.post('/match-commit', async (request, response) => {
         // Some sort of error for email not being sent
         console.log('Reset Email Error: ' + err)
 
-        return response.send('false')
+        return response.send(err)
     }
 
     return response.send('true')
